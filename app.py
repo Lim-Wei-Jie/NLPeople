@@ -1,7 +1,3 @@
-pip install plotly
-pip install streamlit
-pip install streamlit-aggrid
-
 import functools
 from pathlib import Path
 
