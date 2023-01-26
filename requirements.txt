@@ -3,4 +3,4 @@ streamlit
 streamlit-aggrid==0.3.3
 pandas
 matplotlib
-camelot
+camelot-py
