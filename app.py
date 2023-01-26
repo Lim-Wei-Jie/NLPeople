@@ -8,7 +8,6 @@ from st_aggrid.shared import JsCode
 
 import numpy as np
 import matplotlib.pyplot as plt
-%matplotlib inline
 
 
 def _max_width_():
