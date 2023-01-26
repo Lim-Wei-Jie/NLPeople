@@ -11,5 +11,5 @@ for filename in os.listdir(path_of_the_directory):
     f = os.path.join(path_of_the_directory,filename)
     if os.path.isfile(f):
         print(f)
-        tables = tabula.read_pdf(b, pages="all", multiple_tables=True,encoding='cp1252')
+        tables = tabula.read_pdf(f, pages="all", multiple_tables=True,encoding='cp1252')
         print(tables)
