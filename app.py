@@ -1,224 +1,137 @@
 import streamlit as st
 import pandas as pd
 
+###################################
 from st_aggrid import AgGrid
-from st_aggrid.shared import JsCode
 from st_aggrid.grid_options_builder import GridOptionsBuilder
+from st_aggrid.shared import JsCode
 
-# import functools
-# from pathlib import Path
+###################################
 
-# import plotly.express as px
+from functionforDownloadButtons import download_button
 
-# chart = functools.partial(st.plotly_chart, use_container_width=True)
-# COMMON_ARGS = {
-#     "color": "symbol",
-#     "color_discrete_sequence": px.colors.sequential.Greens,
-#     "hover_data": [
-#         "account_name",
-#         "percent_of_account",
-#         "quantity",
-#         "total_gain_loss_dollar",
-#         "total_gain_loss_percent",
-#     ],
-# }
+###################################
 
 
-# @st.experimental_memo
-# def clean_data(df: pd.DataFrame) -> pd.DataFrame:
-#     """
-#     Take Raw Fidelity Dataframe and return usable dataframe.
-#     - snake_case headers
-#     - Include 401k by filling na type
-#     - Drop Cash accounts and misc text
-#     - Clean $ and % signs from values and convert to floats
+def _max_width_():
+    max_width_str = f"max-width: 1800px;"
+    st.markdown(
+        f"""
+    <style>
+    .reportview-container .main .block-container{{
+        {max_width_str}
+    }}
+    </style>    
+    """,
+        unsafe_allow_html=True,
+    )
 
-#     Args:
-#         df (pd.DataFrame): Raw fidelity csv data
+st.set_page_config(page_icon="✂️", page_title="CSV Wrangler")
 
-#     Returns:
-#         pd.DataFrame: cleaned dataframe with features above
-#     """
-#     df = df.copy()
-#     df.columns = df.columns.str.lower().str.replace(" ", "_", regex=False).str.replace("/", "_", regex=False)
+# st.image("https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/balloon_1f388.png", width=100)
+st.image(
+    "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/scissors_2702-fe0f.png",
+    width=100,
+)
 
-#     df.type = df.type.fillna("unknown")
-#     df = df.dropna()
+st.title("CSV Wrangler")
 
-#     price_index = df.columns.get_loc("last_price")
-#     cost_basis_index = df.columns.get_loc("cost_basis_per_share")
-#     df[df.columns[price_index : cost_basis_index + 1]] = df[
-#         df.columns[price_index : cost_basis_index + 1]
-#     ].transform(lambda s: s.str.replace("$", "", regex=False).str.replace("%", "", regex=False).astype(float))
-
-#     quantity_index = df.columns.get_loc("quantity")
-#     most_relevant_columns = df.columns[quantity_index : cost_basis_index + 1]
-#     first_columns = df.columns[0:quantity_index]
-#     last_columns = df.columns[cost_basis_index + 1 :]
-#     df = df[[*most_relevant_columns, *first_columns, *last_columns]]
-#     return df
+# st.caption(
+#     "PRD : TBC | Streamlit Ag-Grid from Pablo Fonseca: https://pypi.org/project/streamlit-aggrid/"
+# )
 
 
-# @st.experimental_memo
-# def filter_data(
-#     df: pd.DataFrame, account_selections: list[str], symbol_selections: list[str]
-# ) -> pd.DataFrame:
-#     """
-#     Returns Dataframe with only accounts and symbols selected
+# ModelType = st.radio(
+#     "Choose your model",
+#     ["Flair", "DistilBERT (Default)"],
+#     help="At present, you can choose between 2 models (Flair or DistilBERT) to embed your text. More to come!",
+# )
 
-#     Args:
-#         df (pd.DataFrame): clean fidelity csv data, including account_name and symbol columns
-#         account_selections (list[str]): list of account names to include
-#         symbol_selections (list[str]): list of symbols to include
-
-#     Returns:
-#         pd.DataFrame: data only for the given accounts and symbols
-#     """
-#     df = df.copy()
-#     df = df[
-#         df.account_name.isin(account_selections) & df.symbol.isin(symbol_selections)
-#     ]
-
-#     return df
-
-
-# def main() -> None:
-#     st.header("Fidelity Account Overview :moneybag: :dollar: :bar_chart:")
-
-#     with st.expander("How to Use This"):
-#         st.write(Path("README.md").read_text())
-
-#     st.subheader("Upload your CSV from Fidelity")
-#     uploaded_data = st.file_uploader(
-#         "Drag and Drop or Click to Upload", type=".csv", accept_multiple_files=False
-#     )
-
-#     if uploaded_data is None:
-#         st.info("Using example data. Upload a file above to use your own data!")
-#         uploaded_data = open("example.csv", "r")
-#     else:
-#         st.success("Uploaded your file!")
-
-#     df = pd.read_csv(uploaded_data)
-#     with st.expander("Raw Dataframe"):
-#         st.write(df)
-
-#     df = clean_data(df)
-#     with st.expander("Cleaned Data"):
-#         st.write(df)
-
-#     st.sidebar.subheader("Filter Displayed Accounts")
-
-#     accounts = list(df.account_name.unique())
-#     account_selections = st.sidebar.multiselect(
-#         "Select Accounts to View", options=accounts, default=accounts
-#     )
-#     st.sidebar.subheader("Filter Displayed Tickers")
-
-#     symbols = list(df.loc[df.account_name.isin(account_selections), "symbol"].unique())
-#     symbol_selections = st.sidebar.multiselect(
-#         "Select Ticker Symbols to View", options=symbols, default=symbols
-#     )
-
-#     df = filter_data(df, account_selections, symbol_selections)
-#     st.subheader("Selected Account and Ticker Data")
-#     cellsytle_jscode = JsCode(
+# with st.expander("ToDo's", expanded=False):
+#     st.markdown(
 #         """
-#     function(params) {
-#         if (params.value > 0) {
-#             return {
-#                 'color': 'white',
-#                 'backgroundColor': 'forestgreen'
-#             }
-#         } else if (params.value < 0) {
-#             return {
-#                 'color': 'white',
-#                 'backgroundColor': 'crimson'
-#             }
-#         } else {
-#             return {
-#                 'color': 'white',
-#                 'backgroundColor': 'slategray'
-#             }
-#         }
-#     };
-#     """
+# -   Add pandas.json_normalize() - https://streamlit.slack.com/archives/D02CQ5Z5GHG/p1633102204005500
+# -   **Remove 200 MB limit and test with larger CSVs**. Currently, the content is embedded in base64 format, so we may end up with a large HTML file for the browser to render
+# -   **Add an encoding selector** (to cater for a wider array of encoding types)
+# -   **Expand accepted file types** (currently only .csv can be imported. Could expand to .xlsx, .txt & more)
+# -   Add the ability to convert to pivot → filter → export wrangled output (Pablo is due to change AgGrid to allow export of pivoted/grouped data)
+# 	    """
 #     )
-
-#     gb = GridOptionsBuilder.from_dataframe(df)
-#     gb.configure_columns(
-#         (
-#             "last_price_change",
-#             "total_gain_loss_dollar",
-#             "total_gain_loss_percent",
-#             "today's_gain_loss_dollar",
-#             "today's_gain_loss_percent",
-#         ),
-#         cellStyle=cellsytle_jscode,
-#     )
-#     gb.configure_pagination()
-#     gb.configure_columns(("account_name", "symbol"), pinned=True)
-#     gridOptions = gb.build()
-
-#     AgGrid(df, gridOptions=gridOptions, allow_unsafe_jscode=True)
-
-#     def draw_bar(y_val: str) -> None:
-#         fig = px.bar(df, y=y_val, x="symbol", **COMMON_ARGS)
-#         fig.update_layout(barmode="stack", xaxis={"categoryorder": "total descending"})
-#         chart(fig)
-
-#     account_plural = "s" if len(account_selections) > 1 else ""
-#     st.subheader(f"Value of Account{account_plural}")
-#     totals = df.groupby("account_name", as_index=False).sum()
-#     if len(account_selections) > 1:
-#         st.metric(
-#             "Total of All Accounts",
-#             f"${totals.current_value.sum():.2f}",
-#             f"{totals.total_gain_loss_dollar.sum():.2f}",
-#         )
-#     for column, row in zip(st.columns(len(totals)), totals.itertuples()):
-#         column.metric(
-#             row.account_name,
-#             f"${row.current_value:.2f}",
-#             f"{row.total_gain_loss_dollar:.2f}",
-#         )
-
-#     fig = px.bar(
-#         totals,
-#         y="account_name",
-#         x="current_value",
-#         color="account_name",
-#         color_discrete_sequence=px.colors.sequential.Greens,
-#     )
-#     fig.update_layout(barmode="stack", xaxis={"categoryorder": "total descending"})
-#     chart(fig)
-
-#     st.subheader("Value of each Symbol")
-#     draw_bar("current_value")
-
-#     st.subheader("Value of each Symbol per Account")
-#     fig = px.sunburst(
-#         df, path=["account_name", "symbol"], values="current_value", **COMMON_ARGS
-#     )
-#     fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
-#     chart(fig)
-
-#     st.subheader("Value of each Symbol")
-#     fig = px.pie(df, values="current_value", names="symbol", **COMMON_ARGS)
-#     fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
-#     chart(fig)
-
-#     st.subheader("Total Value gained each Symbol")
-#     draw_bar("total_gain_loss_dollar")
-#     st.subheader("Total Percent Value gained each Symbol")
-#     draw_bar("total_gain_loss_percent")
+# 
+#     st.text("")
 
 
-# if __name__ == "__main__":
-#     st.set_page_config(
-#         "Fidelity Account View by Gerard Bentley",
-#         "📊",
-#         initial_sidebar_state="expanded",
-#         layout="wide",
-#     )
-#     main()
+c29, c30, c31 = st.columns([1, 6, 1])
+
+with c30:
+
+    uploaded_file = st.file_uploader(
+        "",
+        key="1",
+        help="To activate 'wide mode', go to the hamburger menu > Settings > turn on 'wide mode'",
+    )
+
+    if uploaded_file is not None:
+        file_container = st.expander("Check your uploaded .csv")
+        shows = pd.read_csv(uploaded_file)
+        uploaded_file.seek(0)
+        file_container.write(shows)
+
+    else:
+        st.info(
+            f"""
+                👆 Upload a .csv file first. Sample to try: [biostats.csv](https://people.sc.fsu.edu/~jburkardt/data/csv/biostats.csv)
+                """
+        )
+
+        st.stop()
+
+from st_aggrid import GridUpdateMode, DataReturnMode
+
+gb = GridOptionsBuilder.from_dataframe(shows)
+# enables pivoting on all columns, however i'd need to change ag grid to allow export of pivoted/grouped data, however it select/filters groups
+gb.configure_default_column(enablePivot=True, enableValue=True, enableRowGroup=True)
+gb.configure_selection(selection_mode="multiple", use_checkbox=True)
+gb.configure_side_bar()  # side_bar is clearly a typo :) should by sidebar
+gridOptions = gb.build()
+
+st.success(
+    f"""
+        💡 Tip! Hold the shift key when selecting rows to select multiple rows at once!
+        """
+)
+
+response = AgGrid(
+    shows,
+    gridOptions=gridOptions,
+    enable_enterprise_modules=True,
+    update_mode=GridUpdateMode.MODEL_CHANGED,
+    data_return_mode=DataReturnMode.FILTERED_AND_SORTED,
+    fit_columns_on_grid_load=False,
+)
+
+df = pd.DataFrame(response["selected_rows"])
+
+st.subheader("Filtered data will appear below 👇 ")
+st.text("")
+
+st.table(df)
+
+st.text("")
+
+c29, c30, c31 = st.columns([1, 1, 2])
+
+with c29:
+
+    CSVButton = download_button(
+        df,
+        "File.csv",
+        "Download to CSV",
+    )
+
+with c30:
+    CSVButton = download_button(
+        df,
+        "File.csv",
+        "Download to TXT",
+    )
