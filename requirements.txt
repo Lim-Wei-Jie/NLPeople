@@ -1,6 +1,7 @@
-plotly==5.12.0
 streamlit
 streamlit-aggrid==0.3.3
 pandas
-matplotlib
-camelot-py
+tabula-py
+
+# plotly==5.12.0
+# matplotlib

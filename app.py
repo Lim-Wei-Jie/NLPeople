@@ -1,14 +1,20 @@
 import streamlit as st
-import pandas as pd
-import camelot as cam
-
 from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid.shared import JsCode
 
-import numpy as np
-import matplotlib.pyplot as plt
+import os
+import tabula
+import requests
+import re
+from urllib.parse import parse_qsl, urljoin, urlparse
+import os
+import pandas as pd
 
+# import camelot as cam
+# import numpy as np
+# import matplotlib.pyplot as plt
+################################################
 
 def _max_width_():
     max_width_str = f"max-width: 1800px;"
@@ -24,9 +30,6 @@ def _max_width_():
     )
 
 st.set_page_config(page_title="NLPeople")
-
-# st.title("NLPeople")
-
 
 c29, c30, c31 = st.columns([1, 6, 1])
 
