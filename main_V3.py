@@ -82,7 +82,8 @@ if __name__ == "__main__":
     print ("************")
     first_item = list(objs[0].items())[0]
     print(first_item[1])
-    documentName = str(first_item[1])
+    # documentName = str(first_item[1])
+    documentName = str('abc-balance-sheet.jpeg')
     
     with open(documentName, 'rb') as document:
         response = textract.analyze_document(
@@ -93,14 +94,11 @@ if __name__ == "__main__":
             FeatureTypes=['TABLES']
         )
     
-    # blocks=response['Blocks']
-    # print(blocks)
-    blocks=response['Blocks']
     
     #Get the text blocks
     blocks=response['Blocks']
 
-    # Create image showing bounding box/polygon the detected lines/text
+    # # Create image showing bounding box/polygon the detected lines/text
     
     blocks_map = {}
     table_blocks = []
@@ -118,7 +116,7 @@ if __name__ == "__main__":
         csv += generate_table_csv(table, blocks_map, index +1)
         csv += '\n\n'
 
-    output_file = 'output.csv'
+    output_file = 'abc-balance-sheet.csv'
 
     # replace content
     with open(output_file, "wt") as fout:
