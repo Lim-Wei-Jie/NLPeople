@@ -92,8 +92,7 @@ if __name__ == "__main__":
                 'Bytes' : document.read(),
             },
             FeatureTypes=['TABLES']
-        )
-    
+        ) 
     
     #Get the text blocks
     blocks=response['Blocks']
