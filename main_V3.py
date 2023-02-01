@@ -81,9 +81,10 @@ if __name__ == "__main__":
     objs.sort(key=lambda e:['LastModified'], reverse=True)
     print ("************")
     first_item = list(objs[0].items())[0]
-    print(first_item[1])
+    # print(first_item[1])
     # documentName = str(first_item[1])
-    documentName = str('investopedia-balance-sheet.png')
+    documentName = str('Grab Q2 22 Income Statement.pdf')
+    print (documentName)
     
     with open(documentName, 'rb') as document:
         response = textract.analyze_document(
@@ -115,7 +116,7 @@ if __name__ == "__main__":
         csv += generate_table_csv(table, blocks_map, index +1)
         csv += '\n\n'
 
-    output_file = 'investopedia-balance-sheet.csv'
+    output_file = 'Grab Q2 22 Income Statement.csv'
 
     # replace content
     with open(output_file, "wt") as fout:
