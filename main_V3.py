@@ -83,7 +83,7 @@ if __name__ == "__main__":
     first_item = list(objs[0].items())[0]
     print(first_item[1])
     # documentName = str(first_item[1])
-    documentName = str('abc-balance-sheet.jpeg')
+    documentName = str('investopedia-balance-sheet.png')
     
     with open(documentName, 'rb') as document:
         response = textract.analyze_document(
@@ -115,7 +115,7 @@ if __name__ == "__main__":
         csv += generate_table_csv(table, blocks_map, index +1)
         csv += '\n\n'
 
-    output_file = 'abc-balance-sheet.csv'
+    output_file = 'investopedia-balance-sheet.csv'
 
     # replace content
     with open(output_file, "wt") as fout:
