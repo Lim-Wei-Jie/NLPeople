@@ -1,7 +1,0 @@
-streamlit
-streamlit-aggrid==0.3.3
-pandas
-tabula-py
-
-# plotly==5.12.0
-# matplotlib
