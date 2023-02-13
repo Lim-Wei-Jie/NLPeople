@@ -45,7 +45,8 @@ def is_number(string):
 
 # Callback to parse contents of a pdf
 @dash.callback([Output('pdf-viewer', 'columns'),
-                Output('pdf-viewer', 'data')],
+                Output('pdf-viewer', 'data'),
+                Output('pdf', 'src')],
                 [Input('pdf-upload', 'contents'),
                 State('pdf-upload', 'filename'),
                 Input('adding-columns-button', 'n_clicks'),
@@ -63,11 +64,11 @@ def update_table(contents, filename, n_clicks, value, existing_columns, n_clicks
     if triggered_id == 'pdf-upload':
         return pdf_output(contents, filename)
     elif triggered_id == 'adding-columns-button':
-        return update_columns(n_clicks, value, existing_columns, table_data)
+        return update_columns(n_clicks, value, existing_columns, table_data, contents)
     elif triggered_id == 'adding-rows-button':
-        return add_row(n_clicks_row, table_data, existing_columns)
+        return add_row(n_clicks_row, table_data, existing_columns, contents)
     elif triggered_id == 'convert-currency-button':
-        return convert_currency(n_clicks_convert, table_data, selected_cells, existing_columns)
+        return convert_currency(n_clicks_convert, table_data, selected_cells, existing_columns, contents)
     else:
         raise exceptions.PreventUpdate
 
@@ -97,9 +98,9 @@ def pdf_output(contents, filename):
             for i in range(len(file_dict[k])):
                 list_of_dfs.append(file_dict[k][i].df)
 
-        return [{'name': 'Column {}'.format(i), 'id': str(i), 'deletable': True, 'renamable': True} for i in pd.concat(list_of_dfs).columns], pd.concat(list_of_dfs).to_dict('records')
+        return [{'name': 'Column {}'.format(i), 'id': str(i), 'deletable': True, 'renamable': True} for i in pd.concat(list_of_dfs).columns], pd.concat(list_of_dfs).to_dict('records'), contents
 
-def update_columns(n_clicks, value, existing_columns, table_data):
+def update_columns(n_clicks, value, existing_columns, table_data, contents):
     if n_clicks > 0:
         existing_columns.append({
             'name': value, 'id': value, 
@@ -107,14 +108,14 @@ def update_columns(n_clicks, value, existing_columns, table_data):
         })
     else:
         raise exceptions.PreventUpdate
-    return existing_columns, table_data
+    return existing_columns, table_data, contents
 
-def add_row(n_clicks_row, table_data, existing_columns):
+def add_row(n_clicks_row, table_data, existing_columns, contents):
     if n_clicks_row > 0:
         table_data.append({c['id']: '' for c in existing_columns})
-    return existing_columns, table_data
+    return existing_columns, table_data, contents
 
-def convert_currency(n_clicks_convert, table_data, selected_cells, existing_columns):
+def convert_currency(n_clicks_convert, table_data, selected_cells, existing_columns, contents):
     print(table_data)
     if n_clicks_convert > 0:
         for cell in selected_cells:
@@ -133,7 +134,7 @@ def convert_currency(n_clicks_convert, table_data, selected_cells, existing_colu
             else:
                 # Print the cell value if it's not a number
                 print(cell_value) 
-    return existing_columns, table_data
+    return existing_columns, table_data, contents
 
 #Upload component:
 pdf_load = dcc.Upload(id='pdf-upload',
@@ -154,8 +155,10 @@ pdf_table = dash_table.DataTable(editable=True,
                                 id='pdf-viewer',
                                 row_selectable='multi', 
                                 selected_columns=[], 
-                                # selected_rows=[]                           
+                                selected_rows=[]                           
                                 )
+
+pdf = html.Iframe(id='pdf', height="1067px", width="100%")
 
 #Adding columns:
 add_columns = dcc.Input(
@@ -169,6 +172,7 @@ add_columns = dcc.Input(
 layout = html.Div([html.H4('Convert PDF using Camelot and dash'),
                         pdf_load,
                         html.Br(),
+                        pdf,
                         html.Div([add_columns, 
                                 html.Button('Add Column', id='adding-columns-button', n_clicks=0)
                                 ], style={'height': 50}),
