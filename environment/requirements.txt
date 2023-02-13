@@ -1,0 +1,13 @@
+# python -m pip install -r ./environment/requirements.txt
+
+numpy
+pandas
+plotly
+dash
+camelot-py[cv]
+ghostscript
+camelot-py[plot]
+PyPDF2==2.12.1
+pytesseract==0.3.10
+opencv-contrib-python
+CurrencyConverter

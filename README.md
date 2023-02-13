@@ -1,14 +1,31 @@
 # NLPeople
 
-Installation:
-- pip install dash
-- pip install pandas
-- pip install opencv-contrib-python
-- pip install pytesseract
-- pip install CurrencyConverter
+To create new env
+
+```
+conda env create -f ./environment/conda.yaml
+```
+
+To activate env
+```
+conda activate dash-app
+```
+
+To deactivate env
+```
+conda deactivate
+```
+
+To install pip dependencies
+```
+python -m pip install -r ./environment/requirements.txt
+```
 
 Usage:
-open terminal, run 'python app.py'
+open terminal, run
+```
+python app.py
+```
 
 Current App Functionality:
 - upload PDF/image function
