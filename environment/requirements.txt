@@ -4,10 +4,10 @@ numpy
 pandas
 plotly
 dash
-camelot-py[cv]
+camelot-py
 ghostscript
-camelot-py[plot]
 PyPDF2==2.12.1
+# PyPDF2==3.0.1
 pytesseract==0.3.10
 opencv-contrib-python
 CurrencyConverter
