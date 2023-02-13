@@ -6,6 +6,7 @@ Installation:
 - pip install opencv-contrib-python
 - pip install pytesseract
 - pip install CurrencyConverter
+- pip install camelot-py
 
 Usage:
 open terminal, run 'python app.py'
