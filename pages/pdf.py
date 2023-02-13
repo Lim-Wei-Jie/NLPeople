@@ -136,6 +136,28 @@ def convert_currency(n_clicks_convert, table_data, selected_cells, existing_colu
                 print(cell_value) 
     return existing_columns, table_data, contents
 
+@dash.callback([Output('new-table', 'columns'),
+                Output('new-table', 'data')],
+                [Input('pdf-viewer', 'selected_rows'),
+                Input('get-new-table-button', 'n_clicks'),
+                Input('pdf-viewer', 'data')],
+                prevent_initial_call = True)
+def new_table(selected_rows, n_clicks, table_data):
+    if selected_rows is None:
+        selected_rows = []
+
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    if 'get-new-table-button' in changed_id:
+        selected_rows = sorted(selected_rows)
+        list_of_dicts = []
+        for i in selected_rows:
+            list_of_dicts.append(table_data[i])
+    else:
+        raise exceptions.PreventUpdate
+    
+    return [{'name': 'Column {}'.format(i), 'id': str(i), 'deletable': True, 'renamable': True} for i in pd.DataFrame(list_of_dicts).columns], list_of_dicts
+    
+
 #Upload component:
 pdf_load = dcc.Upload(id='pdf-upload',
                         children=html.Div(['Drag and Drop or ', html.A('Select PDF files')]),
@@ -168,15 +190,34 @@ add_columns = dcc.Input(
             style={'padding': 10}
                 )
 
+extracted_table = dash_table.DataTable(editable=True,
+                                        row_deletable=True,
+                                        export_format='xlsx',
+                                        # page_action='none',
+                                        # fixed_rows={'headers': True},
+                                        # style_table={'height': 500, 'overflowY': 'auto'},
+                                        # style_header={'overflowY': 'auto'}
+                                        id='new-table',
+                                        row_selectable='multi', 
+                                        selected_columns=[], 
+                                        selected_rows=[]                           
+                                        )
+
 #Place into the app
 layout = html.Div([html.H4('Convert PDF using Camelot and dash'),
                         pdf_load,
                         html.Br(),
+                        html.H5('Preview of PDF'),
                         pdf,
+                        html.H5('PDF output table'),
                         html.Div([add_columns, 
                                 html.Button('Add Column', id='adding-columns-button', n_clicks=0)
                                 ], style={'height': 50}),
                         pdf_table,
                         html.Button('Add Row', id='adding-rows-button', n_clicks=0),
-                        html.Button('Convert Currency', id='convert-currency-button', n_clicks=0)
+                        html.Button('Convert Currency', id='convert-currency-button', n_clicks=0),
+                        html.Button('Extract Table', id='get-new-table-button', n_clicks=0),
+                        html.Br(),
+                        html.H5('Extracted Table'),
+                        extracted_table
                         ])
