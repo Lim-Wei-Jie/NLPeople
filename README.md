@@ -10,9 +10,6 @@ Installation:
 Usage:
 open terminal, run 'python app.py'
 
-Note:
-if you face camelot errors while running, send in tele group!
-
 Current App Functionality:
 - upload PDF/image function
 - output table display
@@ -23,8 +20,9 @@ Current App Functionality:
 What we need to continue implementing:
 - highlight metrics that user wants
 - extract those metrics only
-- currency converter
+- currency converter - user to input currency
 
 Flaws of the app:
 - cannot rearrange columns or rows
 - columns and rows can only be added to the ends of the table
+- for currency conversion, need to read the file for whether the values are in billions/millions

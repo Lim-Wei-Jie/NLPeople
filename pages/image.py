@@ -10,12 +10,40 @@ import pytesseract
 # from img2table.document import Image
 # from img2table.ocr import TesseractOCR
 
+from currency_converter import CurrencyConverter
 import re
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 
 dash.register_page(__name__)
+
+cr = CurrencyConverter()
+
+input_currency = "JPY"
+
+number_scale = 1
+
+number_scale = 1000
+
+def currency_conversion(amount, input_currency, output_currency='USD'):
+    converted_amount = cr.convert(amount, input_currency, output_currency)
+    return converted_amount
+
+def is_number(string):
+    try:
+        int(string)
+        return True
+    except ValueError:
+        pass
+    
+    try:
+        float(string)
+        return True
+    except ValueError:
+        pass
+    
+    return False
 
 
 # Callback to parse contents of a pdf
@@ -28,10 +56,12 @@ dash.register_page(__name__)
                 State('adding-columns-name', 'value'),
                 State('img-viewer', 'columns'),
                 Input('adding-rows-button', 'n_clicks'),
+                Input('convert-currency-button', 'n_clicks'),
+                Input('img-viewer', 'selected_cells'),
                 State('img-viewer', 'data')],
                 prevent_initial_call = True
                 )
-def update_table(contents, filename, n_clicks, value, existing_columns, n_clicks_row, table_data):
+def update_table(contents, filename, n_clicks, value, existing_columns, n_clicks_row, n_clicks_convert, selected_cells, table_data):
     triggered_id = ctx.triggered_id
     # print(triggered_id)
     if triggered_id == 'img-upload':
@@ -40,6 +70,10 @@ def update_table(contents, filename, n_clicks, value, existing_columns, n_clicks
         return update_columns(n_clicks, value, existing_columns, table_data, contents)
     elif triggered_id == 'adding-rows-button':
         return add_row(n_clicks_row, table_data, existing_columns, contents)
+    elif triggered_id == 'convert-currency-button':
+        return convert_currency(n_clicks_convert, table_data, selected_cells, existing_columns, contents)
+    else:
+        raise exceptions.PreventUpdate
 
 def img_output(contents, filename):
     if contents is None:
@@ -117,6 +151,26 @@ def add_row(n_clicks_row, table_data, existing_columns, contents):
         table_data.append({c['id']: '' for c in existing_columns})
     return existing_columns, table_data, contents
 
+def convert_currency(n_clicks_convert, table_data, selected_cells, existing_columns, contents):
+    print(table_data)
+    if n_clicks_convert > 0:
+        for cell in selected_cells:
+            cell_value = table_data[cell['row']][cell['column_id']]
+            print(cell_value)
+            print(type(cell_value))
+            if isinstance(cell_value, str):
+                # Convert the cell value to USD
+                if cell_value != "" or cell_value != None:
+                    cell_value = re.sub('\W+','', cell_value )
+                    if is_number(cell_value):
+                        cell_value = float(cell_value)
+                        cell_value = cell_value*number_scale
+                        converted_amount = currency_conversion(cell_value, input_currency)
+                        table_data[cell['row']][cell['column_id']] = str(converted_amount)
+            else:
+                # Print the cell value if it's not a number
+                print(cell_value) 
+    return existing_columns, table_data, contents
 
 # Upload component:
 img_load = dcc.Upload(id='img-upload',
@@ -130,7 +184,10 @@ img_load = dcc.Upload(id='img-upload',
 img_table = dash_table.DataTable(editable=True,
                                 row_deletable=True,
                                 export_format='xlsx',
-                                id='img-viewer'                          
+                                id='img-viewer',
+                                row_selectable='multi', 
+                                selected_columns=[], 
+                                # selected_rows=[]                           
                                 )
 
 image = html.Img(id='image')
@@ -152,5 +209,6 @@ layout = html.Div([html.H4('Convert Image using OpenCV, PyTesseract, Dash'),
                                 html.Button('Add Column', id='adding-columns-button', n_clicks=0)
                                 ], style={'height': 50}),
                         img_table,
-                        html.Button('Add Row', id='adding-rows-button', n_clicks=0)
+                        html.Button('Add Row', id='adding-rows-button', n_clicks=0),
+                        html.Button('Convert Currency', id='convert-currency-button', n_clicks=0)
                         ])
