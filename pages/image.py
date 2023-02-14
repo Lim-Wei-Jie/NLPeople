@@ -165,7 +165,8 @@ def convert_currency(n_clicks_convert, table_data, selected_cells, existing_colu
             if isinstance(cell_value, str):
                 # Convert the cell value to USD
                 if cell_value != "" or cell_value != None:
-                    cell_value = re.sub('\W+','', cell_value )
+                    cell_value = re.sub('/[^A-Za-z0-9.\-]/','', cell_value )
+                    cell_value = cell_value.replace(",",  "")
                     if is_number(cell_value):
                         cell_value = float(cell_value)
                         cell_value = cell_value*number_scale
