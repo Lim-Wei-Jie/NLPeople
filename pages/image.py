@@ -13,6 +13,10 @@ import pytesseract
 from currency_converter import CurrencyConverter
 import re
 
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
+
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 
@@ -192,7 +196,32 @@ def new_table(selected_rows, n_clicks, table_data):
         raise exceptions.PreventUpdate
     
     return [{'name': 'Column {}'.format(i), 'id': str(i), 'deletable': True, 'renamable': True} for i in pd.DataFrame(list_of_dicts).columns], list_of_dicts
-    
+
+
+@dash.callback(Output('img-viewer', 'selected_rows'),
+                [Input('spacy-button', 'n_clicks'),
+                Input('img-viewer', 'data')],
+                prevent_initial_call = True)
+def highlight_rows(n_clicks_spacy_button, table_data):
+    print(table_data)
+    financial_terms = ["revenue", "profit", "income", "expense", "loss", "cost", "gross profit", "gross loss", "net profit", "net loss", "EBIDTA", "total equities", "equities", "total liabilities", "liabilities", "total assets", "assets", "total current assets", "current assets", "total non-current assets", "non-current assets", "debt", "cash", "net cash flow", "cash flow"]
+    row_ids = []
+    if n_clicks_spacy_button > 0:
+        for i in range(len(table_data)):
+            text = "\n".join(list(table_data[i].values()))
+            doc = nlp(text)
+
+            for token in doc:
+                if token.text.lower() in financial_terms:
+                    row_ids.append(i)
+
+        row_ids = sorted(list(dict.fromkeys(row_ids)))
+    else:
+        raise exceptions.PreventUpdate
+
+    return row_ids
+
+
 # Upload component:
 img_load = dcc.Upload(id='img-upload',
                         children=html.Div(['Drag and Drop or ', html.A('Select Image files')]),
@@ -250,5 +279,6 @@ layout = html.Div([html.H4('Convert Image using OpenCV, PyTesseract, Dash'),
                         html.Button('Extract Table', id='get-new-table-button', n_clicks=0),
                         html.Br(),
                         html.H5('Extracted Table'),
-                        extracted_table
+                        extracted_table,
+                        html.Button('Select Only Financial Data!', id='spacy-button', n_clicks=0)
                         ])
