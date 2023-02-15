@@ -24,17 +24,18 @@ dash.register_page(__name__)
 
 cr = CurrencyConverter()
 
-input_currency = "JPY"
+# input_currency = "JPY"
 
-number_scale = 1
+# number_scale = 1
 
-number_scale = 1000
+# number_scale = 1000
 
-def currency_conversion(amount, input_currency, output_currency='USD'):
-    converted_amount = cr.convert(amount, input_currency, output_currency)
-    return converted_amount
+# def currency_conversion(amount, input_currency, output_currency='USD'):
+#     converted_amount = cr.convert(amount, input_currency, output_currency)
+#     return converted_amount
 
 def is_number(string):
+    string = string.replace(',', '')
     try:
         int(string)
         return True
@@ -61,11 +62,15 @@ def is_number(string):
                 State('img-viewer', 'columns'),
                 Input('adding-rows-button', 'n_clicks'),
                 Input('convert-currency-button', 'n_clicks'),
+                Input('currency-input-dropdown', 'value'),
+                Input('currency-output-dropdown', 'value'),
+                Input('scale-input-dropdown', 'value'),
+                Input('scale-output-dropdown', 'value'),
                 Input('img-viewer', 'selected_cells'),
                 State('img-viewer', 'data')],
                 prevent_initial_call = True
                 )
-def update_table(contents, filename, n_clicks, value, existing_columns, n_clicks_row, n_clicks_convert, selected_cells, table_data):
+def update_table(contents, filename, n_clicks, value, existing_columns, n_clicks_row, n_clicks_convert, currency_input, currency_output, scale_input, scale_output, selected_cells, table_data):
     triggered_id = ctx.triggered_id
     # print(triggered_id)
     if triggered_id == 'img-upload':
@@ -75,7 +80,7 @@ def update_table(contents, filename, n_clicks, value, existing_columns, n_clicks
     elif triggered_id == 'adding-rows-button':
         return add_row(n_clicks_row, table_data, existing_columns, contents)
     elif triggered_id == 'convert-currency-button':
-        return convert_currency(n_clicks_convert, table_data, selected_cells, existing_columns, contents)
+        return convert_currency(n_clicks_convert, table_data, selected_cells, currency_input, currency_output, scale_input, scale_output, existing_columns, contents)
     else:
         raise exceptions.PreventUpdate
 
@@ -116,24 +121,30 @@ def img_output(contents, filename):
                     numbers.append(row.split()[0])
                 else:
                     words.append(row.split()[0])
-                
+
             for i in range(1, len(row.split())-1):
                     if re.search("[0-9]", row.split()[i]) and re.search("[0-9]", row.split()[i+1]):
                         numbers.append(row.split()[i])
                     else:
                         words.append(row.split()[i])
-            
+
             if len(row) != 0:
                 numbers.append(row.split()[-1])
 
             whole = []
             whole.extend(words)
-            words_length = len(words)
+
+            temp = " ".join(whole)
+            whole = [temp]
+
             numbers_length = len(numbers)
-            for i in range(0, max(lengths_of_each_rows) - words_length - numbers_length):
+            for i in range(0, max(lengths_of_each_rows) - numbers_length):
                 whole.append("")
+            print("whole3:", whole)
             whole.extend(numbers)
+            print("whole4:", whole)
             data.append(whole)
+            print("data:", data)
 
         df = pd.DataFrame(data)
 
@@ -155,7 +166,7 @@ def add_row(n_clicks_row, table_data, existing_columns, contents):
         table_data.append({c['id']: '' for c in existing_columns})
     return existing_columns, table_data, contents
 
-def convert_currency(n_clicks_convert, table_data, selected_cells, existing_columns, contents):
+def convert_currency(n_clicks_convert, table_data, selected_cells, currency_input,currency_output, scale_input, scale_output, existing_columns, contents):
     print(table_data)
     if n_clicks_convert > 0:
         for cell in selected_cells:
@@ -165,24 +176,115 @@ def convert_currency(n_clicks_convert, table_data, selected_cells, existing_colu
             if isinstance(cell_value, str):
                 # Convert the cell value to USD
                 if cell_value != "" or cell_value != None:
-                    cell_value = re.sub('/[^A-Za-z0-9.\-]/','', cell_value )
-                    cell_value = cell_value.replace(",",  "")
+                    cell_value = re.sub('/[^A-Za-z0-9.\-]/','', cell_value)
+                    cell_value = cell_value.replace(',', '')
+                    print(cell_value)
                     if is_number(cell_value):
                         cell_value = float(cell_value)
-                        cell_value = cell_value*number_scale
-                        converted_amount = currency_conversion(cell_value, input_currency)
+                        if scale_output == "NA" or scale_input == "NA":
+                            cell_value = cell_value
+                        else:
+                            if scale_input == "thousands" or scale_input == "millions" or scale_input == "billions":
+                                # eg. 1000 > 1k, 1000000 > 1000k, 1000000000 > 1000000k
+                                if scale_output == "k":
+                                        cell_value = cell_value/1000
+                                # eg. 1000 > 0.001m , 1000000 > 1m, 1000000000 > 1000m
+                                elif scale_output == "m":
+                                    cell_value = cell_value/1000000
+                                # eg. 1000 > 0.000001b , 1000000 > 0.001b, 1000000000 > 1b
+                                elif scale_output == "b":
+                                    cell_value = cell_value/1000000000
+                            
+                            if scale_input == "k":
+                                # eg. 1k > 1000 (real value)
+                                if scale_output == "thousands":
+                                    cell_value = cell_value*1000
+                                elif scale_output == "k":
+                                    cell_value = cell_value
+                                # eg. 1k > 0.001m
+                                elif scale_output == "millions" or scale_output == "m":
+                                    cell_value = cell_value/1000
+                                # eg. 1k > 0.000001b 
+                                elif scale_output == "billions" or scale_output == "b":
+                                    cell_value = cell_value/1000000
+                            elif scale_input == 'm':
+                                # eg. 1m > 1000k
+                                if scale_output == "thousands" or scale_output == "k":
+                                    cell_value = cell_value*1000
+                                # eg. 1m > 1000000 (real value)
+                                elif scale_output == "millions":
+                                    cell_value = cell_value*1000000
+                                elif scale_output == "m":
+                                    cell_value = cell_value
+                                # eg. 1m > 0.001b
+                                elif scale_output == "billions" or scale_output == "b":
+                                    cell_value = cell_value/1000
+                            elif scale_input == 'b':
+                                # eg. 1b > 1000000k
+                                if scale_output == "thousands" or scale_output == "k":
+                                    cell_value = cell_value*1000000
+                                # eg. 1b > 1000m 
+                                elif scale_output == "millions" or scale_output == "m":
+                                    cell_value = cell_value*1000
+                                # eg. 1m > 0.001b
+                                elif scale_output == "b":
+                                    cell_value = cell_value
+                                # eg. 1b > 1000000000 (real value)
+                                elif scale_output == "billions":
+                                    cell_value = cell_value*1000000000
+                            
+                            if scale_input == "thousands":
+                                if scale_output == "thousands":
+                                    cell_value = cell_value
+                                elif scale_output == "millions":
+                                    cell_value = cell_value*0.001
+                                elif scale_output == "billions":
+                                    cell_value = cell_value*0.000001
+                            elif scale_input == "millions":
+                                if scale_output == "thousands":
+                                    cell_value = cell_value * 1000
+                                elif scale_output == "millions":
+                                    cell_value = cell_value
+                                elif scale_output == "billions":
+                                    cell_value = cell_value*0.001
+                            elif scale_input == "billions":
+                                if scale_output == "thousands":
+                                    cell_value = cell_value * 1000000
+                                elif scale_output == "millions":
+                                    cell_value = cell_value * 1000
+                                elif scale_output == "billions":
+                                    cell_value = cell_value
+                        # cell_value = cell_value*scale_input
+                        converted_amount = cr.convert(cell_value, currency_input, currency_output)
                         table_data[cell['row']][cell['column_id']] = str(converted_amount)
             else:
                 # Print the cell value if it's not a number
                 print(cell_value) 
     return existing_columns, table_data, contents
 
+
 @dash.callback([Output('new-table-img', 'columns'),
                 Output('new-table-img', 'data')],
                 [Input('img-viewer', 'selected_rows'),
                 Input('get-new-table-button', 'n_clicks'),
-                Input('img-viewer', 'data')],
+                Input('img-viewer', 'data'),
+                Input('adding-columns-button-new-table', 'n_clicks'),
+                State('adding-columns-name-new-table', 'value'),
+                State('new-table-img', 'columns'),
+                State('new-table-img', 'data'),
+                Input('adding-rows-button-new-table', 'n_clicks')],
                 prevent_initial_call = True)
+def update_extracted_table(selected_rows, n_clicks_get_table, table_data, n_clicks_add_column, new_column_name, existing_columns, new_table_data, n_clicks_add_row):
+    triggered_id = ctx.triggered_id
+    if triggered_id == 'get-new-table-button':
+        return new_table(selected_rows, n_clicks_get_table, table_data)
+    elif triggered_id == 'adding-columns-button-new-table':
+        return update_columns_new_table(n_clicks_add_column, new_column_name, existing_columns, new_table_data)
+    elif triggered_id == 'adding-rows-button-new-table':
+        return add_row_new_table(n_clicks_add_row, new_table_data, existing_columns)
+    else:
+        raise exceptions.PreventUpdate
+
 def new_table(selected_rows, n_clicks, table_data):
     if selected_rows is None:
         selected_rows = []
@@ -198,6 +300,20 @@ def new_table(selected_rows, n_clicks, table_data):
     
     return [{'name': 'Column {}'.format(i), 'id': str(i), 'deletable': True, 'renamable': True} for i in pd.DataFrame(list_of_dicts).columns], list_of_dicts
 
+def update_columns_new_table(n_clicks_add_column, new_column_name, existing_columns, new_table_data):
+    if n_clicks_add_column > 0:
+        existing_columns.append({
+            'name': new_column_name, 'id': new_column_name, 
+            'renamable': True, 'deletable': True
+        })
+    else:
+        raise exceptions.PreventUpdate
+    return existing_columns, new_table_data
+
+def add_row_new_table(n_clicks_add_row, new_table_data, existing_columns):
+    if n_clicks_add_row > 0:
+        new_table_data.append({c['id']: '' for c in existing_columns})
+    return existing_columns, new_table_data
 
 @dash.callback(Output('img-viewer', 'selected_rows'),
                 [Input('spacy-button', 'n_clicks'),
@@ -222,6 +338,17 @@ def highlight_rows(n_clicks_spacy_button, table_data):
 
     return row_ids
 
+@dash.callback(
+    Output(component_id='currency-is-in-img', component_property='children'),
+    [Input(component_id='scale-input-dropdown', component_property='value'),
+    Input(component_id='scale-output-dropdown', component_property='value')]
+)
+def update_output_div(input_scale, output_scale):
+    if input_scale == "NA" or output_scale == "NA":
+        text = ""
+    else:
+        text = "The output table values are converted from " + input_scale + " to " + output_scale
+    return text
 
 # Upload component:
 img_load = dcc.Upload(id='img-upload',
@@ -271,15 +398,37 @@ layout = html.Div([html.H4('Convert Image using OpenCV, PyTesseract, Dash'),
                         html.H5('Preview of Image'),
                         image,
                         html.H5('Image output table'),
+                        html.Div(id='currency-is-in-img'),
                         html.Div([add_columns, 
                                 html.Button('Add Column', id='adding-columns-button', n_clicks=0)
                                 ], style={'height': 50}),
                         img_table,
                         html.Button('Add Row', id='adding-rows-button', n_clicks=0),
+                        html.Br(), html.Br(),
+                        html.H5('Convert Currency'),
+                        html.P('Convert from:'),
+                        dcc.Dropdown(options=['USD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CHF', 'ISK', 'NOK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 'IDR', 'ILS', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR'], value='USD', id='currency-input-dropdown'),
+                        html.P('Convert to:'),
+                        dcc.Dropdown(options=['USD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CHF', 'ISK', 'NOK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 'IDR', 'ILS', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR'], value='USD', id='currency-output-dropdown'),
+                        html.P('Scale from:'),
+                        dcc.Dropdown(options=['NA', 'thousands', 'millions', 'billions', 'k', 'm', 'b'], id='scale-input-dropdown', value='NA'),
+                        html.P('Scale to:'),
+                        dcc.Dropdown(options=['NA', 'thousands', 'millions', 'billions', 'k', 'm', 'b'], id='scale-output-dropdown', value='NA'),
                         html.Button('Convert Currency', id='convert-currency-button', n_clicks=0),
-                        html.Button('Extract Table', id='get-new-table-button', n_clicks=0),
-                        html.Br(),
+                        html.Br(), html.Br(),
+                        
                         html.H5('Extracted Table'),
+                        html.Button('Select Only Financial Data!', id='spacy-button', n_clicks=0),
+                        html.Button('Extract Table', id='get-new-table-button', n_clicks=0),
+                        html.Br(), html.Br(),
+                        html.Div([dcc.Input(
+                                            id='adding-columns-name-new-table',
+                                            placeholder='Enter a column name...',
+                                            value='',
+                                            style={'padding': 10}
+                                                ), 
+                                html.Button('Add Column', id='adding-columns-button-new-table', n_clicks=0)
+                                ], style={'height': 50}),
                         extracted_table,
-                        html.Button('Select Only Financial Data!', id='spacy-button', n_clicks=0)
+                        html.Button('Add Row', id='adding-rows-button-new-table', n_clicks=0)
                         ])
