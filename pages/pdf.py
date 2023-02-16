@@ -144,77 +144,59 @@ def convert_currency(n_clicks_convert, table_data, selected_cells, currency_inpu
                         if scale_output == "NA" or scale_input == "NA":
                             cell_value = cell_value
                         else:
-                            if scale_input == "thousands" or scale_input == "millions" or scale_input == "billions":
-                                # eg. 1000 > 1k, 1000000 > 1000k, 1000000000 > 1000000k
+                            if scale_input == "real number":
+                                # eg. 1000 > 1k
                                 if scale_output == "k":
                                         cell_value = cell_value/1000
-                                # eg. 1000 > 0.001m , 1000000 > 1m, 1000000000 > 1000m
+                                # eg. 1000 > 0.001m 
                                 elif scale_output == "m":
                                     cell_value = cell_value/1000000
-                                # eg. 1000 > 0.000001b , 1000000 > 0.001b, 1000000000 > 1b
+                                # eg. 1000 > 0.000001b 
                                 elif scale_output == "b":
                                     cell_value = cell_value/1000000000
+                                elif scale_output == "real number":
+                                    cell_value = cell_value
                             
-                            if scale_input == "k":
+                            elif scale_input == "k":
                                 # eg. 1k > 1000 (real value)
-                                if scale_output == "thousands":
+                                if scale_output == "real number":
                                     cell_value = cell_value*1000
                                 elif scale_output == "k":
                                     cell_value = cell_value
                                 # eg. 1k > 0.001m
-                                elif scale_output == "millions" or scale_output == "m":
+                                elif scale_output == "m":
                                     cell_value = cell_value/1000
                                 # eg. 1k > 0.000001b 
-                                elif scale_output == "billions" or scale_output == "b":
+                                elif scale_output == "b":
                                     cell_value = cell_value/1000000
+                            
                             elif scale_input == 'm':
                                 # eg. 1m > 1000k
-                                if scale_output == "thousands" or scale_output == "k":
+                                if scale_output == "k":
                                     cell_value = cell_value*1000
                                 # eg. 1m > 1000000 (real value)
-                                elif scale_output == "millions":
+                                elif scale_output == "real number":
                                     cell_value = cell_value*1000000
                                 elif scale_output == "m":
                                     cell_value = cell_value
                                 # eg. 1m > 0.001b
-                                elif scale_output == "billions" or scale_output == "b":
+                                elif scale_output == "b":
                                     cell_value = cell_value/1000
+                            
                             elif scale_input == 'b':
                                 # eg. 1b > 1000000k
-                                if scale_output == "thousands" or scale_output == "k":
+                                if scale_output == "k":
                                     cell_value = cell_value*1000000
                                 # eg. 1b > 1000m 
-                                elif scale_output == "millions" or scale_output == "m":
+                                elif scale_output == "m":
                                     cell_value = cell_value*1000
                                 # eg. 1m > 0.001b
                                 elif scale_output == "b":
                                     cell_value = cell_value
                                 # eg. 1b > 1000000000 (real value)
-                                elif scale_output == "billions":
+                                elif scale_output == "real number":
                                     cell_value = cell_value*1000000000
-                            
-                            if scale_input == "thousands":
-                                if scale_output == "thousands":
-                                    cell_value = cell_value
-                                elif scale_output == "millions":
-                                    cell_value = cell_value*0.001
-                                elif scale_output == "billions":
-                                    cell_value = cell_value*0.000001
-                            elif scale_input == "millions":
-                                if scale_output == "thousands":
-                                    cell_value = cell_value * 1000
-                                elif scale_output == "millions":
-                                    cell_value = cell_value
-                                elif scale_output == "billions":
-                                    cell_value = cell_value*0.001
-                            elif scale_input == "billions":
-                                if scale_output == "thousands":
-                                    cell_value = cell_value * 1000000
-                                elif scale_output == "millions":
-                                    cell_value = cell_value * 1000
-                                elif scale_output == "billions":
-                                    cell_value = cell_value
-                        # cell_value = cell_value*scale_input
+
                         converted_amount = cr.convert(currency_input, currency_output, cell_value)
                         table_data[cell['row']][cell['column_id']] = str(converted_amount)
             else:
@@ -384,9 +366,9 @@ layout = html.Div([html.H4('Convert PDF using Camelot and dash'),
                         html.P('Convert to:'),
                         dcc.Dropdown(options=['USD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CHF', 'ISK', 'NOK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 'IDR', 'ILS', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR'], value='USD', id='currency-output-dropdown'),
                         html.P('Scale from:'),
-                        dcc.Dropdown(options=['NA', 'thousands', 'millions', 'billions', 'k', 'm', 'b'], id='scale-input-dropdown', value='NA'),
+                        dcc.Dropdown(options=['NA', 'real number', 'k', 'm', 'b'], id='scale-input-dropdown', value='NA'),
                         html.P('Scale to:'),
-                        dcc.Dropdown(options=['NA', 'thousands', 'millions', 'billions', 'k', 'm', 'b'], id='scale-output-dropdown', value='NA'),
+                        dcc.Dropdown(options=['NA', 'real number', 'k', 'm', 'b'], id='scale-output-dropdown', value='NA'),
                         html.Button('Convert Currency', id='convert-currency-button', n_clicks=0),
                         html.Br(), html.Br(),
                         
