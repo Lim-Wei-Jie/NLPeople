@@ -10,7 +10,9 @@ import PyPDF2
 from PyPDF2 import PdfReader
 
 from currency_converter import CurrencyConverter
+from forex_python.converter import CurrencyRates
 import re
+from datetime import datetime
 
 import spacy
 
@@ -19,7 +21,7 @@ nlp = spacy.load("en_core_web_sm")
 dash.register_page(__name__, path='/')
 
 
-cr = CurrencyConverter()
+cr = CurrencyRates()
 
 # input_currency = "JPY"
 
@@ -213,11 +215,21 @@ def convert_currency(n_clicks_convert, table_data, selected_cells, currency_inpu
                                 elif scale_output == "billions":
                                     cell_value = cell_value
                         # cell_value = cell_value*scale_input
-                        converted_amount = cr.convert(cell_value, currency_input, currency_output)
+                        converted_amount = cr.convert(currency_input, currency_output, cell_value)
                         table_data[cell['row']][cell['column_id']] = str(converted_amount)
             else:
                 # Print the cell value if it's not a number
                 print(cell_value) 
+        #print date in cell
+        break_loop = False
+        for i in range(len(table_data),-1, -1):
+            for x in range(len(table_data[i-1]),-1,-1):
+                if table_data[i-1][str(x-1)] == "":
+                    table_data[i-1][str(x-1)] = "Exchage Rate from "  + str(datetime.today())
+                    break_loop = True
+                    break
+            if break_loop:
+                break
     return existing_columns, table_data, contents
 
 @dash.callback([Output('new-table', 'columns'),
