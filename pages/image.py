@@ -244,16 +244,12 @@ def convert_currency(n_clicks_convert, table_data, selected_cells, currency_inpu
             else:
                 # Print the cell value if it's not a number
                 print(cell_value) 
-        #print date in cell
-        break_loop = False
-        for i in range(len(table_data),-1, -1):
-            for x in range(len(table_data[i-1]),-1,-1):
-                if table_data[i-1][str(x-1)] == "":
-                    table_data[i-1][str(x-1)] = "Exchage Rate from "  + str(datetime.today())
-                    break_loop = True
-                    break
-            if break_loop:
-                break
+        #add row and print date in cell
+        if "Exchage Rate from" in table_data[len(table_data)-1][str(len(existing_columns)-1)]:
+            table_data[len(table_data)-1][str(len(existing_columns)-1)] = "Exchage Rate from "  + str(datetime.today())
+        else:
+            table_data = add_row(1,table_data,existing_columns,contents)[1]
+            table_data[len(table_data)-1][str(len(existing_columns)-1)] = "Exchage Rate from "  + str(datetime.today())
     return existing_columns, table_data, contents
 
 
