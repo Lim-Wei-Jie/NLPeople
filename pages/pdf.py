@@ -397,7 +397,7 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data):
     grab_row_id = []
     count_for_row = 0
 
-    if value is not None:
+    if value is not None: # if user made a radio button selection (chose a financial metric column)
     # if len(value) != 0:
         for i in range(len(table_data)):
             print("da value", value)
@@ -413,13 +413,17 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data):
                 value_position = col_names_list.index(user_selected_value)
                 print("value position", value_position)
 
-                new_user_selected_value = value_position+1  
+                new_user_selected_value = value_position+1  #position of the right next cell (of the empty cell)
+
+                #if column name (position) is not the last column, we safely select the right next cell
                 if int(user_selected_value) < len(col_names_list)-1:
                     right_row_cell = table_data[i][str(new_user_selected_value)]
                     if right_row_cell != "":
                         print("right row cell", right_row_cell)
                         row_cell = right_row_cell
 
+                #if this is not the first row (btw i indicates row value), we can safely select the row above
+                #row above's value is i-1
                 if i > 0:
                     up_row_cell = table_data[i-1][user_selected_value]                        
                     if up_row_cell != "":
