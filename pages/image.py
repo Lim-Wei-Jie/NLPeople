@@ -14,7 +14,7 @@ import re
 from datetime import datetime
 
 import nltk
-nltk.download('wordnet')
+nltk.download('wordnet', quiet=True)
 from nltk.stem import WordNetLemmatizer
 
 # initialize the WordNetLemmatizer
@@ -140,7 +140,7 @@ def img_output(contents, filename):
 
         df = pd.DataFrame(data)
 
-        return [{'name': 'Column {}'.format(i), 'id': str(i), 'deletable': True, 'renamable': True} for i in df.columns], df.to_dict('records'), contents
+        return [{'name': 'Column {}'.format(i), 'id': str(i), 'renamable': True} for i in df.columns], df.to_dict('records'), contents
 
 
 def update_columns(n_clicks, value, existing_columns, table_data, contents):
@@ -151,7 +151,7 @@ def update_columns(n_clicks, value, existing_columns, table_data, contents):
     if n_clicks > 0:
         existing_columns.append({
             'name': value, 'id': str(int(existing_column_ids[-1])+1), 
-            'renamable': True, 'deletable': True
+            'renamable': True
         })
     else:
         raise exceptions.PreventUpdate
@@ -331,13 +331,14 @@ def add_row_new_table(n_clicks_add_row, new_table_data, existing_columns):
 
 @dash.callback(Output('financial-terms-cols-boxes-img', 'options'),
                 [Input('img-viewer', 'data'),
-                Input('spacy-button', 'n_clicks')],
+                Input('spacy-button', 'n_clicks'),
+                State('financial-terms-list-img', 'value')],
                 prevent_initial_call = True)
-def shortlisted_financial_term_columns_for_user_selection(table_data, n_clicks):
+def shortlisted_financial_term_columns_for_user_selection(table_data, n_clicks, metric_list):
 
     if n_clicks > 0:
-        stemmed_master_list = ["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev"]
+        # stemmed_master_list = ["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
+        #                         "equity", "asset", "debt", "cash", "liability", "rev"]
         
         # go thru every col (DONE)
         # for each col, check the rows (DONE)
@@ -379,7 +380,7 @@ def shortlisted_financial_term_columns_for_user_selection(table_data, n_clicks):
                         clean_token_v1 = re.sub(r'[^a-zA-Z]', '', token)
                         clean_token_v2 = clean_token_v1.lower()
                         clean_token_v3 = lemmatizer.lemmatize(clean_token_v2)
-                        for keyword in stemmed_master_list:
+                        for keyword in metric_list:
                             if keyword in clean_token_v3:
                                 my_check.append(token)
                                 number_of_instances_in_col += 1
@@ -404,16 +405,32 @@ def shortlisted_financial_term_columns_for_user_selection(table_data, n_clicks):
 @dash.callback([Output('img-viewer', 'selected_rows')],
                 [Input('financial-terms-cols-boxes-img', 'value'),
                 Input('img-viewer', 'data'),
+                State('financial-terms-list-img', 'value'),
+                Input('deselect-rows-button', 'n_clicks')
                 ],
                 prevent_initial_call = True)
-def shortlisted_financial_term_columns_for_user_selection(value, table_data):
-    # if len(value) != 0:
+def update_row_selection(value, table_data, metric_list, n_clicks_deselect):
+    triggered_id = ctx.triggered_id
+    # print(triggered_id)
+    if triggered_id == 'deselect-rows-button':
+        return deselect_all_rows(n_clicks_deselect)
+    elif triggered_id == 'financial-terms-cols-boxes-img':
+        return shortlisted_financial_term_columns_for_user_selection(value, table_data, metric_list)
+    else:
+        raise exceptions.PreventUpdate
+
+def deselect_all_rows(n_clicks_deselect):
+    if n_clicks_deselect > 0:
+        selected_rows = [[]]
+    return selected_rows
+
+def shortlisted_financial_term_columns_for_user_selection(value, table_data, metric_list):    # if len(value) != 0:
     if value is not None:
         print("value", value)
         print("data for shortlisted-fin-terms-cols", table_data)
 
-    stemmed_master_list = ["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev"]
+    # stemmed_master_list = ["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
+    #                             "equity", "asset", "debt", "cash", "liability", "rev"]
 
     # get column names in list of dicts --> first key of every list
     col_names_list = []
@@ -427,7 +444,7 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data):
     grab_row_id = []
     count_for_row = 0
 
-    if value is not None:
+    if value is not None: # if user made a radio button selection (chose a financial metric column)
     # if len(value) != 0:
         for i in range(len(table_data)):
             print("da value", value)
@@ -443,13 +460,17 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data):
                 value_position = col_names_list.index(user_selected_value)
                 print("value position", value_position)
 
-                new_user_selected_value = value_position+1  
+                new_user_selected_value = value_position+1  #position of the right next cell (of the empty cell)
+
+                #if column name (position) is not the last column, we safely select the right next cell
                 if int(user_selected_value) < len(col_names_list)-1:
                     right_row_cell = table_data[i][str(new_user_selected_value)]
                     if right_row_cell != "":
                         print("right row cell", right_row_cell)
                         row_cell = right_row_cell
 
+                #if this is not the first row (btw i indicates row value), we can safely select the row above
+                #row above's value is i-1
                 if i > 0:
                     up_row_cell = table_data[i-1][user_selected_value]                        
                     if up_row_cell != "":
@@ -466,7 +487,7 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data):
                     clean_token_v1 = re.sub(r'[^a-zA-Z]', '', token)
                     clean_token_v2 = clean_token_v1.lower()
                     clean_token_v3 = lemmatizer.lemmatize(clean_token_v2)
-                    for keyword in stemmed_master_list:
+                    for keyword in metric_list:
                         if keyword == clean_token_v3:
                             # my_check.append(token)
                             # number_of_instances_in_col += 1
@@ -517,7 +538,7 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
         #             for i in range(len(new_df))]
         # print("new_df: ", new_df)
 
-        if active_cell is not None and len(new_df)>1 and "Quarters" in new_df:
+        if active_cell is not None and len(new_df)>1:
             if active_cell["row"]!=0:
                 row = active_cell["row"]
                 print("row: ", row)
@@ -526,11 +547,35 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
                     dcc.Graph(id='graph',
                                 figure=px.line(
                                     data_frame = new_df, 
-                                    x = "Quarters",
+                                    x = new_df.columns[0],
                                     y = new_df.columns[row]
                                 ).update_layout(autotypenumbers='convert types')
                                 )
                 ]
+
+@dash.callback(Output('financial-terms-list-img', 'options'),
+                [Input('input-metric', "value"),
+                State('financial-terms-list-img', 'options'),
+                Input('add-metric-button', 'n_clicks')],
+                prevent_initial_call = True)
+def update_metrics_list(new_metric, metric_list, n_clicks):
+    triggered_id = ctx.triggered_id
+    if triggered_id == 'add-metric-button':
+        return add_metric_to_list(new_metric, metric_list, n_clicks)
+    else:
+        raise exceptions.PreventUpdate
+
+def add_metric_to_list(new_metric, metric_list, n_clicks):
+    metric_list_in_lower = []
+    for metric in metric_list:
+        metric_list_in_lower.append(metric.lower())
+
+    if n_clicks > 0:
+        if new_metric.lower() not in metric_list_in_lower:
+            metric_list.append(new_metric)
+    else:
+        raise exceptions.PreventUpdate
+    return metric_list
 
 # Upload component:
 img_load = dcc.Upload(id='img-upload',
@@ -595,6 +640,19 @@ financial_terms_cols_checklist = dcc.RadioItems(
                                     inline=True
                                     )
 
+input_metric = dcc.Input(id='input-metric',
+                        type='text',
+                        placeholder='financial metric')
+
+financial_terms_list = dcc.Checklist(
+                                options=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
+                                "equity", "asset", "debt", "cash", "liability", "rev"],
+                                value=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
+                                "equity", "asset", "debt", "cash", "liability", "rev"],
+                                id='financial-terms-list-img',
+                                inline=True
+                            )
+
 #Place into the app
 layout = html.Div([html.H4('Convert Image using OpenCV, PyTesseract, Dash'),
                         img_load,
@@ -615,12 +673,19 @@ layout = html.Div([html.H4('Convert Image using OpenCV, PyTesseract, Dash'),
                                 html.Button('Add Row', id='adding-rows-button', n_clicks=0),
 
                                 html.Button('Get Columns with Metrics!', id='spacy-button', n_clicks=0),
+                                html.Button('Deselect All', id='deselect-rows-button', n_clicks=0),
                                 html.Button('Extract Table', id='get-new-table-button', n_clicks=0),
                                 html.P("From the shortlisted columns below, please choose 1 column which contains the financial metrics."),
                                 financial_terms_cols_checklist
                                 ], style={'width': '42%', 'display': 'inline-block'}),
                             html.Div(style={'width': '2%', 'display': 'inline-block'}),
                             html.Div([
+                                html.H5('Metrics'),
+                                html.P("All Metrics:"),
+                                financial_terms_list,
+                                html.P("Add Metric:"),
+                                input_metric,
+                                html.Button('Add', id='add-metric-button', n_clicks=0),
                                 html.H5('Convert Currency'),
                                 html.P('Convert from:'),
                                 dcc.Dropdown(options=['USD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CHF', 'ISK', 'NOK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 'IDR', 'ILS', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR'], value='USD', id='currency-input-dropdown'),
@@ -653,5 +718,9 @@ layout = html.Div([html.H4('Convert Image using OpenCV, PyTesseract, Dash'),
 
                         html.Br(), html.Br(),
                         html.H5('Dashboard'),
+                        html.P("For the dashboard to work, there are a few assumptions:"),
+                        html.P("1) The first row in the Extracted Table will be the x-axis of the graph, where the first cell is variable name and the subsequent cells are the UNIQUE classes of the x-axis"),
+                        html.P("2) Extracted Table must only have 1 column of UNIQUE row headers (Must be the first column in the table)"),
+                        html.P("For the graph to appear, click any cell in the Extracted Table except for the first row."),
                         html.Div(id='line-container-img')
                         ])
