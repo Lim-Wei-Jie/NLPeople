@@ -350,7 +350,7 @@ def shortlisted_financial_term_columns_for_user_selection(table_data, n_clicks, 
                         clean_token_v2 = clean_token_v1.lower()
                         clean_token_v3 = lemmatizer.lemmatize(clean_token_v2)
                         for keyword in metric_list:
-                            if keyword in clean_token_v3:
+                            if keyword.lower() in clean_token_v3:
                                 my_check.append(token)
                                 number_of_instances_in_col += 1
             instances_of_fin_terms_in_cols.append(number_of_instances_in_col)
@@ -459,7 +459,7 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data, met
                     clean_token_v2 = clean_token_v1.lower()
                     clean_token_v3 = lemmatizer.lemmatize(clean_token_v2)
                     for keyword in metric_list:
-                        if keyword == clean_token_v3:
+                        if keyword.lower() in clean_token_v3:
                             # my_check.append(token)
                             # number_of_instances_in_col += 1
                             if count_for_row not in grab_row_id:
