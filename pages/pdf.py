@@ -67,13 +67,13 @@ def update_table(contents, filename, n_clicks, value, existing_columns, n_clicks
     # print(triggered_id)
     if triggered_id == 'pdf-upload':
         return pdf_output(contents, filename)
-    elif triggered_id == 'adding-columns-button':
+    elif triggered_id == 'adding-columns-button' and table_data is not None:
         return update_columns(n_clicks, value, existing_columns, table_data, contents)
-    elif triggered_id == 'adding-rows-button':
+    elif triggered_id == 'adding-rows-button' and table_data is not None:
         return add_row(n_clicks_row, table_data, existing_columns, contents)
-    elif triggered_id == 'convert-currency-button':
+    elif triggered_id == 'convert-currency-button' and table_data is not None:
         return convert_currency(n_clicks_convert, table_data, selected_cells, currency_input, currency_output, existing_columns, contents)
-    elif triggered_id == 'convert-scale-button':
+    elif triggered_id == 'convert-scale-button' and table_data is not None:
         return convert_scale(n_clicks_scale, table_data, selected_cells, scale_input, scale_output, existing_columns, contents)
     else:
         raise exceptions.PreventUpdate
@@ -253,9 +253,9 @@ def update_extracted_table(selected_rows, n_clicks_get_table, table_data, n_clic
     triggered_id = ctx.triggered_id
     if triggered_id == 'get-new-table-button':
         return new_table(selected_rows, n_clicks_get_table, table_data)
-    elif triggered_id == 'adding-columns-button-new-table':
+    elif triggered_id == 'adding-columns-button-new-table' and new_table_data is not None:
         return update_columns_new_table(n_clicks_add_column, new_column_name, existing_columns, new_table_data)
-    elif triggered_id == 'adding-rows-button-new-table':
+    elif triggered_id == 'adding-rows-button-new-table' and new_table_data is not None:
         return add_row_new_table(n_clicks_add_row, new_table_data, existing_columns)
     else:
         raise exceptions.PreventUpdate
@@ -298,13 +298,13 @@ def add_row_new_table(n_clicks_add_row, new_table_data, existing_columns):
 
 
 @dash.callback(Output('financial-terms-cols-boxes', 'options'),
-                [State('pdf-viewer', 'data'),
+                [Input('pdf-viewer', 'data'),
                 Input('spacy-button', 'n_clicks'),
-                State('financial-terms-list', 'value')],
+                Input('financial-terms-list', 'value')],
                 prevent_initial_call = True)
 def shortlisted_financial_term_columns_for_user_selection(table_data, n_clicks, metric_list):
 
-    if n_clicks > 0:
+    if n_clicks > 0 and table_data is not None:
 
         # stemmed_master_list = ["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
         #                         "equity", "asset", "debt", "cash", "liability", "rev"]
@@ -375,7 +375,7 @@ def shortlisted_financial_term_columns_for_user_selection(table_data, n_clicks, 
 @dash.callback([Output('pdf-viewer', 'selected_rows')],
                 [Input('financial-terms-cols-boxes', 'value'),
                 Input('pdf-viewer', 'data'),
-                State('financial-terms-list', 'value'),
+                Input('financial-terms-list', 'value'),
                 Input('deselect-rows-button', 'n_clicks')
                 ],
                 prevent_initial_call = True)
@@ -392,6 +392,8 @@ def update_row_selection(value, table_data, metric_list, n_clicks_deselect):
 def deselect_all_rows(n_clicks_deselect):
     if n_clicks_deselect > 0:
         selected_rows = [[]]
+    else:
+        raise exceptions.PreventUpdate
     return selected_rows
 
 def shortlisted_financial_term_columns_for_user_selection(value, table_data, metric_list):
@@ -531,6 +533,12 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
                                 # .update_traces(marker_color=colors, hovertemplate="<b>%{y}%</b><extra></extra>")
                                 )
                 ]
+            else:
+                raise exceptions.PreventUpdate
+        else:
+            raise exceptions.PreventUpdate
+    else:
+        raise exceptions.PreventUpdate
 
 @dash.callback(Output('financial-terms-list', 'options'),
                 [Input('input-metric', "value"),
@@ -539,7 +547,7 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
                 prevent_initial_call = True)
 def update_metrics_list(new_metric, metric_list, n_clicks):
     triggered_id = ctx.triggered_id
-    if triggered_id == 'add-metric-button':
+    if triggered_id == 'add-metric-button' and new_metric is not None:
         return add_metric_to_list(new_metric, metric_list, n_clicks)
     else:
         raise exceptions.PreventUpdate
