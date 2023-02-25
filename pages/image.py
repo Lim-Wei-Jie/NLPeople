@@ -536,11 +536,30 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
         print("new_df: ", new_df)
         print("new_df columns: ", new_df.columns)
 
+        # For Rule 1: the first row in the Extracted Table has to be the x-axis hence needs to be filled and classes need to have different namings
+        values_in_first_row = dff.iloc[0].to_list()
+        x_axis_variable = values_in_first_row[0]
+        classes = values_in_first_row[1:]
+
+        # For Rule 2: unique_values_for_rows and current_df_columns are needed to find out whether there are UNIQUE row headers. dashboard can only be displayed without errors when the Extracted Table contains UNIQUE row headers
+        # to store all the UNIQUE df.columns values without empty cells
+        unique_values_for_rows = []
+        for v in new_df.columns:
+            if v.strip() != '' and v not in unique_values_for_rows:
+                unique_values_for_rows.append(v)
+        
+        # to store all the df.columns values without empty cells
+        current_df_columns = []
+        for v in new_df.columns:
+            if v.strip() != '':
+                current_df_columns.append(v)
+
         # colors = ['#7FDBFF' if i in slctd_row_indices else '#0074D9'
         #             for i in range(len(new_df))]
         # print("new_df: ", new_df)
 
-        if active_cell is not None and len(new_df)>1:
+        # Show dashboard based on the 2 rules, and datatable cannot be empty
+        if active_cell is not None and len(new_df)>1 and len(unique_values_for_rows) == len(current_df_columns) and x_axis_variable.strip()!='' and len(set(classes))==len(classes):
             if active_cell["row"]!=0:
                 row = active_cell["row"]
                 print("row: ", row)
@@ -727,7 +746,7 @@ layout = html.Div([html.H4('Convert Image using OpenCV, PyTesseract, Dash'),
                         html.Br(), html.Br(),
                         html.H5('Dashboard'),
                         html.P("For the dashboard to work, there are a few assumptions:"),
-                        html.P("1) The first row in the Extracted Table will be the x-axis of the graph, where the first cell is variable name and the subsequent cells are the UNIQUE classes of the x-axis"),
+                        html.P("1) The first row in the Extracted Table will be the x-axis of the graph, where the first cell is variable name and the subsequent cells are the UNIQUE classes of the x-axis (the classes have to be in continuous ascending order if they are numbers)"),
                         html.P("2) Extracted Table must only have 1 column of UNIQUE row headers (Must be the first column in the table)"),
                         html.P("For the graph to appear, click any cell in the Extracted Table except for the first row."),
                         html.Div(id='line-container-img')
