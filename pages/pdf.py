@@ -241,6 +241,8 @@ def convert_scale(n_clicks_scale, table_data, selected_cells, scale_input, scale
 @dash.callback([Output('new-table', 'columns'),
                 Output('new-table', 'data')],
                 [Input('pdf-viewer', 'selected_rows'),
+                Input('financial-terms-cols-boxes', 'value'),
+                Input('financial-terms-list', 'value'),
                 Input('get-new-table-button', 'n_clicks'),
                 Input('pdf-viewer', 'data'),
                 Input('adding-columns-button-new-table', 'n_clicks'),
@@ -249,10 +251,10 @@ def convert_scale(n_clicks_scale, table_data, selected_cells, scale_input, scale
                 State('new-table', 'data'),
                 Input('adding-rows-button-new-table', 'n_clicks')],
                 prevent_initial_call = True)
-def update_extracted_table(selected_rows, n_clicks_get_table, table_data, n_clicks_add_column, new_column_name, existing_columns, new_table_data, n_clicks_add_row):
+def update_extracted_table(selected_rows, value_of_column, selected_metrics, n_clicks_get_table, table_data, n_clicks_add_column, new_column_name, existing_columns, new_table_data, n_clicks_add_row):
     triggered_id = ctx.triggered_id
     if triggered_id == 'get-new-table-button':
-        return new_table(selected_rows, n_clicks_get_table, table_data)
+        return new_table(selected_rows, value_of_column, selected_metrics, n_clicks_get_table, table_data)
     elif triggered_id == 'adding-columns-button-new-table' and new_table_data is not None:
         return update_columns_new_table(n_clicks_add_column, new_column_name, existing_columns, new_table_data)
     elif triggered_id == 'adding-rows-button-new-table' and new_table_data is not None:
@@ -260,16 +262,74 @@ def update_extracted_table(selected_rows, n_clicks_get_table, table_data, n_clic
     else:
         raise exceptions.PreventUpdate
 
-def new_table(selected_rows, n_clicks_get_table, table_data):
+def new_table(selected_rows, value_of_column, selected_metrics, n_clicks_get_table, table_data):
     if selected_rows is None:
         selected_rows = []
 
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     if 'get-new-table-button' in changed_id:
-        selected_rows = sorted(selected_rows)
+        ######## old implementation (start) #########
+        # selected_rows = sorted(selected_rows)
+        # list_of_dicts = []
+        # for i in selected_rows:
+        #     list_of_dicts.append(table_data[i])
+        ######## old implementation (end) #########
+
+        ######## new implementation (start) - align row headers and values in same row ########
+
+        #get column names in list of dicts --> first key of every list
+        col_names_list = []
+        for colname in table_data[0]:
+            col_names_list.append(colname) #colname is in string
+        print("woohoo col names: " , col_names_list)
+
         list_of_dicts = []
-        for i in selected_rows:
-            list_of_dicts.append(table_data[i])
+        if value_of_column is None:
+            print("boohoo2")
+            print("lalala2", value_of_column)
+
+        choose_row_id = []
+        count_for_row = 0
+
+        if value_of_column is not None: 
+            for i in range(len(table_data)): #going through rows
+                print("what's table data length?")
+                print("myyy i2", i)
+                user_selected_value = str(value_of_column)
+                fin_row_cell = table_data[i][user_selected_value]
+
+                for j in range(len(table_data[i])):
+                    if table_data[i][str(j)] == "": # if row cell empty
+                        if table_data[i][user_selected_value] != "" and i != len(table_data)-1: # look at the fin row cell
+                            if table_data[i+1][user_selected_value] == "": # look at 1 fin row cell down
+                                if table_data[i][str(j)] == "" and table_data[i+1][str(j)] != "":
+                                    table_data[i][str(j)] = table_data[i+1][str(j)]
+
+
+                if fin_row_cell != "":
+                    row_cell = fin_row_cell
+                    tokenised_row_cell = row_cell.split(" ")
+                    for token in tokenised_row_cell:
+                        #remove special ch
+                        #convert to lower
+                        clean_token_v1 = re.sub(r'[^a-zA-Z]', '', token)
+                        clean_token_v2 = clean_token_v1.lower()
+                        clean_token_v3 = lemmatizer.lemmatize(clean_token_v2)
+                        for keyword in selected_metrics:
+                            if keyword.lower() in clean_token_v3:
+                                if count_for_row not in choose_row_id:
+                                    choose_row_id.append(count_for_row)
+                count_for_row += 1
+                print("show my table NOW: ", table_data)
+                print("choose_row_id", choose_row_id)
+                print("row 12", table_data[12])
+
+
+        for row_id in choose_row_id:
+            list_of_dicts.append(table_data[row_id])
+
+        print("selected fin dicts: ", list_of_dicts)
+        ######## new implementation (end) #########
     else:
         raise exceptions.PreventUpdate
     
