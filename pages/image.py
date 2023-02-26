@@ -312,69 +312,71 @@ def new_table(selected_rows, value_of_column, selected_metrics, n_clicks, table_
         selected_rows = []
 
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    list_of_dicts = []
     if 'get-new-table-button' in changed_id:
         ######## old implementation (start) #########
-        # selected_rows = sorted(selected_rows)
-        # list_of_dicts = []
-        # for i in selected_rows:
-        #     list_of_dicts.append(table_data[i])
+        if value_of_column is None or selected_rows != list_of_dicts:
+            selected_rows = sorted(selected_rows)
+            list_of_dicts = []
+            for i in selected_rows:
+                list_of_dicts.append(table_data[i])
         ######## old implementation (end) #########
 
         ######## new implementation (start) - align row headers and values in same row ########
+        else:
+            #get column names in list of dicts --> first key of every list
+            col_names_list = []
+            for colname in table_data[0]:
+                col_names_list.append(colname) #colname is in string
+            print("woohoo col names: " , col_names_list)
 
-        #get column names in list of dicts --> first key of every list
-        col_names_list = []
-        for colname in table_data[0]:
-            col_names_list.append(colname) #colname is in string
-        print("woohoo col names: " , col_names_list)
+            list_of_dicts = []
+            if value_of_column is None:
+                print("boohoo2")
+                print("lalala2", value_of_column)
 
-        list_of_dicts = []
-        if value_of_column is None:
-            print("boohoo2")
-            print("lalala2", value_of_column)
+            choose_row_id = []
+            count_for_row = 0
 
-        choose_row_id = []
-        count_for_row = 0
+            if value_of_column is not None: 
+                for i in range(len(table_data)): #going through rows
+                    print("what's table data length?")
+                    print("myyy i2", i)
+                    user_selected_value = str(value_of_column)
+                    fin_row_cell = table_data[i][user_selected_value]
 
-        if value_of_column is not None: 
-            for i in range(len(table_data)): #going through rows
-                print("what's table data length?")
-                print("myyy i2", i)
-                user_selected_value = str(value_of_column)
-                fin_row_cell = table_data[i][user_selected_value]
-
-                for j in range(len(table_data[i])):
-                    if table_data[i][str(j)] == "": # if row cell empty
-                        if table_data[i][user_selected_value] != "" and i != len(table_data)-1: # look at the fin row cell
-                            if table_data[i+1][user_selected_value] == "": # look at 1 fin row cell down
-                                if table_data[i][str(j)] == "" and table_data[i+1][str(j)] != "":
-                                    table_data[i][str(j)] = table_data[i+1][str(j)]
-
-
-                if fin_row_cell != "":
-                    row_cell = fin_row_cell
-                    tokenised_row_cell = row_cell.split(" ")
-                    for token in tokenised_row_cell:
-                        #remove special ch
-                        #convert to lower
-                        clean_token_v1 = re.sub(r'[^a-zA-Z]', '', token)
-                        clean_token_v2 = clean_token_v1.lower()
-                        clean_token_v3 = lemmatizer.lemmatize(clean_token_v2)
-                        for keyword in selected_metrics:
-                            if keyword.lower() in clean_token_v3:
-                                if count_for_row not in choose_row_id:
-                                    choose_row_id.append(count_for_row)
-                count_for_row += 1
-                print("show my table NOW: ", table_data)
-                print("choose_row_id", choose_row_id)
-                print("row 12", table_data[12])
+                    for j in range(len(table_data[i])):
+                        if table_data[i][str(j)] == "": # if row cell empty
+                            if table_data[i][user_selected_value] != "" and i != len(table_data)-1: # look at the fin row cell
+                                if table_data[i+1][user_selected_value] == "": # look at 1 fin row cell down
+                                    if table_data[i][str(j)] == "" and table_data[i+1][str(j)] != "":
+                                        table_data[i][str(j)] = table_data[i+1][str(j)]
 
 
-        for row_id in choose_row_id:
-            list_of_dicts.append(table_data[row_id])
+                    if fin_row_cell != "":
+                        row_cell = fin_row_cell
+                        tokenised_row_cell = row_cell.split(" ")
+                        for token in tokenised_row_cell:
+                            #remove special ch
+                            #convert to lower
+                            clean_token_v1 = re.sub(r'[^a-zA-Z]', '', token)
+                            clean_token_v2 = clean_token_v1.lower()
+                            clean_token_v3 = lemmatizer.lemmatize(clean_token_v2)
+                            for keyword in selected_metrics:
+                                if keyword.lower() in clean_token_v3:
+                                    if count_for_row not in choose_row_id:
+                                        choose_row_id.append(count_for_row)
+                    count_for_row += 1
+                    print("show my table NOW: ", table_data)
+                    print("choose_row_id", choose_row_id)
+                    print("row 12", table_data[12])
 
-        print("selected fin dicts: ", list_of_dicts)
-        ######## new implementation (end) #########
+
+            for row_id in choose_row_id:
+                list_of_dicts.append(table_data[row_id])
+
+            print("selected fin dicts: ", list_of_dicts)
+            ######## new implementation (end) #########
     else:
         raise exceptions.PreventUpdate
     
