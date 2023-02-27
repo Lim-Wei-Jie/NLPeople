@@ -141,8 +141,6 @@ def img_output(contents, filename):
             whole = [temp]
 
             numbers_length = len(numbers)
-            print(max(lengths_of_each_rows))
-            print("numbers_length:", numbers_length)
             for i in range(0, max(lengths_of_each_rows)+1 - numbers_length):
                 whole.append("")
             whole.extend(numbers)
@@ -286,8 +284,6 @@ def convert_scale(n_clicks_scale, table_data, selected_cells, scale_input, scale
 @dash.callback([Output('new-table-img', 'columns'),
                 Output('new-table-img', 'data')],
                 [Input('img-viewer', 'selected_rows'),
-                Input('financial-terms-cols-boxes-img', 'value'),
-                Input('financial-terms-list-img', 'value'),
                 Input('get-new-table-button', 'n_clicks'),
                 Input('img-viewer', 'data'),
                 Input('adding-columns-button-new-table', 'n_clicks'),
@@ -296,10 +292,10 @@ def convert_scale(n_clicks_scale, table_data, selected_cells, scale_input, scale
                 State('new-table-img', 'data'),
                 Input('adding-rows-button-new-table', 'n_clicks')],
                 prevent_initial_call = True)
-def update_extracted_table(selected_rows, value_of_column, selected_metrics, n_clicks_get_table, table_data, n_clicks_add_column, new_column_name, existing_columns, new_table_data, n_clicks_add_row):
+def update_extracted_table(selected_rows, n_clicks_get_table, table_data, n_clicks_add_column, new_column_name, existing_columns, new_table_data, n_clicks_add_row):
     triggered_id = ctx.triggered_id
     if triggered_id == 'get-new-table-button':
-        return new_table(selected_rows, value_of_column, selected_metrics, n_clicks_get_table, table_data)
+        return new_table(selected_rows, n_clicks_get_table, table_data)
     elif triggered_id == 'adding-columns-button-new-table' and new_table_data is not None:
         return update_columns_new_table(n_clicks_add_column, new_column_name, existing_columns, new_table_data)
     elif triggered_id == 'adding-rows-button-new-table' and new_table_data is not None:
@@ -307,76 +303,16 @@ def update_extracted_table(selected_rows, value_of_column, selected_metrics, n_c
     else:
         raise exceptions.PreventUpdate
 
-def new_table(selected_rows, value_of_column, selected_metrics, n_clicks, table_data):
+def new_table(selected_rows, n_clicks, table_data):
     if selected_rows is None:
         selected_rows = []
 
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
-    list_of_dicts = []
     if 'get-new-table-button' in changed_id:
-        ######## old implementation (start) #########
-        if value_of_column is None or selected_rows != list_of_dicts:
-            selected_rows = sorted(selected_rows)
-            list_of_dicts = []
-            for i in selected_rows:
-                list_of_dicts.append(table_data[i])
-        ######## old implementation (end) #########
-
-        ######## new implementation (start) - align row headers and values in same row ########
-        else:
-            #get column names in list of dicts --> first key of every list
-            col_names_list = []
-            for colname in table_data[0]:
-                col_names_list.append(colname) #colname is in string
-            print("woohoo col names: " , col_names_list)
-
-            list_of_dicts = []
-            if value_of_column is None:
-                print("boohoo2")
-                print("lalala2", value_of_column)
-
-            choose_row_id = []
-            count_for_row = 0
-
-            if value_of_column is not None: 
-                for i in range(len(table_data)): #going through rows
-                    print("what's table data length?")
-                    print("myyy i2", i)
-                    user_selected_value = str(value_of_column)
-                    fin_row_cell = table_data[i][user_selected_value]
-
-                    for j in range(len(table_data[i])):
-                        if table_data[i][str(j)] == "": # if row cell empty
-                            if table_data[i][user_selected_value] != "" and i != len(table_data)-1: # look at the fin row cell
-                                if table_data[i+1][user_selected_value] == "": # look at 1 fin row cell down
-                                    if table_data[i][str(j)] == "" and table_data[i+1][str(j)] != "":
-                                        table_data[i][str(j)] = table_data[i+1][str(j)]
-
-
-                    if fin_row_cell != "":
-                        row_cell = fin_row_cell
-                        tokenised_row_cell = row_cell.split(" ")
-                        for token in tokenised_row_cell:
-                            #remove special ch
-                            #convert to lower
-                            clean_token_v1 = re.sub(r'[^a-zA-Z]', '', token)
-                            clean_token_v2 = clean_token_v1.lower()
-                            clean_token_v3 = lemmatizer.lemmatize(clean_token_v2)
-                            for keyword in selected_metrics:
-                                if keyword.lower() in clean_token_v3:
-                                    if count_for_row not in choose_row_id:
-                                        choose_row_id.append(count_for_row)
-                    count_for_row += 1
-                    print("show my table NOW: ", table_data)
-                    print("choose_row_id", choose_row_id)
-                    print("row 12", table_data[12])
-
-
-            for row_id in choose_row_id:
-                list_of_dicts.append(table_data[row_id])
-
-            print("selected fin dicts: ", list_of_dicts)
-            ######## new implementation (end) #########
+        selected_rows = sorted(selected_rows)
+        list_of_dicts = []
+        for i in selected_rows:
+            list_of_dicts.append(table_data[i])
     else:
         raise exceptions.PreventUpdate
     
@@ -529,27 +465,27 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data, met
 
             # fill in the empty row cells with possible financial metrics
 
-            if row_cell == "":
-                print("went in")
-                value_position = col_names_list.index(user_selected_value)
-                print("value position", value_position)
+            # if row_cell == "":
+            #     print("went in")
+            #     value_position = col_names_list.index(user_selected_value)
+            #     print("value position", value_position)
 
-                new_user_selected_value = value_position+1  #position of the right next cell (of the empty cell)
+            #     new_user_selected_value = value_position+1  #position of the right next cell (of the empty cell)
 
-                #if column name (position) is not the last column, we safely select the right next cell
-                if int(user_selected_value) < len(col_names_list)-1:
-                    right_row_cell = table_data[i][str(new_user_selected_value)]
-                    if right_row_cell != "":
-                        print("right row cell", right_row_cell)
-                        row_cell = right_row_cell
+            #     #if column name (position) is not the last column, we safely select the right next cell
+            #     if int(user_selected_value) < len(col_names_list)-1:
+            #         right_row_cell = table_data[i][str(new_user_selected_value)]
+            #         if right_row_cell != "":
+            #             print("right row cell", right_row_cell)
+            #             row_cell = right_row_cell
 
-                #if this is not the first row (btw i indicates row value), we can safely select the row above
-                #row above's value is i-1
-                if i > 0:
-                    up_row_cell = table_data[i-1][user_selected_value]                        
-                    if up_row_cell != "":
-                        print("up row cell", up_row_cell)
-                        row_cell = up_row_cell
+            #     #if this is not the first row (btw i indicates row value), we can safely select the row above
+            #     #row above's value is i-1
+            #     if i > 0:
+            #         up_row_cell = table_data[i-1][user_selected_value]                        
+            #         if up_row_cell != "":
+            #             print("up row cell", up_row_cell)
+            #             row_cell = up_row_cell
 
             if row_cell != "" and row_cell != None:
                 # print("row: ", row)
