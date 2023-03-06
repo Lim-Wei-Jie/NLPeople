@@ -1,24 +1,34 @@
 # NLPeople
 
-To create new env
+To create new env, run CMD as administrator and install virtualenv
 
 ```
-conda env create -f ./environment/conda.yaml
+pip install virtualenv
 ```
 
-To activate env
+Check if virtualenv is installed
 ```
-conda activate dash-app
+virtualenv --version
 ```
 
-To deactivate env
+Create env (virtual env name = venv)
 ```
-conda deactivate
+virtualenv venv
+```
+
+Activate virtualenv
+```
+venv\Scripts\activate
+```
+
+Deactivate virtualenv
+```
+deactivate
 ```
 
 To install pip dependencies
 ```
-python -m pip install -r ./environment/requirements.txt
+python -m pip install -r ./requirements.txt
 ```
 
 Usage:
