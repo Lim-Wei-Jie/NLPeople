@@ -5,6 +5,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = Dash(__name__, use_pages=True, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
 
+server = app.server
+
 app.layout = html.Div(
     [
         # Framework of the main app
