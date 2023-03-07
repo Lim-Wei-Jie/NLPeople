@@ -10,7 +10,8 @@ import camelot as cam
 import PyPDF2
 from PyPDF2 import PdfReader
 
-from forex_python.converter import CurrencyRates
+import requests
+
 import re
 from datetime import datetime
 
@@ -22,8 +23,6 @@ from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 
 dash.register_page(__name__, path='/')
-
-cr = CurrencyRates()
 
 def is_number(string):
     string = string.replace(',', '')
@@ -171,6 +170,13 @@ def add_row(n_clicks_row, table_data, existing_columns, contents):
 def convert_currency(n_clicks_convert, table_data, selected_cells, currency_input, currency_output, existing_columns, contents):
     print(table_data)
     if n_clicks_convert > 0:
+        url = "https://api.exchangerate.host/convert?from=" + str(currency_input) + "&to=" + str(currency_output)
+        response = requests.get(url)
+        data = response.json()
+        exchange_rate = data['result'] 
+        exchange_date = data['date']
+        historical = data['historical'] # check if exchange rate is historical or not (realtime)
+
         for cell in selected_cells:
             cell_value = table_data[cell['row']][cell['column_id']]
             print(cell_value)
@@ -183,7 +189,7 @@ def convert_currency(n_clicks_convert, table_data, selected_cells, currency_inpu
                     print(cell_value)
                     if is_number(cell_value):
                         cell_value = float(cell_value)
-                        converted_amount = cr.convert(currency_input, currency_output, cell_value)
+                        converted_amount = cell_value * exchange_rate
                         table_data[cell['row']][cell['column_id']] = str(converted_amount)
             else:
                 # Print the cell value if it's not a number
@@ -191,6 +197,8 @@ def convert_currency(n_clicks_convert, table_data, selected_cells, currency_inpu
         
         if currency_input != currency_output:
             exchange_rate_time = str(datetime.today())
+            if historical == True:
+                exchange_rate_time = exchange_date
             if n_clicks_convert == 1:
                 table_data.append({c['id']: '' for c in existing_columns})
                 num_rows = len(table_data)
