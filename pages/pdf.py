@@ -450,9 +450,6 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data, met
         print("value", value)
         print("data for shortlisted-fin-terms-cols", table_data)
 
-    # stemmed_master_list = ["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-    #                             "equity", "asset", "debt", "cash", "liability", "rev"]
-
     # get column names in list of dicts --> first key of every list
     col_names_list = []
     for colname in table_data[0]:
@@ -631,6 +628,121 @@ def add_metric_to_list(new_metric, metric_list, n_clicks):
         raise exceptions.PreventUpdate
     return metric_list
 
+
+
+@dash.callback(Output('display-financial-ratio', 'children'),
+                [Input('get-financial-ratios', "n_clicks"),
+                Input('spacy-button', 'n_clicks'),
+                Input('get-new-table-button', 'n_clicks'),
+                Input('financial-terms-cols-boxes', 'value'),
+                Input('new-table', 'columns'),
+                Input('new-table', 'data')
+                ],
+                prevent_initial_call = True)
+def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_extracted, value, columns, table_data):
+    if (n_clicks_fin_col == 0 or n_clicks_extracted ==0 or value == None) and n_clicks_fin_ratio > 0:
+        return "Please click on the 'GET COLUMNS WITH METRICS' button and make a selection. Then, click on the 'EXTRACT TABLE' button."
+    
+    if n_clicks_fin_col > 0 and n_clicks_extracted > 0 and n_clicks_fin_ratio > 0 and value != None:
+        print("tabla", table_data)
+
+        #Step 1: App determines what kind of financial data table_data is. (implement NLP if needed)
+            #go through row cells in selected financial column to find terms 
+            #checks if table_data is from an income statement, balance sheet or cash-flow statement.
+
+      
+        financial_data_type_list = [ { "revenue": 1, "operating profit": 2, "gross profit": 1, "earnings per share": 2, "owners of the parent": 1, "cost of": 1,
+            "other income": 1, "controlling interest": 1, "net income": 1, "interest expense": 1, "per common share": 2, "per share": 1,
+            "tax expense": 1, "sales": 1 }, # dictionary for words from income statements
+
+        { "current assets": 2, "fixed assets": 2, "total assets": 2, "inventory": 1, "inventories": 1, "liabilities": 1, "current liabilities": 3,
+            "taxes payable": 1, "long-term debt": 3, "total current liabilities": 3, "equity": 1, "shareholders' equity": 2, "common shares": 2,
+            "common stock": 2 }, # dictionary for words from balance sheets
+        
+        { "cash flow from operating activities": 10, "cash flow from investing activities": 10, "cash flow from financing activities": 10,
+            "cash flows from operating activities": 10, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
+            "cash flow from": 10, "cash flows from": 10} ] # dictionary for words from cash flow statements
+        
+        income_total_weight = 0
+        balance_total_weight = 0
+        cash_total_weight = 0
+        financial_data_type = ""
+
+        collect_lowered_fin_terms_from_col = []
+        for a_dict in table_data:
+            collect_lowered_fin_terms_from_col.append(a_dict[value].lower())
+        print("collect_lowered_fin_terms_from_col: ", collect_lowered_fin_terms_from_col)
+
+        for fin_data_type_dict in financial_data_type_list:
+            if financial_data_type_list[0] == fin_data_type_dict:
+                for income_key in fin_data_type_dict:
+                    for collected_term in collect_lowered_fin_terms_from_col:
+                        if income_key in collected_term:
+                            income_total_weight += fin_data_type_dict[income_key]
+                            print("added income key: ", income_key)
+
+            if financial_data_type_list[1] == fin_data_type_dict:
+                for balance_key in fin_data_type_dict:
+                    for collected_term in collect_lowered_fin_terms_from_col:
+                        if balance_key in collected_term:
+                            balance_total_weight += fin_data_type_dict[balance_key]
+                            print("added balance key: ", balance_key)
+
+
+            if financial_data_type_list[2] == fin_data_type_dict:
+                for cash_key in fin_data_type_dict:
+                        if cash_key in collected_term:
+                            cash_total_weight += fin_data_type_dict[cash_key]
+                            print("added cash key: ", cash_key)
+
+        list_of_weights = [income_total_weight, balance_total_weight, cash_total_weight]
+
+        print("list_of_weights: ", list_of_weights)
+        max_value = max(list_of_weights)
+        index = list_of_weights.index(max_value)
+
+        if index == 0:
+            financial_data_type = "income statement"
+            print("financial data type is income statement")
+        elif index == 1:
+            financial_data_type = "balance sheet"
+            print("financial data type is balance sheet")
+        else:
+            financial_data_type = "cash flow statement"
+            print("financial data type is cash flow statement")
+
+        #Step 2: Use the right financial metrics
+        #Step 3: Go through selected financial column. Grab values needed to calculate financial metrics. (NLP needed)
+
+        # if financial_data_type == "income statement":
+        #     operating_margin_numerator = ""
+        #     operating_margin_denominator = ""
+        #     for a_dict in table_data:
+        #         if a_dict[value].lower() in ["operating profit", "income from operations"]:
+        #             if a_dict[str(int(value)+1)] != "":
+                        
+        #                 operating_margin_numerator = a_dict[str(int(value)+1)] 
+        #                 print("updated numerator", operating_margin_numerator)
+        #         if a_dict[value] == "Revenue":
+        #             print("line 726 went in")
+        #             if a_dict[str(int(value)+1)] != "": #check if the column beside financial term is "" else the latest value will be updated
+        #                 operating_margin_denominator = a_dict[str(int(value)+1)] 
+        #                 print("updated denominator", operating_margin_denominator)
+        #     operating_margin = operating_margin_numerator + operating_margin_denominator
+        #     final_output = "Operating Margin: " + operating_margin
+        #     return final_output
+
+
+        return financial_data_type
+
+
+
+
+
+
+    
+
+
 #Upload component:
 pdf_load = dcc.Upload(id='pdf-upload',
                         children=html.Div(['Drag and Drop or ', html.A('Select PDF files')]),
@@ -779,5 +891,15 @@ layout = html.Div([html.H4('Convert PDF using Camelot and Dash'),
                         html.P("1) The first row in the Extracted Table will be the x-axis of the graph, where the first cell is variable name and the subsequent cells are the UNIQUE classes of the x-axis (the classes have to be in continuous ascending order if they are numbers)"),
                         html.P("2) Extracted Table must only have 1 column of UNIQUE row headers (Must be the first column in the table)"),
                         html.P("For the graph to appear, click any cell in the Extracted Table except for the first row."),
-                        html.Div(id='line-container')
+                        html.Div(id='line-container'),
+
+                        html.Br(),
+
+                        html.Div([
+                        html.H5('Financial Ratios'),
+                        html.Button('Get Financial Ratios!', id='get-financial-ratios', n_clicks=0),
+                        html.Br(), html.Br(),
+                        html.Div(id='display-financial-ratio'),
+                        html.Br(), html.Br(),
+                        ])
                         ])
