@@ -9,6 +9,7 @@ plotly
 dash
 camelot-py
 ghostscript
+requests
 PyPDF2==2.12.1
 # PyPDF2==3.0.1
 # pytesseract==0.3.10
