@@ -16,7 +16,7 @@ import spacy
 import matplotlib.pyplot as plt
 import os
 
-text = extract_text(r'C:\Users\arkgn\Desktop\public\grab\Grab Q2 22.pdf')
+text = extract_text(r'/Users/ronaldsee/Documents/GitHub/NLPeople/Grab Q2 22_OCR.pdf')
 #print(text)
 
 

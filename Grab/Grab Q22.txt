@@ -1,0 +1,47 @@
+Disclaimer
+
+Forward-Looking Statements
+
+This presentation (this “Presentation”) and the announced investor webcast contain “forward-looking statements” within the meaning of the “safe harbor" provisions of the U.S. Private Securities Litigation Reform Act of 1995. All statements
+other than statements of historical fact contained in this presentation and the webcast, including but not limited to, statements about Grab’s beliefs and expectations, business strategy and plans, objectives of management for future
+operations of Grab, and growth opportunities, are forward-looking statements. Some of these forward-looking statements can be identified by the use of forward-looking words, including “anticipate,” “expect,” “suggest,” “plan,” “believe,”
+“intend,” “estimate,” “target,” “project,” “should,” “could,” “would,” “may,” “will,” “forecast” or other similar expressions. Forward-looking statements are based upon estimates and forecasts and reflect the views, assumptions, expectations, and
+opinions of Grab, which involve inherent risks and uncertainties, and therefore should not be relied upon as being necessarily indicative of future results. A number of factors could cause actual results to differ materially from those contained
+in any forward-looking statement, including but not limited to: Grab’s ability to grow at the desired rate or scale and its ability to manage its growth; its ability to further develop its business, including new products and services; its ability to
+attract and retain partners and consumers; its ability to compete effectively in the intensely competitive and constantly changing market; its ability to continue to raise sufficient capital; its ability to reduce net losses and the use of partner and
+consumer incentives, and to achieve profitability; potential impact of the complex legal and regulatory environment on its business; its ability to protect and maintain its brand and reputation; general economic conditions, in particular as a
+result of COVID-19; expected growth of markets in which Grab operates or may operate; and its ability to defend any legal or governmental proceedings instituted against it. In addition to the foregoing factors, you should also carefully
+consider the other risks and uncertainties described in the “Risk Factors” section of Grab's registration statement on Form F-1 and the prospectus therein, and other documents filed by Grab from time to time with the U.S. Securities and
+Exchange Commission (the “SEC’)
+
+Forward-looking statements speak only as of the date they are made. Grab does not undertake any obligation to update any forward-looking statement, whether as a result of new information, future developments, or otherwise, except as
+required under applicable law.
+
+Unaudited Financial Information and Non-IFRS Financial Measures
+Grab’s unaudited selected financial data for the three months ended June 30, 2022 and 2021 included in this presentation and the investor webcast is based on financial data derived from the Grab’s management accounts that have not been
+reviewed or audited.
+
+This presentation and the investor webcast also include references to non-IFRS financial measures, which include: Adjusted EBITDA, Total Segment Adjusted EBITDA and Segment Adjusted EBITDA. However, the presentation of these non-IFRS
+financial measures is not intended to be considered in isolation from, or as an alternative to, financial measures determined in accordance with IFRS. In addition, these non-IFRS financial measures may differ from non-IFRS financial measures
+with comparable names used by other companies.
+
+Grab uses these non-IFRS financial measures for financial and operational decision-making and as a means to evaluate period-to-period comparisons, and Grab's management believes that these norrlFRS financial measures provide meaningful
+supplemental information regarding its performance by excluding certain items that may not be indicative of its recurring core business operating results. For example, Grab's management uses: Total Segment Adjusted EBITDA as a useful
+indicator of the economics of Grab’s business segments, as it does not include regional corporate costs.
+
+There are a number of limitations related to the use of non-IFRS financial measures. In light of these limitations, we provide specific information regarding the IFRS amounts excluded from these non-IFRS financial measures and evaluate these
+non-lFRS financial measures together with their relevant financial measures in accordance with IFRS.
+
+This presentation and the investor webcast also includes “Pre-InterCo" data that does not reflect elimination of intragroup transactions, which means such data includes earnings and other amounts from transactions between entities within the
+Grab group that are eliminated upon consolidation. Such data differs materially from the corresponding figures post-elimination of intra-group transactions.
+
+We compare the percent change in our current period results from the corresponding prior period using constant currency. We present constant currency growth rate information to provide a framework for assessing how our underlying GMV
+and revenue performed excluding the effect of foreign currency rate fluctuations. We calculate constant currency by translating our current period financial results using the corresponding prior period's monthly exchange rates for our
+transacted currencies other than the U.S. dollar.
+
+Explanation of norlFRS financial measures
+
+Adjusted EBITDA is a norrlFRS financial measure calculated as net loss adjusted to exclude: (i) interest income (expenses), (ii) other income (expenses), (iii) income tax expenses (credit), (iv) depreciation and amortization, (v) stock-based
+compensation expenses, (vi) costs related to mergers and acquisitions, (vii) unrealized foreign exchange gain (loss), (viii) impairment losses on goodwill and nor-financial assets, (ix) fair value changes on investments, (x) restructuring costs, (xi)
+legal, tax and regulatory settlement provisions and (xii) share listing and associated expenses. Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in
+each case, regional corporate costs. Adjusted EBITDA margin is a non-IFRS financial measure calculated as Adjusted EBITDA divided by Gross Merchandise Value.

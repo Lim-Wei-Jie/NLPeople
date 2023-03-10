@@ -1,0 +1,1298 @@
+Q2 2022
+Earnings
+Call
+
+August 2022
+
+Disclaimer
+
+Forward-Looking Statements
+
+This presentation (this “Presentation”) and the announced investor webcast contain “forward-looking statements” within the meaning of the “safe harbor” provisions of the U.S. Private Securities Litigation Reform Act of 1995. All statements
+other than statements of historical fact contained in this presentation and the webcast, including but not limited to, statements about Grab’s beliefs and expectations, business strategy and plans, objectives of management for future
+operations of Grab, and growth opportunities, are forward-looking statements. Some of these forward-looking statements can be identified by the use of forward-looking words, including “anticipate,” “expect,” “suggest,” “plan,” “believe,”
+“intend,” “estimate,” “target,” “project,” “should,” “could,” “would,” “may,” “will,” “forecast” or other similar expressions. Forward-looking statements are based upon estimates and forecasts and reflect the views, assumptions, expectations, and
+opinions of Grab, which involve inherent risks and uncertainties, and therefore should not be relied upon as being necessarily indicative of future results. Anumber of factors could cause actual results to differ materially from those contained
+in any forward-looking statement, including but not limited to: Grab’s ability to grow at the desired rate or scale and its ability to manage its growth; its ability to further develop its business, including new products and services; its ability to
+attract and retain partners and consumers; its ability to compete effectively in the intensely competitive and constantly changing market; its ability to continue to raise sufficient capital; its ability to reduce net losses and the use of partner and
+consumer incentives, and to achieve profitability; potential impact of the complex legal and regulatory environment on its business; its ability to protect and maintain its brand and reputation; general economic conditions, in particular as a
+result of COVID-19; expected growth of markets in which Grab operates or may operate; and its ability to defend any legal or governmental proceedings instituted against it. In addition to the foregoing factors, you should also carefully
+consider the other risks and uncertainties described in the “Risk Factors” section of Grab’s registration statement on Form F-1 and the prospectus therein, and other documents filed by Grab from time to time with the U.S. Securities and
+Exchange Commission (the “SEC’).
+
+no on na
+
+m4. nu wu uu no, uu not, nou.
+
+Forward-looking statements speak only as of the date they are made. Grab does not undertake any obligation to update any forward-looking statement, whether as a result of new information, future developments, or otherwise, except as
+required under applicable law.
+
+Unaudited Financial Information and Non-IFRS Financial Measures
+Grab's unaudited selected financial data for the three months ended June 30, 2022 and 2021 included in this presentation and the investor webcast is based on financial data derived from the Grab’s management accounts that have not been
+reviewed or audited.
+
+This presentation and the investor webcast also include references to non-IFRS financial measures, which include: Adjusted EBITDA, Total Segment Adjusted EBITDA and Segment Adjusted EBITDA. However, the presentation of these non-IFRS
+financial measures is not intended to be considered in isolation from, or as an alternative to, financial measures determined in accordance with IFRS. In addition, these non-IFRS financial measures may differ from non-IFRS financial measures
+with comparable names used by other companies.
+
+Grab uses these non-IFRS financial measures for financial and operational decision-making and as a means to evaluate period-to-period comparisons, and Grab’s management believes that these non-IFRS financial measures provide meaningful
+supplemental information regarding its performance by excluding certain items that may not be indicative of its recurring core business operating results. For example, Grab’s management uses: Total Segment Adjusted EBITDA as a useful
+indicator of the economics of Grab's business segments, as it does not include regional corporate costs.
+
+There are anumber of limitations related to the use of non-IFRS financial measures. In light of these limitations, we provide specific information regarding the IFRS amounts excluded from these non-lFRS financial measures and evaluate these
+non-IFRS financial measures together with their relevant financial measures in accordance with IFRS.
+
+This presentation and the investor webcast also includes “Pre-InterCo” data that does not reflect elimination of intragroup transactions, which means such data includes earnings and other amounts from transactions between entities within the
+Grab group that are eliminated upon consolidation. Such data differs materially from the corresponding figures post-elimination of intra-group transactions.
+
+We compare the percent change in our current period results from the corresponding prior period using constant currency. We present constant currency growth rate information to provide a framework for assessing how our underlying GMV
+and revenue performed excluding the effect of foreign currency rate fluctuations. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our
+transacted currencies other than the U.S. dollar.
+
+Explanation of non-lFRS financial measures:
+
+Adjusted EBITDA is a non-IFRS financial measure calculated as net loss adjusted to exclude: (i) interest income (expenses), (ii) other income (expenses), (iii) income tax expenses (credit), (iv) depreciation and amortization, (v) stock-based
+compensation expenses, (vi) costs related to mergers and acquisitions, (vii) unrealized foreign exchange gain (loss), (viii) impairment losses on goodwill and non-financial assets, (ix) fair value changes on investments, (x) restructuring costs, (xi)
+legal, tax and regulatory settlement provisions and (xii) share listing and associated expenses. Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in
+each case, regional corporate costs. Adjusted EBITDA margin is a non-IFRS financial measure calculated as Adjusted EBITDA divided by Gross Merchandise Value.
+DISCLaimer
+
+Operating Metrics
+
+Gross Merchandise Value (GMY) is an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. GMV is a metric by
+which Grab understands, evaluates and manages its business, and Grab’s management believes is necessary for investors to understand and evaluate its business. GMV provides useful information to investors as it represents the amount of a
+consumer's spend that is being directed through Grab’s platform. This metric enables Grab and investors to understand, evaluate and compare the total amount of customer spending that is being directed through its platform over a period of
+time. Grab presents GMV as a metric to understand and compare, and to enable investors to understand and compare, Grab’s aggregate operating results, which captures significant trends in its business over time.
+
+Monthly Transacting User (MTUs) is defined as the monthly transacting users, which is an operating metric defined as the monthly number of unique users who transact via Grab’s products, where transact means to have successfully paid for
+any of Grab’s products. MTUs is a metric by which Grab understands, evaluates and manages its business, and Grab’s management believes is necessary for investors to understand and evaluate its business.
+
+Commission Rate represents the total dollar value paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as a
+percentage of GMV, over the period of measurement.
+
+Partner incentives is an operating metric representing the dollar value of incentives granted to driver- and merchant-partners. The incentives granted to driver- and merchant-partners include base incentives and excess incentives, with base
+incentives being the amount of incentives paid to driver- and merchant-partners up to the amount of commissions and fees earned by Grab from those driver- and merchant-partners, and excess incentives being the amount of payments
+made to driver- and merchant-partners that exceed the amount of commissions and fees earned by Grab from those driver- and merchant-partners. Consumer incentives is an operating metric representing the dollar value of discounts and
+promotions offered to consumers. Partner incentives and consumer incentives are metrics by which we understand, evaluate and manage our business, and we believe are necessary for investors to understand and evaluate our business. We
+believe these metrics capture significant trends in our business over time.
+
+Industry and Market Data
+
+This Presentation also contains information, estimates and other statistical data derived from third party sources, including research, surveys or studies, some of which are preliminary drafts, conducted by third parties, information provided by
+customers and/or industry or general publications. Such information involves a number of assumptions and limitations, and you are cautioned not to give undue weight on such estimates. Grab has not independently verified such third-party
+information, and makes no representation as to the accuracy of such third-party information.
+| Business Update
+) Financial Results
+> Outlook
+
+4. Non-lIFRS Reconciliation
+
+BUSIACSS
+Uedate
+
+Driving sustainable growth in Q2 2022
+
+Gross Merchandise Value“)
+j (1)
+nevenve Gross Merchandise Value per Monthly Transacting User“)
+
++19% +*+30% #£#+16%
+
+YoY YoY YoY
+
++85% YoY Constant Currency?) +34% YoY Constant Currency () +20% YoY Constant Currency °)
+
+1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. 2. MTUs means monthly transacting users, which is defined as the monthly number of
+unique users who transact via Grab’s products, where transact means to have successfully paid for any of Grab’s products. MTUs over a quarterly or annual period are calculated based on the average of the MTUs for each month in the relevant period 3. We calculate constant currency by translating our current period
+financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+Business Uedate
+Increasing MTUs and engagement levels
+
+MTUs" continue to grow, driven by the ...while user engagement levels also
+recovery in Mobility demand... continue to improve
+(MTUs in millions) (% MTUs™ split by number of services'?))
+
+l
+
+I
+
+l
+
+I
+
+l
+
+I
+
+l
+
+32.6
+
+|
+
+I
+
+l
+
+I
+
+l
+
+l
+
+l
+
+l
+
+I
+
+|
+mw > 3 offerings
+m 2 offerings
+mw loffering
+
+04 2019 Q2 2020 Q4 2020 Q2 2021 04 2021 Q2 2022 2018 2019 2020 2021 Q2 2022
+
+Note: 1. Defined as the monthly number of unique users who transact via Grab’s products, where transact means to have successfully paid for any of Grab’s products. Monthly transacting users (MTUs) over a quarterly or annual period are calculated based on the average
+of the MTUs for each month in the relevant period. 2. Figures may not add up to 100% due to rounding
+Business Uedate
+Improvement in margins and unit economics
+
+Total incentives as a proportion of Adjusted EBITDA margins'2) as a
+GMV°) proportion of GMV'?)
+
+13.0%
+
+(4.6)%
+(6.0)% A
+
+Q4 2021 Q12022 Q2 2022 Q4 2021 Q12022 Q2 2022
+
+Note: 1. Total incentives include consumer and partner incentives. Consumer incentives is an operating metric representing the dollar value of discounts and promotions offered to consumers. Partner incentives is an operating metric representing the dollar value of incentives granted to driver- and merchantpartners. The incentives granted to driver- and merchant-partners include base incentives and excess incentives, with base incentives being the amount of incentives paid to driver- and merchant-partners up to the number of commissions and fees earned by Grab from those driver- and merchant-partners, and
+excess incentives being the amount of payments made to driver- and merchant-partners that exceed the amount of commissions and fees earned by Grab from those driver- and merchant-partners. 2. Adjusted EBITDA is defined as net loss adjusted to exclude: (i) net interest income (expenses), (ii) other income
+(expenses), (iii) income tax expenses, (iv) depreciation and amortization, (v) stock-based compensation expenses, (vi) costs related to mergers and acquisitions, (vii) unrealized foreign exchange gain (loss), (viii) impairment losses on goodwill and non-financial assets, (ix) fair value changes on investments, (x)
+restructuring costs, (xi) legal, tax and regulatory settlement provisions and (xii) share listing and associated expenses. 3. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees,
+over the period of measurement.
+Mobility
+Mobility demand continues to recover
+
+Mobility GMV
+
+(In US$ millions)
+
+Initial wave of COVID restrictions
+
+Q2 2022 Mobility GMV grew
+
++51% YoY and reached its outrontnpa
+highest level since O1 2020 Delta- koverioneimpoct
+
+Mobility GMV in Q2 2022 is
+
+67% of 04 2019 levels 7 ; i 7
+
+Q42019 Q12020 922020 Q32020 Q42020 12021 922021 932021 942021 12022 922022
+
+Note: 1.GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement
+Mobility
+Recovery in Mobility margins
+
+Mobility Segment Adjusted EBITDA margins ©
+
+(Mobility Segment Adjusted EBITDA as a % of GMV'??)
+
+Mobility Segment Adjusted
+
+EBITDA margins™ at 12.1% in Q2
+
+2022
+
+In line with expected steady
+
+state margins of 12% Ll
+
+Q42019 Q12020 022020 Q32020 Q42020 12021 Q22021 932021 Q42021 Q12022 Q22022
+
+12%
+
+Note: 1. - lc ulated as Mobility Se nme nt Adjusted EBITDA as a percentage of Mobility GMV. Segment Adjusted EBITDA is 1 anaes ee nti ners oo sted EBITDA of each of our four bus nts, excluding, in each case, regional corporate costs. For a
+cilia to the most dir ectly mparable IFRS measure see the ection titled "Non-IFRS Reconci iliation.” 2. GMV means gross merchandise value, an operating metric representing the sum o ofthe total do fer vale Pita actions from Grab’s services, including any applicable taxes,
+
+thon, to tells td ies arte e peri tod of measurement
+Deliveries
+Strong focus on improving unit economics
+
+Deliveries total incentives as a Deliveries Segment Adjusted EBITDA
+
+proportion of GMV'?) Margins")
+(% of Deliveries GMV'?))
+
+(1.4)%
+A
+
+04 2021 Q1 2022 Q2 2022 Q4 2021 Q1 2022 Q2 2022
+
+Note: Deliveries Q1 and Q2 2022 results include contributions from Jaya Grocer
+
+1. Total incentives include consumer and partner incentives. Consumer incentives is an operating metric representing the dollar value of discounts and promotions offered to consumers. Partner incentives is an operating metric representing the dollar value of incentives granted to driver- and merchant-partners.
+The incentives granted to driver- and merchant-partners include base incentives and excess incentives, with base incentives being the amount of incentives paid to driver- and merchant-partners up to the amount of commissions and fees earned by Grab from those driver- and merchant-partners, and excess
+incentives being the amount of payments made to driver- and merchant-partners that exceed the amount of commissions and fees earned by Grab from those driver- and merchant-partners. 2. Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four
+business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.” 3. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from
+Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement.
+
+11
+Financial Services
+Enhances Grab’s Superapp
+
+Financial services increases user engagement ..and Orives productivity and satisfaction with
+
+and stickiness... our Oriver-partners
+
+GrabPay users are 2.9x more likely to use 3 0 % 30% of active driver-partners have an
+
+a second Grab product than Cash users active loan from Grab °°)...
+
+2.9Xx
+1.5x
+
+10+ months retention rates of GrabPay +7 3 % ..and Oriver-partners with loans record
+
+users are 1.5x higher than Cash users (2) +13% more rides vs. those without loans (4)
+
+Note: 1. As some viessitname anaehe lesen oho rt,a nd after 10+ mo nths of first u “— e 3. Percentage of active driver-partners in Singapore, Malaysia, Thailan nd, Philippin s, Indo and Vietnam with an active loan as of May 2022 4. Comparison between a cohort of dri artners in Malaysia, Singapore,
+Philippines, and Thailand with a ive loan relative to driver-partners in the same ntri se witho uta sctive loan, compar span — nths post adoption per oe cahor since cos spans from July an  Aueus ust'2021 u ly and Septembe oo2 for Vislays INaNnciak
+2esSults
+
+Q2 2022 Results
+Consolidated group
+
+YoY% Change
+
+Q2 2022 Q?2 2021 YoY% Change (Constant Q2 2022 © Q?2 2021
+Currency)
+
+$ in millions, unless otherwise stated % of GMV
+
+Operating Metrics
+GMV®) 5,055 3,878 30% 34% - 
+MTU) (millions of users)** 32.6 29.1 12% . - :
+
+GMV per MTU ($)** 155 133 16% 20% - Partner Incentives ©) 212 172 23% - A% A%
+
+Consumer Incentives (6) 311 243 28% - 6% 6%
+
+Financial Measures
+Revenue 321 179 79% 85% 6% 5%
+
+Loss for the period (572) (801) 29% - (11)% (21)%
+Total Segment Adjusted EBITDA“) (non-IFRS) (19) (14) (43)% ; (0)% (0)%
+Adjusted EBITDA(®2) (non-IFRS) (233) (214) (9)% . (5)% (6)%
+
+Note: **Excluding OVO MTUs, our MTUs for Q2 2022 and Q2 2021 would be 29.5 million and 24.7 million respectively, and GMV per MTU would be $172 and $157 respectively
+
+. Unaudited for Q2 2021 and Q2 2022.
+. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+1
+
+2
+
+3. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement.
+
+4. Defined as the monthly number of unique users who transact via Grab’s products, where transact means to have successfully paid for any of Grab’s products. Monthly transacting users (MTUs) over a quarterly or annual period are calculated based on the average of the MTUs for each month in the relevant
+
+period.
+5. Partner incentives is an operating metric representing the do
+merchant-partners up to the amount of commissions and fees e
+
+merchant-partners.
+6. Consumer incentives is an operating metric representing the dollar value of discounts and promotions offered to consumers.
+
+7. Total Segment Adjusted EBITDA is defined as the Adjusted EBITDA excluding regional corporate costs.
+8. Adjusted EBITDA is defined as net loss adjusted to exclude: (i) net interest income (expenses), (ii) other income (expenses), (iii) income tax expenses, (iv) depreciation and amortization, (v) stock-based compensation expenses, (vi) costs related to mergers and acquisitions, (vii) unrealized foreign exchange
+
+gain (loss), (viii) impairment losses on goodwill and non-financial assets, (ix) fair value changes on investments, (x) restructuring costs, (xi) legal, tax and regulatory settlement provisions and (xii) share listing and associated expenses.
+9. These are non-IFRS financial measures. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.”
+
+lar value of incentives granted to driver- and merchant-partners. The incentives granted to driver- and merchant-partners include base incentives and excess incentives, with base incentives being the amount of incentives paid to driver- and
+arned by Grab from those driver- and merchant-partners, and excess incentives being the amount of payments made to driver- and merchant-partners that exceed the amount of commissions and fees earned by Grab from those driver- and
+
+@2 2022 Results
+Commission rates
+
+Q2 2022 ©) Q2 2021") YoY ppt Change
+Commission rates)
+Deliveries 20.8% 18.0% 2.8%
+
+Mobility 23.2% 23.7% (0.5)%
+Financial Services 2.7% 24% 0.3%
+
+Note: Deliveries Q2 2022 results include contributions from Jaya Grocer
+
+1. Unaudited for Q2 2021 and Q2 2022. 2. Commission Rate is an operating metric, representing the total dollar value paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as a
+percentage of GMV, over the period of measurement.
+Q2 2022 Results
+Segment Adjusted EBITDA to IFRS Net Loss
+
+OO en 0.0 >Fo2.2002100
+
+$ in millions, unless otherwise stated
+Total Segment Adjusted EBITDA 4) (non-IFRS) (19) (14)
+
+Regional Corporate Costs (214) —s—=<“<«~*‘« 2002Y2~—=“‘C™S '____» Asa%of GMV, Regional Corporate Costs fell from (5)% in
+Adjusted EBITDA @4) (non-IFRS) (233) (214) Q2 2021 to (4)% in Q2 2022.
+
+Non-cash expenses (317) (546)
+Cash expenses (22) (41)
+
+Loss for the period (572) (801)
+
+Note: 1. Unaudited for Q2 2021 and Q2 2022. 2. Total Segment Adjusted EBITDA is defined as the Adjusted EBITDA excluding regional corporate costs. 3. Adjusted EBITDA is defined as net loss adjusted to exclude: (i) net interest income (expenses), (ii) other income (expenses), (iii) income tax expenses, (iv)
+depreciation and amortization, (v) stock-based compensation expenses, (vi) costs related to mergers and acquisitions, (vii) unrealized foreign exchange gain (loss), (viii) impairment losses on goodwill and non-financial assets, (ix) fair value changes on investments, (x) restructuring costs, (xi) legal, tax and regulatory
+settlement provisions and (xii) share listing and associated expenses. 4. These are non-IFRS financial measures. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.”
+Q2 2022 Results
+Net Cash Liquidity
+
+As of 30 June As of 31 Mar As of 31 Dec
+2022 2022 (1) 2021)
+
+$ in millions, unless otherwise stated
+
+Cash & cash equivalents 2,628 3,215 4,838
+Add: Other Long-term Investments 112 115 121
+Add: Time deposits 4,061 4,006 3,174
+Add: Cash investments 773 708 684
+Add: Restricted cash 166 172 153
+Cash Liquidity 7,740 8,216 8,970
+Less: Loans and borrowings (2,168) (2,238) (2,175)
+
+Net Cash Liquidity 5,572 5,978 6,795
+
+Note: 1. Unaudited for June-30, 2022 and March-31, 2022. For Dec-31, 2021, only loans and borrowings are audited but cash liquidity and net cash liquidity are not 2. Cash Liquidity includes cash on hand, time deposits (>3 months), marketable securities and restricted cash.
+@2 2022 Results
+Deliveries
+
+Gross Merchandise Value") Commission Rate?)
+
+(% of GMV)
+
+aii 2.476
+
++19% YOY °
++24% YoY (CC®?) 20.8%
+18.0%
+
+2,073
+
+Q22021 022022 Q22021 922022
+
+Note: Deliveries Q2 2022 results include contributions from Jaya Grocer
+1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. 2. Commission Rate is an operating metric, representing the total dollar value
+paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as a percentage of GMV, over the period of measurement. 3. CC stands for Constant Currency. We calculate constant currency
+
+by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+18
+@2 2022 Results
+Deliveries
+
+Revenue
+
+(US$M)
+
+134
+
++199% YoY
++211% YoY (CC!)
+
+Q22021 022022
+
+Note: Deliveries Q2 2022 results include contributions from Jaya Grocer
+
+Segment Adjusted EBITDA”
+
+(US$M)
+
+% of GMV (0.9%) (14%)
+
+(20)
+
+(34)
+
+-US$15M
+
+Q22021 022022
+
+1 Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled
+"Non-lFRS Reconciliation.” 2. CC stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+19
+NY)
+
+@2 2022 Results
+Mobilit
+
+O
+
+Gross Merchandise Value Commission Rate'2)
+
+(US$M) (% of GMV)
+
+1,035
++51% YOY 23.7% 23.2%
+
++55% YoY (CC!?))
+
+685
+
+Q22021 022022 Q22021 922022
+
+Note: 1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. 2. Commission Rate is an operating metric, representing the total dollar
+value paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as a percentage of GMV, over the period of measurement. 3. CC stands for Constant Currency. We calculate constant
+currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+20
+@2 2022 Results
+
+Revenue
+
+(US$M)
+161
++37% YOY
++40% YoY (CC!)
+
+118
+
+Q22021 Q22022
+
+Segment Adjusted EBITDA")
+
+(US$M)
+
+% Of GMV 13.0% 12.1%
+
+125
+
++40% YoY
+
+Q22021 022022
+
+Note: 1. Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.” 2.
+CC stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+21
+@2 2022 Results
+Financial services
+
+Total Payments Volume (Pre-InterCco)™ Commission Rate'?)
+
+(US$M) (% of GMV)
+
+3,778
++e YOY 2.7%
++35% YoY (CC) 2.4%
+
+2,887
+
+™ On-Grab
+Mi Off-Grab
+
+Q22021 Q22022 Q22021 922022
+
+Note: 1. Total Payments Volume (TPV) is defined as the value of payments, net of payment reversals, successfully completed through the Grab platform for the financial services segment. Pre-InterCo means this segment data includes earnings and other amounts from transactions between entities within the
+Grab group that are eliminated upon consolidation. 2. Commission Rate is an operating metric, representing the total dollar value paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as
+a percentage of GMV, over the period of measurement 3. CC stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+22
+@2 2022 Results
+Financial services
+
+Revenue Segment Adjusted EBITDA”)
+
+(US$M) (US$M)
+13
++94% YoY
+
++105% YoY (CC) % OF TPV (2.9%) (3.1%)
+
+(115)
+
+-US$31M
+
+Q2 2021 Q2 2022 Q2 2021 Q2 2022
+
+Note: 1. Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.” 2. CC
+stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+23
+Q2 2022 Results
+Enterprise and New Initiatives
+
+Gross Merchandise Value” Revenue Segment Adjusted EBITDA!)
+
+(US$M) (US$M) (US$M)
+52 l4
+
++5155 YOY #307. YOY
++54% YoY (CC?) +38% YoY (CC!)
+
+% of GMV He 9.7%
+
+5
+
++340% YoY
+
+Q2 2021 Q2 2022 Q2 2021 Q2 2022 Q2 2021 Q2 2022
+
+Note: 1.GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement.
+2 Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled
+"Non-lFRS Reconciliation.” 3. CC stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+24
+NY)
+NY)
+
+@2 2022 Results
+Incentives
+
+Q2 2022 Q2 2021
+
+Base Excess Consumer Total Base Excess Consumer Total
+Incentives Incentives®) Incentives®) Incentives  Incentives™ Incentives®) Incentives®) Incentives
+
+Deliveries 12.0 147.8 221.0 380.7 28.1 117.6 182.7 328.5
+Mobility 36.9 15.5 26.2 78.7 16.4 9.9 18.4 44./
+Financial Services 0.1 0.0 28.0 28.1 0.1 0.1 19.1 19.3
+Enterprise & New Initiatives 0.0 0.0 35.9 35.9 0.0 (0.1) 22.4 22.3
+Total 49.0 163.3 311.1 523.4 44.7 127.5 242.6 414.8
+
+Q2 2022 Q2 2021
+
+As a % of GMV“) Base Excess Consumer Total Base Excess Consumer Total
+° Incentives Incentives?) Incentives®) Incentives  Incentives® Incentives®) Incentives®) Incentives
+
+Deliveries 0.5% 6.0% 8.9% 15.4% 1.4% 5.7% 8.8% 15.8%
+Mobility 3.6% 1.5% 2.5% 7.6% 2.4% 1.4% 2.7% 6.5%
+Financial Services 0.0% 0.0% 1.9% 1.9% 0.0% 0.0% 1.8% 1.8%
+Enterprise & New Initiatives 0.0% 0.0% 69.0% 69.0% 0.0% (0.3%) 65.0% 64.7%
+Total 1.0% 3.2% 6.2% 10.4% 1.2% 3.3% 6.3% 10.7%
+
+$ In millions
+
+Note: Q2 2021 and Q2 2022 are based on unaudited numbers. 1. Base incentives refer to the amount of incentives paid to driver and merchant-partners up to the amount of commissions and fees earned by Grab from those driver- and merchant-partners. 2. Excess incentives refer to payments made to driver
+and merchant-partners that exceed the amount of commissions sand fees earned by Grab from those driver- and merchant-partners. 3. Consumer incentives refer to discounts and promotions offered to consumers. 4. Calculated as a percentage of segment GMV (for Deliveries, Mobility, Financial Services and
+Enterprise & New Initiatives) and Group GMV (for Total). GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any a anil cable taxes, tips, tolls and fees, over the period of measurement.
+Food
+
+Ba ince
+
+Outlook
+
+Outlook
+Outlook for O03 2022
+
+Mobility GMV $1.05B ~ $1.10B
+
+Financial Services TPV (Pre-InterCo)!2) $3.8B ~ $3.9B
+
+Note:
+1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement
+
+2. Total Payments Volume (TPY) is defined as the value of payments, net of payment reversals, successfully completed through the Grab platform for the financial services segment. Pre-InterCo means this segment data includes earnings and other amounts from transactions between
+
+entities within the Grab group that are eliminated upon consolidation.
+Outlook
+Outlook for 2022 and Deliveries breakeven
+
++21 ~ 25% YoY
+2022 GMV") YoY% growth +25 ~ 29% YoY CC(2)
+(Previous: +30 ~ 35% YoY)
+
+$1.25B ~ $1.30B
+2022 Revenue (Previous: $1.20B ~ $1.30B)
+
+Q12023
+
+(Previous: H1 2023)
+
+Deliveries Segment Adj. EBITDA‘?) Breakeven ore oO
+
+Note:
+
+1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. 2. CC stands for Constant Currency. We estimate the variance
+between Constant Currency and Reported Currency growth rates for GMV in 2022 to be c. 4%, taking into consideration the FX translational impacts observed to date. 3. Segment Adjusted EBITDA is a non-lFRS financial measure, representing the Adjusted EBITDA of each of our four
+business segments, excluding, in each case, regional corporate costs.
+Non-llFR
+ReECONcIL
+
+Adjusted EBITDA to
+IFRS Net Loss Reconciliation
+
+Q2 2022 Q2 2021
+
+S$ in millions, unless otherwise stated
+
+‘Lossfortheperiod == 5) 801)
+Net interest expenses 18 444
+Other income (1) (6)
+Income tax expenses 2 2
+Depreciation and amortization 38 86
+Share-based compensation expenses 111 106
+Unrealized foreign exchange (gain) (4) (4)
+Impairment losses on goodwill and non-financial assets * 3
+Fair value change on investments 173 (60)
+Restructuring costs 1 *
+Legal, tax and regulatory settlement provisions 1 16
+
+* Amount less than $1 million
+Note: Q2 2021 and Q2 2022 are based on unaudited numbers.
+Q2 2022
+Earnings
+Call
+
+August 2022
+
+Disclaimer
+
+Forward-Looking Statements
+
+This presentation (this “Presentation”) and the announced investor webcast contain “forward-looking statements” within the meaning of the “safe harbor” provisions of the U.S. Private Securities Litigation Reform Act of 1995. All statements
+other than statements of historical fact contained in this presentation and the webcast, including but not limited to, statements about Grab’s beliefs and expectations, business strategy and plans, objectives of management for future
+operations of Grab, and growth opportunities, are forward-looking statements. Some of these forward-looking statements can be identified by the use of forward-looking words, including “anticipate,” “expect,” “suggest,” “plan,” “believe,”
+“intend,” “estimate,” “target,” “project,” “should,” “could,” “would,” “may,” “will,” “forecast” or other similar expressions. Forward-looking statements are based upon estimates and forecasts and reflect the views, assumptions, expectations, and
+opinions of Grab, which involve inherent risks and uncertainties, and therefore should not be relied upon as being necessarily indicative of future results. Anumber of factors could cause actual results to differ materially from those contained
+in any forward-looking statement, including but not limited to: Grab’s ability to grow at the desired rate or scale and its ability to manage its growth; its ability to further develop its business, including new products and services; its ability to
+attract and retain partners and consumers; its ability to compete effectively in the intensely competitive and constantly changing market; its ability to continue to raise sufficient capital; its ability to reduce net losses and the use of partner and
+consumer incentives, and to achieve profitability; potential impact of the complex legal and regulatory environment on its business; its ability to protect and maintain its brand and reputation; general economic conditions, in particular as a
+result of COVID-19; expected growth of markets in which Grab operates or may operate; and its ability to defend any legal or governmental proceedings instituted against it. In addition to the foregoing factors, you should also carefully
+consider the other risks and uncertainties described in the “Risk Factors” section of Grab’s registration statement on Form F-1 and the prospectus therein, and other documents filed by Grab from time to time with the U.S. Securities and
+Exchange Commission (the “SEC’).
+
+no on na
+
+m4. nu wu uu no, uu not, nou.
+
+Forward-looking statements speak only as of the date they are made. Grab does not undertake any obligation to update any forward-looking statement, whether as a result of new information, future developments, or otherwise, except as
+required under applicable law.
+
+Unaudited Financial Information and Non-IFRS Financial Measures
+Grab's unaudited selected financial data for the three months ended June 30, 2022 and 2021 included in this presentation and the investor webcast is based on financial data derived from the Grab’s management accounts that have not been
+reviewed or audited.
+
+This presentation and the investor webcast also include references to non-IFRS financial measures, which include: Adjusted EBITDA, Total Segment Adjusted EBITDA and Segment Adjusted EBITDA. However, the presentation of these non-IFRS
+financial measures is not intended to be considered in isolation from, or as an alternative to, financial measures determined in accordance with IFRS. In addition, these non-IFRS financial measures may differ from non-IFRS financial measures
+with comparable names used by other companies.
+
+Grab uses these non-IFRS financial measures for financial and operational decision-making and as a means to evaluate period-to-period comparisons, and Grab’s management believes that these non-IFRS financial measures provide meaningful
+supplemental information regarding its performance by excluding certain items that may not be indicative of its recurring core business operating results. For example, Grab’s management uses: Total Segment Adjusted EBITDA as a useful
+indicator of the economics of Grab's business segments, as it does not include regional corporate costs.
+
+There are anumber of limitations related to the use of non-IFRS financial measures. In light of these limitations, we provide specific information regarding the IFRS amounts excluded from these non-lFRS financial measures and evaluate these
+non-IFRS financial measures together with their relevant financial measures in accordance with IFRS.
+
+This presentation and the investor webcast also includes “Pre-InterCo” data that does not reflect elimination of intragroup transactions, which means such data includes earnings and other amounts from transactions between entities within the
+Grab group that are eliminated upon consolidation. Such data differs materially from the corresponding figures post-elimination of intra-group transactions.
+
+We compare the percent change in our current period results from the corresponding prior period using constant currency. We present constant currency growth rate information to provide a framework for assessing how our underlying GMV
+and revenue performed excluding the effect of foreign currency rate fluctuations. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our
+transacted currencies other than the U.S. dollar.
+
+Explanation of non-lFRS financial measures:
+
+Adjusted EBITDA is a non-IFRS financial measure calculated as net loss adjusted to exclude: (i) interest income (expenses), (ii) other income (expenses), (iii) income tax expenses (credit), (iv) depreciation and amortization, (v) stock-based
+compensation expenses, (vi) costs related to mergers and acquisitions, (vii) unrealized foreign exchange gain (loss), (viii) impairment losses on goodwill and non-financial assets, (ix) fair value changes on investments, (x) restructuring costs, (xi)
+legal, tax and regulatory settlement provisions and (xii) share listing and associated expenses. Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in
+each case, regional corporate costs. Adjusted EBITDA margin is a non-IFRS financial measure calculated as Adjusted EBITDA divided by Gross Merchandise Value.
+DISCLaimer
+
+Operating Metrics
+
+Gross Merchandise Value (GMY) is an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. GMV is a metric by
+which Grab understands, evaluates and manages its business, and Grab’s management believes is necessary for investors to understand and evaluate its business. GMV provides useful information to investors as it represents the amount of a
+consumer's spend that is being directed through Grab’s platform. This metric enables Grab and investors to understand, evaluate and compare the total amount of customer spending that is being directed through its platform over a period of
+time. Grab presents GMV as a metric to understand and compare, and to enable investors to understand and compare, Grab’s aggregate operating results, which captures significant trends in its business over time.
+
+Monthly Transacting User (MTUs) is defined as the monthly transacting users, which is an operating metric defined as the monthly number of unique users who transact via Grab’s products, where transact means to have successfully paid for
+any of Grab’s products. MTUs is a metric by which Grab understands, evaluates and manages its business, and Grab’s management believes is necessary for investors to understand and evaluate its business.
+
+Commission Rate represents the total dollar value paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as a
+percentage of GMV, over the period of measurement.
+
+Partner incentives is an operating metric representing the dollar value of incentives granted to driver- and merchant-partners. The incentives granted to driver- and merchant-partners include base incentives and excess incentives, with base
+incentives being the amount of incentives paid to driver- and merchant-partners up to the amount of commissions and fees earned by Grab from those driver- and merchant-partners, and excess incentives being the amount of payments
+made to driver- and merchant-partners that exceed the amount of commissions and fees earned by Grab from those driver- and merchant-partners. Consumer incentives is an operating metric representing the dollar value of discounts and
+promotions offered to consumers. Partner incentives and consumer incentives are metrics by which we understand, evaluate and manage our business, and we believe are necessary for investors to understand and evaluate our business. We
+believe these metrics capture significant trends in our business over time.
+
+Industry and Market Data
+
+This Presentation also contains information, estimates and other statistical data derived from third party sources, including research, surveys or studies, some of which are preliminary drafts, conducted by third parties, information provided by
+customers and/or industry or general publications. Such information involves a number of assumptions and limitations, and you are cautioned not to give undue weight on such estimates. Grab has not independently verified such third-party
+information, and makes no representation as to the accuracy of such third-party information.
+| Business Update
+) Financial Results
+> Outlook
+
+4. Non-lIFRS Reconciliation
+
+BUSIACSS
+Uedate
+
+Driving sustainable growth in Q2 2022
+
+Gross Merchandise Value“)
+j (1)
+nevenve Gross Merchandise Value per Monthly Transacting User“)
+
++19% +*+30% #£#+16%
+
+YoY YoY YoY
+
++85% YoY Constant Currency?) +34% YoY Constant Currency () +20% YoY Constant Currency °)
+
+1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. 2. MTUs means monthly transacting users, which is defined as the monthly number of
+unique users who transact via Grab’s products, where transact means to have successfully paid for any of Grab’s products. MTUs over a quarterly or annual period are calculated based on the average of the MTUs for each month in the relevant period 3. We calculate constant currency by translating our current period
+financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+Business Uedate
+Increasing MTUs and engagement levels
+
+MTUs" continue to grow, driven by the ...while user engagement levels also
+recovery in Mobility demand... continue to improve
+(MTUs in millions) (% MTUs™ split by number of services'?))
+
+l
+
+I
+
+l
+
+I
+
+l
+
+I
+
+l
+
+32.6
+
+|
+
+I
+
+l
+
+I
+
+l
+
+l
+
+l
+
+l
+
+I
+
+|
+mw > 3 offerings
+m 2 offerings
+mw loffering
+
+04 2019 Q2 2020 Q4 2020 Q2 2021 04 2021 Q2 2022 2018 2019 2020 2021 Q2 2022
+
+Note: 1. Defined as the monthly number of unique users who transact via Grab’s products, where transact means to have successfully paid for any of Grab’s products. Monthly transacting users (MTUs) over a quarterly or annual period are calculated based on the average
+of the MTUs for each month in the relevant period. 2. Figures may not add up to 100% due to rounding
+Business Uedate
+Improvement in margins and unit economics
+
+Total incentives as a proportion of Adjusted EBITDA margins'2) as a
+GMV°) proportion of GMV'?)
+
+13.0%
+
+(4.6)%
+(6.0)% A
+
+Q4 2021 Q12022 Q2 2022 Q4 2021 Q12022 Q2 2022
+
+Note: 1. Total incentives include consumer and partner incentives. Consumer incentives is an operating metric representing the dollar value of discounts and promotions offered to consumers. Partner incentives is an operating metric representing the dollar value of incentives granted to driver- and merchantpartners. The incentives granted to driver- and merchant-partners include base incentives and excess incentives, with base incentives being the amount of incentives paid to driver- and merchant-partners up to the number of commissions and fees earned by Grab from those driver- and merchant-partners, and
+excess incentives being the amount of payments made to driver- and merchant-partners that exceed the amount of commissions and fees earned by Grab from those driver- and merchant-partners. 2. Adjusted EBITDA is defined as net loss adjusted to exclude: (i) net interest income (expenses), (ii) other income
+(expenses), (iii) income tax expenses, (iv) depreciation and amortization, (v) stock-based compensation expenses, (vi) costs related to mergers and acquisitions, (vii) unrealized foreign exchange gain (loss), (viii) impairment losses on goodwill and non-financial assets, (ix) fair value changes on investments, (x)
+restructuring costs, (xi) legal, tax and regulatory settlement provisions and (xii) share listing and associated expenses. 3. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees,
+over the period of measurement.
+Mobility
+Mobility demand continues to recover
+
+Mobility GMV
+
+(In US$ millions)
+
+Initial wave of COVID restrictions
+
+Q2 2022 Mobility GMV grew
+
++51% YoY and reached its outrontnpa
+highest level since O1 2020 Delta- koverioneimpoct
+
+Mobility GMV in Q2 2022 is
+
+67% of 04 2019 levels 7 ; i 7
+
+Q42019 Q12020 922020 Q32020 Q42020 12021 922021 932021 942021 12022 922022
+
+Note: 1.GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement
+Mobility
+Recovery in Mobility margins
+
+Mobility Segment Adjusted EBITDA margins ©
+
+(Mobility Segment Adjusted EBITDA as a % of GMV'??)
+
+Mobility Segment Adjusted
+
+EBITDA margins™ at 12.1% in Q2
+
+2022
+
+In line with expected steady
+
+state margins of 12% Ll
+
+Q42019 Q12020 022020 Q32020 Q42020 12021 Q22021 932021 Q42021 Q12022 Q22022
+
+12%
+
+Note: 1. - lc ulated as Mobility Se nme nt Adjusted EBITDA as a percentage of Mobility GMV. Segment Adjusted EBITDA is 1 anaes ee nti ners oo sted EBITDA of each of our four bus nts, excluding, in each case, regional corporate costs. For a
+cilia to the most dir ectly mparable IFRS measure see the ection titled "Non-IFRS Reconci iliation.” 2. GMV means gross merchandise value, an operating metric representing the sum o ofthe total do fer vale Pita actions from Grab’s services, including any applicable taxes,
+
+thon, to tells td ies arte e peri tod of measurement
+Deliveries
+Strong focus on improving unit economics
+
+Deliveries total incentives as a Deliveries Segment Adjusted EBITDA
+
+proportion of GMV'?) Margins")
+(% of Deliveries GMV'?))
+
+(1.4)%
+A
+
+04 2021 Q1 2022 Q2 2022 Q4 2021 Q1 2022 Q2 2022
+
+Note: Deliveries Q1 and Q2 2022 results include contributions from Jaya Grocer
+
+1. Total incentives include consumer and partner incentives. Consumer incentives is an operating metric representing the dollar value of discounts and promotions offered to consumers. Partner incentives is an operating metric representing the dollar value of incentives granted to driver- and merchant-partners.
+The incentives granted to driver- and merchant-partners include base incentives and excess incentives, with base incentives being the amount of incentives paid to driver- and merchant-partners up to the amount of commissions and fees earned by Grab from those driver- and merchant-partners, and excess
+incentives being the amount of payments made to driver- and merchant-partners that exceed the amount of commissions and fees earned by Grab from those driver- and merchant-partners. 2. Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four
+business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.” 3. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from
+Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement.
+
+11
+Financial Services
+Enhances Grab’s Superapp
+
+Financial services increases user engagement ..and Orives productivity and satisfaction with
+
+and stickiness... our Oriver-partners
+
+GrabPay users are 2.9x more likely to use 3 0 % 30% of active driver-partners have an
+
+a second Grab product than Cash users active loan from Grab °°)...
+
+2.9Xx
+1.5x
+
+10+ months retention rates of GrabPay +7 3 % ..and Oriver-partners with loans record
+
+users are 1.5x higher than Cash users (2) +13% more rides vs. those without loans (4)
+
+Note: 1. As some viessitname anaehe lesen oho rt,a nd after 10+ mo nths of first u “— e 3. Percentage of active driver-partners in Singapore, Malaysia, Thailan nd, Philippin s, Indo and Vietnam with an active loan as of May 2022 4. Comparison between a cohort of dri artners in Malaysia, Singapore,
+Philippines, and Thailand with a ive loan relative to driver-partners in the same ntri se witho uta sctive loan, compar span — nths post adoption per oe cahor since cos spans from July an  Aueus ust'2021 u ly and Septembe oo2 for Vislays INaNnciak
+2esSults
+
+Q2 2022 Results
+Consolidated group
+
+YoY% Change
+
+Q2 2022 Q?2 2021 YoY% Change (Constant Q2 2022 © Q?2 2021
+Currency)
+
+$ in millions, unless otherwise stated % of GMV
+
+Operating Metrics
+GMV®) 5,055 3,878 30% 34% - 
+MTU) (millions of users)** 32.6 29.1 12% . - :
+
+GMV per MTU ($)** 155 133 16% 20% - Partner Incentives ©) 212 172 23% - A% A%
+
+Consumer Incentives (6) 311 243 28% - 6% 6%
+
+Financial Measures
+Revenue 321 179 79% 85% 6% 5%
+
+Loss for the period (572) (801) 29% - (11)% (21)%
+Total Segment Adjusted EBITDA“) (non-IFRS) (19) (14) (43)% ; (0)% (0)%
+Adjusted EBITDA(®2) (non-IFRS) (233) (214) (9)% . (5)% (6)%
+
+Note: **Excluding OVO MTUs, our MTUs for Q2 2022 and Q2 2021 would be 29.5 million and 24.7 million respectively, and GMV per MTU would be $172 and $157 respectively
+
+. Unaudited for Q2 2021 and Q2 2022.
+. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+1
+
+2
+
+3. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement.
+
+4. Defined as the monthly number of unique users who transact via Grab’s products, where transact means to have successfully paid for any of Grab’s products. Monthly transacting users (MTUs) over a quarterly or annual period are calculated based on the average of the MTUs for each month in the relevant
+
+period.
+5. Partner incentives is an operating metric representing the do
+merchant-partners up to the amount of commissions and fees e
+
+merchant-partners.
+6. Consumer incentives is an operating metric representing the dollar value of discounts and promotions offered to consumers.
+
+7. Total Segment Adjusted EBITDA is defined as the Adjusted EBITDA excluding regional corporate costs.
+8. Adjusted EBITDA is defined as net loss adjusted to exclude: (i) net interest income (expenses), (ii) other income (expenses), (iii) income tax expenses, (iv) depreciation and amortization, (v) stock-based compensation expenses, (vi) costs related to mergers and acquisitions, (vii) unrealized foreign exchange
+
+gain (loss), (viii) impairment losses on goodwill and non-financial assets, (ix) fair value changes on investments, (x) restructuring costs, (xi) legal, tax and regulatory settlement provisions and (xii) share listing and associated expenses.
+9. These are non-IFRS financial measures. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.”
+
+lar value of incentives granted to driver- and merchant-partners. The incentives granted to driver- and merchant-partners include base incentives and excess incentives, with base incentives being the amount of incentives paid to driver- and
+arned by Grab from those driver- and merchant-partners, and excess incentives being the amount of payments made to driver- and merchant-partners that exceed the amount of commissions and fees earned by Grab from those driver- and
+
+@2 2022 Results
+Commission rates
+
+Q2 2022 ©) Q2 2021") YoY ppt Change
+Commission rates)
+Deliveries 20.8% 18.0% 2.8%
+
+Mobility 23.2% 23.7% (0.5)%
+Financial Services 2.7% 24% 0.3%
+
+Note: Deliveries Q2 2022 results include contributions from Jaya Grocer
+
+1. Unaudited for Q2 2021 and Q2 2022. 2. Commission Rate is an operating metric, representing the total dollar value paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as a
+percentage of GMV, over the period of measurement.
+Q2 2022 Results
+Segment Adjusted EBITDA to IFRS Net Loss
+
+OO en 0.0 >Fo2.2002100
+
+$ in millions, unless otherwise stated
+Total Segment Adjusted EBITDA 4) (non-IFRS) (19) (14)
+
+Regional Corporate Costs (214) —s—=<“<«~*‘« 2002Y2~—=“‘C™S '____» Asa%of GMV, Regional Corporate Costs fell from (5)% in
+Adjusted EBITDA @4) (non-IFRS) (233) (214) Q2 2021 to (4)% in Q2 2022.
+
+Non-cash expenses (317) (546)
+Cash expenses (22) (41)
+
+Loss for the period (572) (801)
+
+Note: 1. Unaudited for Q2 2021 and Q2 2022. 2. Total Segment Adjusted EBITDA is defined as the Adjusted EBITDA excluding regional corporate costs. 3. Adjusted EBITDA is defined as net loss adjusted to exclude: (i) net interest income (expenses), (ii) other income (expenses), (iii) income tax expenses, (iv)
+depreciation and amortization, (v) stock-based compensation expenses, (vi) costs related to mergers and acquisitions, (vii) unrealized foreign exchange gain (loss), (viii) impairment losses on goodwill and non-financial assets, (ix) fair value changes on investments, (x) restructuring costs, (xi) legal, tax and regulatory
+settlement provisions and (xii) share listing and associated expenses. 4. These are non-IFRS financial measures. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.”
+Q2 2022 Results
+Net Cash Liquidity
+
+As of 30 June As of 31 Mar As of 31 Dec
+2022 2022 (1) 2021)
+
+$ in millions, unless otherwise stated
+
+Cash & cash equivalents 2,628 3,215 4,838
+Add: Other Long-term Investments 112 115 121
+Add: Time deposits 4,061 4,006 3,174
+Add: Cash investments 773 708 684
+Add: Restricted cash 166 172 153
+Cash Liquidity 7,740 8,216 8,970
+Less: Loans and borrowings (2,168) (2,238) (2,175)
+
+Net Cash Liquidity 5,572 5,978 6,795
+
+Note: 1. Unaudited for June-30, 2022 and March-31, 2022. For Dec-31, 2021, only loans and borrowings are audited but cash liquidity and net cash liquidity are not 2. Cash Liquidity includes cash on hand, time deposits (>3 months), marketable securities and restricted cash.
+@2 2022 Results
+Deliveries
+
+Gross Merchandise Value") Commission Rate?)
+
+(% of GMV)
+
+aii 2.476
+
++19% YOY °
++24% YoY (CC®?) 20.8%
+18.0%
+
+2,073
+
+Q22021 022022 Q22021 922022
+
+Note: Deliveries Q2 2022 results include contributions from Jaya Grocer
+1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. 2. Commission Rate is an operating metric, representing the total dollar value
+paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as a percentage of GMV, over the period of measurement. 3. CC stands for Constant Currency. We calculate constant currency
+
+by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+18
+@2 2022 Results
+Deliveries
+
+Revenue
+
+(US$M)
+
+134
+
++199% YoY
++211% YoY (CC!)
+
+Q22021 022022
+
+Note: Deliveries Q2 2022 results include contributions from Jaya Grocer
+
+Segment Adjusted EBITDA”
+
+(US$M)
+
+% of GMV (0.9%) (14%)
+
+(20)
+
+(34)
+
+-US$15M
+
+Q22021 022022
+
+1 Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled
+"Non-lFRS Reconciliation.” 2. CC stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+19
+NY)
+
+@2 2022 Results
+Mobilit
+
+O
+
+Gross Merchandise Value Commission Rate'2)
+
+(US$M) (% of GMV)
+
+1,035
++51% YOY 23.7% 23.2%
+
++55% YoY (CC!?))
+
+685
+
+Q22021 022022 Q22021 922022
+
+Note: 1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. 2. Commission Rate is an operating metric, representing the total dollar
+value paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as a percentage of GMV, over the period of measurement. 3. CC stands for Constant Currency. We calculate constant
+currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+20
+@2 2022 Results
+
+Revenue
+
+(US$M)
+161
++37% YOY
++40% YoY (CC!)
+
+118
+
+Q22021 Q22022
+
+Segment Adjusted EBITDA")
+
+(US$M)
+
+% Of GMV 13.0% 12.1%
+
+125
+
++40% YoY
+
+Q22021 022022
+
+Note: 1. Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.” 2.
+CC stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+21
+@2 2022 Results
+Financial services
+
+Total Payments Volume (Pre-InterCco)™ Commission Rate'?)
+
+(US$M) (% of GMV)
+
+3,778
++e YOY 2.7%
++35% YoY (CC) 2.4%
+
+2,887
+
+™ On-Grab
+Mi Off-Grab
+
+Q22021 Q22022 Q22021 922022
+
+Note: 1. Total Payments Volume (TPV) is defined as the value of payments, net of payment reversals, successfully completed through the Grab platform for the financial services segment. Pre-InterCo means this segment data includes earnings and other amounts from transactions between entities within the
+Grab group that are eliminated upon consolidation. 2. Commission Rate is an operating metric, representing the total dollar value paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as
+a percentage of GMV, over the period of measurement 3. CC stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+22
+@2 2022 Results
+Financial services
+
+Revenue Segment Adjusted EBITDA”)
+
+(US$M) (US$M)
+13
++94% YoY
+
++105% YoY (CC) % OF TPV (2.9%) (3.1%)
+
+(115)
+
+-US$31M
+
+Q2 2021 Q2 2022 Q2 2021 Q2 2022
+
+Note: 1. Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled "Non-IFRS Reconciliation.” 2. CC
+stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+23
+Q2 2022 Results
+Enterprise and New Initiatives
+
+Gross Merchandise Value” Revenue Segment Adjusted EBITDA!)
+
+(US$M) (US$M) (US$M)
+52 l4
+
++5155 YOY #307. YOY
++54% YoY (CC?) +38% YoY (CC!)
+
+% of GMV He 9.7%
+
+5
+
++340% YoY
+
+Q2 2021 Q2 2022 Q2 2021 Q2 2022 Q2 2021 Q2 2022
+
+Note: 1.GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement.
+2 Segment Adjusted EBITDA is a non-IFRS financial measure, representing the Adjusted EBITDA of each of our four business segments, excluding, in each case, regional corporate costs. For a reconciliation to the most directly comparable IFRS measure see the section titled
+"Non-lFRS Reconciliation.” 3. CC stands for Constant Currency. We calculate constant currency by translating our current period financial results using the corresponding prior period’s monthly exchange rates for our transacted currencies other than the U.S. dollar.
+
+24
+NY)
+NY)
+
+@2 2022 Results
+Incentives
+
+Q2 2022 Q2 2021
+
+Base Excess Consumer Total Base Excess Consumer Total
+Incentives Incentives®) Incentives®) Incentives  Incentives™ Incentives®) Incentives®) Incentives
+
+Deliveries 12.0 147.8 221.0 380.7 28.1 117.6 182.7 328.5
+Mobility 36.9 15.5 26.2 78.7 16.4 9.9 18.4 44./
+Financial Services 0.1 0.0 28.0 28.1 0.1 0.1 19.1 19.3
+Enterprise & New Initiatives 0.0 0.0 35.9 35.9 0.0 (0.1) 22.4 22.3
+Total 49.0 163.3 311.1 523.4 44.7 127.5 242.6 414.8
+
+Q2 2022 Q2 2021
+
+As a % of GMV“) Base Excess Consumer Total Base Excess Consumer Total
+° Incentives Incentives?) Incentives®) Incentives  Incentives® Incentives®) Incentives®) Incentives
+
+Deliveries 0.5% 6.0% 8.9% 15.4% 1.4% 5.7% 8.8% 15.8%
+Mobility 3.6% 1.5% 2.5% 7.6% 2.4% 1.4% 2.7% 6.5%
+Financial Services 0.0% 0.0% 1.9% 1.9% 0.0% 0.0% 1.8% 1.8%
+Enterprise & New Initiatives 0.0% 0.0% 69.0% 69.0% 0.0% (0.3%) 65.0% 64.7%
+Total 1.0% 3.2% 6.2% 10.4% 1.2% 3.3% 6.3% 10.7%
+
+$ In millions
+
+Note: Q2 2021 and Q2 2022 are based on unaudited numbers. 1. Base incentives refer to the amount of incentives paid to driver and merchant-partners up to the amount of commissions and fees earned by Grab from those driver- and merchant-partners. 2. Excess incentives refer to payments made to driver
+and merchant-partners that exceed the amount of commissions sand fees earned by Grab from those driver- and merchant-partners. 3. Consumer incentives refer to discounts and promotions offered to consumers. 4. Calculated as a percentage of segment GMV (for Deliveries, Mobility, Financial Services and
+Enterprise & New Initiatives) and Group GMV (for Total). GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any a anil cable taxes, tips, tolls and fees, over the period of measurement.
+Food
+
+Ba ince
+
+Outlook
+
+Outlook
+Outlook for O03 2022
+
+Mobility GMV $1.05B ~ $1.10B
+
+Financial Services TPV (Pre-InterCo)!2) $3.8B ~ $3.9B
+
+Note:
+1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement
+
+2. Total Payments Volume (TPY) is defined as the value of payments, net of payment reversals, successfully completed through the Grab platform for the financial services segment. Pre-InterCo means this segment data includes earnings and other amounts from transactions between
+
+entities within the Grab group that are eliminated upon consolidation.
+Outlook
+Outlook for 2022 and Deliveries breakeven
+
++21 ~ 25% YoY
+2022 GMV") YoY% growth +25 ~ 29% YoY CC(2)
+(Previous: +30 ~ 35% YoY)
+
+$1.25B ~ $1.30B
+2022 Revenue (Previous: $1.20B ~ $1.30B)
+
+Q12023
+
+(Previous: H1 2023)
+
+Deliveries Segment Adj. EBITDA‘?) Breakeven ore oO
+
+Note:
+
+1. GMV means gross merchandise value, an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. 2. CC stands for Constant Currency. We estimate the variance
+between Constant Currency and Reported Currency growth rates for GMV in 2022 to be c. 4%, taking into consideration the FX translational impacts observed to date. 3. Segment Adjusted EBITDA is a non-lFRS financial measure, representing the Adjusted EBITDA of each of our four
+business segments, excluding, in each case, regional corporate costs.
+Non-llFR
+ReECONcIL
+
+Adjusted EBITDA to
+IFRS Net Loss Reconciliation
+
+Q2 2022 Q2 2021
+
+S$ in millions, unless otherwise stated
+
+‘Lossfortheperiod == 5) 801)
+Net interest expenses 18 444
+Other income (1) (6)
+Income tax expenses 2 2
+Depreciation and amortization 38 86
+Share-based compensation expenses 111 106
+Unrealized foreign exchange (gain) (4) (4)
+Impairment losses on goodwill and non-financial assets * 3
+Fair value change on investments 173 (60)
+Restructuring costs 1 *
+Legal, tax and regulatory settlement provisions 1 16
+
+* Amount less than $1 million
+Note: Q2 2021 and Q2 2022 are based on unaudited numbers.

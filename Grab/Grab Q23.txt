@@ -1,0 +1,26 @@
+DISclaimer
+
+Operating Metrics
+
+Gross Merchandise Value (GMY) is an operating metric representing the sum of the total dollar value of transactions from Grab’s services, including any applicable taxes, tips, tolls and fees, over the period of measurement. GMV is a metric by
+which Grab understands, evaluates and manages its business, and Grab’s management believes is necessary for investors to understand and evaluate its business. GMV provides useful information to investors as it represents the amount of a
+consumer's spend that is being directed through Grab's platform. This metric enables Grab and investors to understand, evaluate and compare the total amount of customer spending that is being directed through its platform over a period of
+time. Grab presents GMV as a metric to understand and compare, and to enable investors to understand and compare, Grab's aggregate operating results, which captures significant trends in its business over time.
+
+Monthly Transacting User (MTUs) is defined as the monthly transacting users, which is an operating metric defined as the monthly number of unique users who transact via Grab's products, where transact means to have successfully paid for
+any of Grab’s products. MTUs is a metric by which Grab understands, evaluates and manages its business, and Grab's management believes is necessary for investors to understand and evaluate its business.
+
+Commission Rate represents the total dollar value paid to Grab in the form of commissions and fees from each transaction, without any adjustments for incentives paid to driver- and merchant-partners or promotions to end-users, as a
+percentage of GMV, over the period of measurement.
+
+Partner incentives is an operating metric representing the dollar value of incentives granted to driver- and merchant-partners. The incentives granted to driver- and merchant-partners include base incentives and excess incentives, with base
+incentives being the amount of incentives paid to driver- and merchant-partners up to the amount of commissions and fees earned by Grab from those driver- and merchant-partners, and excess incentives being the amount of payments
+made to driver- and merchant-partners that exceed the amount of commissions and fees earned by Grab from those driver- and merchant-partners. Consumer incentives is an operating metric representing the dollar value of discounts and
+promotions offered to consumers. Partner incentives and consumer incentives are metrics by which we understand, evaluate and manage our business, and we believe are necessary for investors to understand and evaluate our business. We
+believe these metrics capture significant trends in our business over time.
+
+Industry and Market Data
+
+This Presentation also contains information, estimates and other statistical data derived from third party sources, including research, surveys or studies, some of which are preliminary drafts, conducted by third parties, information provided by
+customers and/or industry or general publications. Such information involves a number of assumptions and limitations, and you are cautioned not to give undue weight on such estimates. Grab has not independently verified such third-party
+information, and makes no representation as to the accuracy of such third-party information.
