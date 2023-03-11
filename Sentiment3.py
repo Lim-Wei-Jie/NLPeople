@@ -20,6 +20,7 @@ from termcolor import colored
 import spacy
 import matplotlib.pyplot as plt
 import os
+import torch
 
 
 
@@ -66,6 +67,8 @@ for sent in doc.sents:
 #print(sentences_annual_report)
 
 
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+
 finbert = BertForSequenceClassification.from_pretrained('yiyanghkust/finbert-tone',num_labels=3)
 tokenizer = BertTokenizer.from_pretrained('yiyanghkust/finbert-tone')
 
@@ -94,20 +97,31 @@ Neutral = 0
     
 #print("Positive: " + Positive)
 
-for x,y,z in zip(sentiment.label,sentiment.docs,sentiment.score):
-    if x == "Positive":
+
+sentence_list=[]
+label_list=[]
+
+for x, y in zip(sentences_annual_report, sentiment.label):
+    sentence_list.append(x)
+    label_list.append(y)
+    if y == "Positive":
         Positive += 1
-        print(y)
-        print()
-       
+
         
-    if x == "Negative":
+    if y == "Negative":
         Negative += 1
         
         
-    if x == "Neutral":
+    if y == "Neutral":
         Neutral += 1
+    
+sentiment = pd.DataFrame({"sentence": sentence_list, "label":  label_list })
+
+
 
 print("Positive :" + str(Positive))
 print("Negative :" + str(Negative))
 print("Neutral :" + str(Neutral))
+
+
+sentiment.to_excel("output.xlsx")
