@@ -712,35 +712,112 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             print("financial data type is cash flow statement")
 
         #Step 2: Use the right financial metrics
-        #Step 3: Go through selected financial column. Grab values needed to calculate financial metrics. (NLP needed)
+        #Step 3: Go through selected financial column. Grab values needed to calculate financial metrics.
 
         # if financial_data_type == "income statement":
         #     operating_margin_numerator = ""
         #     operating_margin_denominator = ""
         #     for a_dict in table_data:
-        #         if a_dict[value].lower() in ["operating profit", "income from operations"]:
-        #             if a_dict[str(int(value)+1)] != "":
-                        
-        #                 operating_margin_numerator = a_dict[str(int(value)+1)] 
-        #                 print("updated numerator", operating_margin_numerator)
-        #         if a_dict[value] == "Revenue":
+        #         for word in ["operating profit", "income from operations"]:
+        #             if word in a_dict[value].lower():
+        #         # if a_dict[value].lower() in ["operating profit", "income from operations"]:
+        #                 if a_dict[str(int(value)+1)] != "":
+                            
+        #                     operating_margin_numerator = a_dict[str(int(value)+1)] 
+        #                     operating_margin_numerator = re.sub('[^0-9.]', '', operating_margin_numerator)
+        #                     print("updated numerator", operating_margin_numerator)
+        #         if "Revenue" in a_dict[value] :
         #             print("line 726 went in")
         #             if a_dict[str(int(value)+1)] != "": #check if the column beside financial term is "" else the latest value will be updated
         #                 operating_margin_denominator = a_dict[str(int(value)+1)] 
+        #                 operating_margin_denominator = re.sub('[^0-9.]', '', operating_margin_denominator)
         #                 print("updated denominator", operating_margin_denominator)
-        #     operating_margin = operating_margin_numerator + operating_margin_denominator
-        #     final_output = "Operating Margin: " + operating_margin
+        #     operating_margin = round(float(operating_margin_numerator) / float(operating_margin_denominator),2)
+        #     final_output = "Operating Margin: " + str(operating_margin)
         #     return final_output
 
 
-        return financial_data_type
+        if financial_data_type == "income statement":
+
+            # calculating operating margin for INCOME STATEMENT #
+
+            operating_margin_numerator = ""
+            operating_margin_denominator = ""
+            operating_margin = "Value cannot be generated, please make further edits to extracted table."
+            for a_dict in table_data:
+                for word in ["operating profit", "income from operations"]:
+                    if word in a_dict[value].lower():
+                        #if a_dict[str(int(value)+1)] != "": 
+                        print("entered line 747")
+                        if list(a_dict.values())[int(value)+1] != "":
+                            print("a_dict val: ", list(a_dict.values())[int(value)+1])
+                            #operating_margin_numerator = a_dict[str(int(value)+1)] 
+                            operating_margin_numerator = list(a_dict.values())[int(value)+1]
+                            operating_margin_numerator = re.sub('[^0-9.]', '', operating_margin_numerator)
+                            print("updated numerator", operating_margin_numerator)
+                        elif list(a_dict.values())[int(value)+1] == "":
+                            if list(a_dict.values())[int(value)+1] != "":
+                                print("a_dict val 3: ", list(a_dict.values())[int(value)+1])
+                                #operating_margin_numerator = a_dict[str(int(value)+1)] 
+                                operating_margin_numerator = list(a_dict.values())[int(value)+1]
+                                operating_margin_numerator = re.sub('[^0-9.]', '', operating_margin_numerator)
+                                print("updated numerator", operating_margin_numerator)
+
+                if "Revenue" in a_dict[value] :
+                    print("line 726 went in")
+                    if list(a_dict.values())[int(value)+1] != "": #check if the column beside financial term is "" else the latest value will be updated
+                        print("a_dict val 2: ", list(a_dict.values())[int(value)+1])
+                        #operating_margin_denominator = a_dict[str(int(value)+1)] 
+                        operating_margin_denominator = list(a_dict.values())[int(value)+1]
+                        operating_margin_denominator = re.sub('[^0-9.]', '', operating_margin_denominator)
+                        print("updated denominator", operating_margin_denominator)
+
+            if operating_margin_numerator != "" and operating_margin_denominator != "":
+                operating_margin = round(float(operating_margin_numerator) / float(operating_margin_denominator),2)
+
+
+            # calculating gross profit margin for INCOME STATEMENT #
+
+            gross_profit_margin_numerator = ""
+            gross_profit_margin_denominator = ""
+            gross_profit_margin = "Value cannot be generated, please make further edits to extracted table."
+            for a_dict in table_data:
+                for word in ["profit for the year", "profit attributable", "of the parent", "attributable to owners", "net income"]:
+                    if word in a_dict[value].lower():
+                        #if a_dict[str(int(value)+1)] != "": 
+                        print("entered line 784")
+                        if list(a_dict.values())[int(value)+1] != "":
+                            print("a_dict val 784: ", list(a_dict.values())[int(value)+1])
+                            #operating_margin_numerator = a_dict[str(int(value)+1)] 
+                            gross_profit_margin_numerator = list(a_dict.values())[int(value)+1]
+                            gross_profit_margin_numerator = re.sub('[^0-9.]', '', gross_profit_margin_numerator)
+                            print("updated numerator 784", gross_profit_margin_numerator)
+                        elif list(a_dict.values())[int(value)+1] == "":
+                            if list(a_dict.values())[int(value)+1] != "":
+                                print("a_dict val 3 line 784: ", list(a_dict.values())[int(value)+1])
+                                #operating_margin_numerator = a_dict[str(int(value)+1)] 
+                                gross_profit_margin_numerator = list(a_dict.values())[int(value)+1]
+                                gross_profit_margin_numerator = re.sub('[^0-9.]', '', gross_profit_margin_numerator)
+                                print("updated numerator line 784", gross_profit_margin_numerator)
+
+                if "Revenue" in a_dict[value] :
+                    print("line 726 went in")
+                    if list(a_dict.values())[int(value)+1] != "": #check if the column beside financial term is "" else the latest value will be updated
+                        print("a_dict val 2: ", list(a_dict.values())[int(value)+1])
+                        #operating_margin_denominator = a_dict[str(int(value)+1)] 
+                        gross_profit_margin_denominator = list(a_dict.values())[int(value)+1]
+                        gross_profit_margin_denominator = re.sub('[^0-9.]', '', gross_profit_margin_denominator)
+                        print("updated denominator line 784", gross_profit_margin_denominator)
+
+            if gross_profit_margin_numerator != "" and gross_profit_margin_denominator != "":
+                gross_profit_margin = round(float(gross_profit_margin_numerator) / float(gross_profit_margin_denominator),2)
+            
+            final_output = "Operating Margin: " + str(operating_margin) + " " + "Gross Profit Margin: " + str(gross_profit_margin)
+            return final_output
 
 
 
-
-
-
-    
+        # return financial_data_type
 
 
 #Upload component:
@@ -816,9 +893,9 @@ input_metric = dcc.Input(id='input-metric',
 
 financial_terms_list = dcc.Checklist(
                                 options=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev"],
+                                "equity", "asset", "debt", "cash", "liability", "rev", "operation"],
                                 value=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev"],
+                                "equity", "asset", "debt", "cash", "liability", "rev", "operation"],
                                 id='financial-terms-list',
                                 inline=True
                             )
