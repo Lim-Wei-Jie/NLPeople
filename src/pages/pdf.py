@@ -660,7 +660,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             "common stock": 2 }, # dictionary for words from balance sheets
         
         { "cash flow from operating activities": 10, "cash flow from investing activities": 10, "cash flow from financing activities": 10,
-            "cash flows from operating activities": 10, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
+            "cash flows from operating activities": 15, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
             "cash flow from": 10, "cash flows from": 10} ] # dictionary for words from cash flow statements
         
         income_total_weight = 0
@@ -691,6 +691,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
 
             if financial_data_type_list[2] == fin_data_type_dict:
                 for cash_key in fin_data_type_dict:
+                    for collected_term in collect_lowered_fin_terms_from_col:
                         if cash_key in collected_term:
                             cash_total_weight += fin_data_type_dict[cash_key]
                             print("added cash key: ", cash_key)
@@ -925,9 +926,50 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             final_output = "Current Ratio: " + str(current_ratio_margin) + " " + "Quick Ratio: " + str(quick_ratio_margin)
 
 
+        if financial_data_type == "cash flow statement":
+
+            # calculating cash flow to net income for CASH FLOW STATEMENT #
+
+            cash_flow_to_net_income_numerator = ""
+            cash_flow_to_net_income_denominator = ""
+            cash_flow_to_net_income = "Value cannot be generated, please make further edits to extracted table."
+            for a_dict in table_data:
+                for word in ["net income", "total profit"]:
+                    if word in a_dict[value].lower():
+                        if list(a_dict.values())[int(value)+1] != "":
+                            print("a_dict val: ", list(a_dict.values())[int(value)+1])
+                            cash_flow_to_net_income_numerator = list(a_dict.values())[int(value)+1]
+                            cash_flow_to_net_income_numerator = re.sub('[^0-9.]', '', cash_flow_to_net_income_numerator)
+                            print("updated numerator", cash_flow_to_net_income_numerator)
+                        elif list(a_dict.values())[int(value)+1] == "":
+                            if list(a_dict.values())[int(value)+2] != "":
+                                print("a_dict val 3: ", list(a_dict.values())[int(value)+2])
+                                cash_flow_to_net_income_numerator = list(a_dict.values())[int(value)+2]
+                                cash_flow_to_net_income_numerator = re.sub('[^0-9.]', '', cash_flow_to_net_income_numerator)
+                                print("updated numerator", cash_flow_to_net_income_numerator)
+
+                if "in cash and cash equivalents" in a_dict[value].lower() :
+                    print("line 951 went in")
+                    if list(a_dict.values())[int(value)+1] != "": #check if the column beside financial term is "" else the latest value will be updated
+                        print("a_dict val 2: ", list(a_dict.values())[int(value)+1])
+                        cash_flow_to_net_income_denominator = list(a_dict.values())[int(value)+1]
+                        cash_flow_to_net_income_denominator= re.sub('[^0-9.]', '', cash_flow_to_net_income_denominator)
+                        print("updated denominator", cash_flow_to_net_income_denominator)
+                    elif list(a_dict.values())[int(value)+1] == "":
+                        if list(a_dict.values())[int(value)+2] != "":
+                            print("a_dict val 3: ", list(a_dict.values())[int(value)+2])
+                            cash_flow_to_net_income_denominator = list(a_dict.values())[int(value)+2]
+                            cash_flow_to_net_income_denominator  = re.sub('[^0-9.]', '', cash_flow_to_net_income_denominator )
+                            print("updated denominator", cash_flow_to_net_income_denominator )
+
+            if cash_flow_to_net_income_numerator != "" and cash_flow_to_net_income_denominator != "":
+                cash_flow_to_net_income = round(float(cash_flow_to_net_income_numerator) / float(cash_flow_to_net_income_denominator),2)
+            final_output = "Cash Flow To Net Income Ratio: " + str(cash_flow_to_net_income)
+            print("line 968, " , cash_flow_to_net_income)
+
+
             return final_output
 
-        # return financial_data_type
 
 
 #Upload component:
