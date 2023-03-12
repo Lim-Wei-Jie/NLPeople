@@ -925,6 +925,8 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
 
             final_output = "Current Ratio: " + str(current_ratio_margin) + " " + "Quick Ratio: " + str(quick_ratio_margin)
 
+            return final_output
+
 
         if financial_data_type == "cash flow statement":
 
@@ -963,7 +965,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                             print("updated denominator", cash_flow_to_net_income_denominator )
 
             if cash_flow_to_net_income_numerator != "" and cash_flow_to_net_income_denominator != "":
-                cash_flow_to_net_income = round(float(cash_flow_to_net_income_numerator) / float(cash_flow_to_net_income_denominator),2)
+                cash_flow_to_net_income = round(float(cash_flow_to_net_income_denominator) / float(cash_flow_to_net_income_numerator),2)
             final_output = "Cash Flow To Net Income Ratio: " + str(cash_flow_to_net_income)
             print("line 968, " , cash_flow_to_net_income)
 
