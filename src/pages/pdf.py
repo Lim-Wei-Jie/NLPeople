@@ -936,7 +936,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             cash_flow_to_net_income_denominator = ""
             cash_flow_to_net_income = "Value cannot be generated, please make further edits to extracted table."
             for a_dict in table_data:
-                for word in ["net income", "total profit"]:
+                for word in ["net income", "total profit", "profit for"]:
                     if word in a_dict[value].lower():
                         if list(a_dict.values())[int(value)+1] != "":
                             print("a_dict val: ", list(a_dict.values())[int(value)+1])
