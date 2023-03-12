@@ -711,31 +711,6 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             financial_data_type = "cash flow statement"
             print("financial data type is cash flow statement")
 
-        #Step 2: Use the right financial metrics
-        #Step 3: Go through selected financial column. Grab values needed to calculate financial metrics.
-
-        # if financial_data_type == "income statement":
-        #     operating_margin_numerator = ""
-        #     operating_margin_denominator = ""
-        #     for a_dict in table_data:
-        #         for word in ["operating profit", "income from operations"]:
-        #             if word in a_dict[value].lower():
-        #         # if a_dict[value].lower() in ["operating profit", "income from operations"]:
-        #                 if a_dict[str(int(value)+1)] != "":
-                            
-        #                     operating_margin_numerator = a_dict[str(int(value)+1)] 
-        #                     operating_margin_numerator = re.sub('[^0-9.]', '', operating_margin_numerator)
-        #                     print("updated numerator", operating_margin_numerator)
-        #         if "Revenue" in a_dict[value] :
-        #             print("line 726 went in")
-        #             if a_dict[str(int(value)+1)] != "": #check if the column beside financial term is "" else the latest value will be updated
-        #                 operating_margin_denominator = a_dict[str(int(value)+1)] 
-        #                 operating_margin_denominator = re.sub('[^0-9.]', '', operating_margin_denominator)
-        #                 print("updated denominator", operating_margin_denominator)
-        #     operating_margin = round(float(operating_margin_numerator) / float(operating_margin_denominator),2)
-        #     final_output = "Operating Margin: " + str(operating_margin)
-        #     return final_output
-
 
         if financial_data_type == "income statement":
 
@@ -756,10 +731,10 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                             operating_margin_numerator = re.sub('[^0-9.]', '', operating_margin_numerator)
                             print("updated numerator", operating_margin_numerator)
                         elif list(a_dict.values())[int(value)+1] == "":
-                            if list(a_dict.values())[int(value)+1] != "":
-                                print("a_dict val 3: ", list(a_dict.values())[int(value)+1])
+                            if list(a_dict.values())[int(value)+2] != "":
+                                print("a_dict val 3: ", list(a_dict.values())[int(value)+2])
                                 #operating_margin_numerator = a_dict[str(int(value)+1)] 
-                                operating_margin_numerator = list(a_dict.values())[int(value)+1]
+                                operating_margin_numerator = list(a_dict.values())[int(value)+2]
                                 operating_margin_numerator = re.sub('[^0-9.]', '', operating_margin_numerator)
                                 print("updated numerator", operating_margin_numerator)
 
@@ -771,6 +746,12 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                         operating_margin_denominator = list(a_dict.values())[int(value)+1]
                         operating_margin_denominator = re.sub('[^0-9.]', '', operating_margin_denominator)
                         print("updated denominator", operating_margin_denominator)
+                    elif list(a_dict.values())[int(value)+1] == "":
+                        if list(a_dict.values())[int(value)+2] != "":
+                            print("a_dict val 3: ", list(a_dict.values())[int(value)+2])
+                            operating_margin_denominator = list(a_dict.values())[int(value)+2]
+                            operating_margin_denominator  = re.sub('[^0-9.]', '', operating_margin_denominator )
+                            print("updated denominator", operating_margin_denominator )
 
             if operating_margin_numerator != "" and operating_margin_denominator != "":
                 operating_margin = round(float(operating_margin_numerator) / float(operating_margin_denominator),2)
@@ -793,12 +774,13 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                             gross_profit_margin_numerator = re.sub('[^0-9.]', '', gross_profit_margin_numerator)
                             print("updated numerator 784", gross_profit_margin_numerator)
                         elif list(a_dict.values())[int(value)+1] == "":
-                            if list(a_dict.values())[int(value)+1] != "":
-                                print("a_dict val 3 line 784: ", list(a_dict.values())[int(value)+1])
-                                #operating_margin_numerator = a_dict[str(int(value)+1)] 
-                                gross_profit_margin_numerator = list(a_dict.values())[int(value)+1]
+                            print("YEAH1")
+                            if list(a_dict.values())[int(value)+2] != "":
+                                print("YEAH2")
+                                print("a_dict val 3 line 784: ", list(a_dict.values())[int(value)+2])
+                                gross_profit_margin_numerator = list(a_dict.values())[int(value)+2]
                                 gross_profit_margin_numerator = re.sub('[^0-9.]', '', gross_profit_margin_numerator)
-                                print("updated numerator line 784", gross_profit_margin_numerator)
+                                print("updated numerator line 777", gross_profit_margin_numerator)
 
                 if "Revenue" in a_dict[value] :
                     print("line 726 went in")
@@ -807,15 +789,143 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                         #operating_margin_denominator = a_dict[str(int(value)+1)] 
                         gross_profit_margin_denominator = list(a_dict.values())[int(value)+1]
                         gross_profit_margin_denominator = re.sub('[^0-9.]', '', gross_profit_margin_denominator)
-                        print("updated denominator line 784", gross_profit_margin_denominator)
+                        print("updated denominator line 786", gross_profit_margin_denominator)
+                    elif list(a_dict.values())[int(value)+1] == "":
+                        if list(a_dict.values())[int(value)+2] != "":
+                            print("a_dict val 3: ", list(a_dict.values())[int(value)+2])
+                            gross_profit_margin_denominator = list(a_dict.values())[int(value)+2]
+                            gross_profit_margin_denominator = re.sub('[^0-9.]', '', gross_profit_margin_denominator)
+                            print("updated denominator", gross_profit_margin_denominator )
 
             if gross_profit_margin_numerator != "" and gross_profit_margin_denominator != "":
                 gross_profit_margin = round(float(gross_profit_margin_numerator) / float(gross_profit_margin_denominator),2)
-            
+
             final_output = "Operating Margin: " + str(operating_margin) + " " + "Gross Profit Margin: " + str(gross_profit_margin)
+
             return final_output
 
+        elif financial_data_type == "balance sheet":
 
+          # calculating current ratio for BALANCE SHEET #
+
+            current_ratio_numerator = ""
+            current_ratio_denominator = ""
+            current_ratio_margin = "Value cannot be generated, please make further edits to extracted table."
+            for a_dict in table_data:
+                for word in ["total current asset"]:
+                    if word in a_dict[value].lower():
+                        #if a_dict[str(int(value)+1)] != "": 
+                        print("entered line 784")
+                        if list(a_dict.values())[int(value)+1] != "":
+                            print("a_dict val 784: ", list(a_dict.values())[int(value)+1])
+                            current_ratio_numerator = list(a_dict.values())[int(value)+1]
+                            current_ratio_numerator = re.sub('[^0-9.]', '', current_ratio_numerator)
+                            print("updated numerator 784", current_ratio_numerator)
+                        elif list(a_dict.values())[int(value)+1] == "":
+                            if list(a_dict.values())[int(value)+2] != "":
+                                print("a_dict val 3 line 812: ", list(a_dict.values())[int(value)+2])
+                                current_ratio_numerator = list(a_dict.values())[int(value)+2]
+                                current_ratio_numerator = re.sub('[^0-9.]', '', current_ratio_numerator)
+                                print("updated numerator line 815", current_ratio_numerator)
+
+                if "total current liabilities" in a_dict[value].lower() :
+                    print("line 816 went in")
+                    if list(a_dict.values())[int(value)+1] != "": #check if the column beside financial term is "" else the latest value will be updated
+                        print("a_dict val 2 line 816: ", list(a_dict.values())[int(value)+1])
+                        #operating_margin_denominator = a_dict[str(int(value)+1)] 
+                        current_ratio_denominator = list(a_dict.values())[int(value)+1]
+                        current_ratio_denominator = re.sub('[^0-9.]', '', current_ratio_denominator)
+                        print("updated denominator line 816", current_ratio_denominator)
+                    elif list(a_dict.values())[int(value)+1] == "":
+                        if list(a_dict.values())[int(value)+2] != "":
+                            print("a_dict val 3 line 827: ", list(a_dict.values())[int(value)+2])
+                            current_ratio_denominator = list(a_dict.values())[int(value)+2]
+                            current_ratio_denominator = re.sub('[^0-9.]', '', current_ratio_denominator)
+                            print("updated numerator line 829", current_ratio_denominator)
+
+            if current_ratio_numerator != "" and current_ratio_denominator != "":
+                current_ratio_margin = round(float(current_ratio_numerator) / float(current_ratio_denominator),2)
+
+
+            # final_output = "Current Ratio: " + str(current_ratio_margin)
+
+
+            # calculating quick ratio for BALANCE SHEET #
+
+            quick_ratio_numerator = ""
+            quick_ratio_denominator = ""
+            quick_ratio_margin = "Value cannot be generated, please make further edits to extracted table."
+            for a_dict in table_data:
+                for word in ["total cash", "receivable"]:
+                    count_words = 0
+                    total_numerator = 0.0
+                    if word in a_dict[value].lower():
+                        #if a_dict[str(int(value)+1)] != "": 
+                        print("entered line 844")
+                        if list(a_dict.values())[int(value)+1] != "":
+                            if word == "total cash":
+                                cash_and_equiv = list(a_dict.values())[int(value)+1]
+                                cash_and_equiv = re.sub('[^0-9.]', '', cash_and_equiv)
+                                count_words += 1
+                            if word == "receivable":
+                                accounts_receivable = list(a_dict.values())[int(value)+1]
+                                accounts_receivable = re.sub('[^0-9.]', '', accounts_receivable)
+                                count_words += 1
+                            if count_words == 2:
+                                quick_ratio_numerator = float(cash_and_equiv) + float(accounts_receivable)
+                                print("updated numerator 784", quick_ratio_numerator)
+                        elif list(a_dict.values())[int(value)+1] == "":
+                            print("slid in 1")
+                            if list(a_dict.values())[int(value)+2] != "":
+                                print("slid in 2")
+
+                                if word == "total cash":
+                                    print("fire in 1")
+                                    cash_and_equiv = list(a_dict.values())[int(value)+2]
+                                    cash_and_equiv = re.sub('[^0-9.]', '', cash_and_equiv)
+                                    count_words += 1
+                                    total_numerator += float(cash_and_equiv)
+                                    print("cash_equi line 887", cash_and_equiv)
+                                if word == "receivable":
+                                    print("fire in 2")
+                                    accounts_receivable = list(a_dict.values())[int(value)+2]
+                                    accounts_receivable = re.sub('[^0-9.]', '', accounts_receivable)
+                                    count_words += 1
+                                    total_numerator += float(accounts_receivable)
+                                    print("accounts receivable line 892", accounts_receivable)
+                                if count_words == 2:
+                                    print("fire in 3")
+                                    #quick_ratio_numerator = float(cash_and_equiv) + float(accounts_receivable)
+                                    print("updated numerator 893", quick_ratio_numerator)
+
+                                #quick_ratio_numerator = list(a_dict.values())[int(value)+2]
+                                #quick_ratio_numerator = re.sub('[^0-9.]', '', quick_ratio_numerator)
+                                quick_ratio_numerator = total_numerator
+                                print("updated numerator line 897", quick_ratio_numerator)
+
+                if "total current liabilities" in a_dict[value].lower() :
+                    print("line 816 went in")
+                    if list(a_dict.values())[int(value)+1] != "": #check if the column beside financial term is "" else the latest value will be updated
+                        print("a_dict val 2 line 816: ", list(a_dict.values())[int(value)+1])
+                        #operating_margin_denominator = a_dict[str(int(value)+1)] 
+                        quick_ratio_denominator = list(a_dict.values())[int(value)+1]
+                        quick_ratio_denominator = re.sub('[^0-9.]', '', quick_ratio_denominator)
+                        print("updated denominator line 816", quick_ratio_denominator)
+                    elif list(a_dict.values())[int(value)+1] == "":
+                        if list(a_dict.values())[int(value)+2] != "":
+                            print("a_dict val 3: ", list(a_dict.values())[int(value)+2])
+                            quick_ratio_denominator = list(a_dict.values())[int(value)+2]
+                            quick_ratio_denominator = re.sub('[^0-9.]', '', quick_ratio_denominator)
+                            print("updated denominator", quick_ratio_denominator )
+
+            if quick_ratio_numerator != "" and quick_ratio_denominator != "":
+                quick_ratio_margin = round(float(quick_ratio_numerator) / float(quick_ratio_denominator),2)
+
+
+            final_output = "Current Ratio: " + str(current_ratio_margin) + " " + "Quick Ratio: " + str(quick_ratio_margin)
+
+
+            return final_output
 
         # return financial_data_type
 
@@ -893,9 +1003,9 @@ input_metric = dcc.Input(id='input-metric',
 
 financial_terms_list = dcc.Checklist(
                                 options=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev", "operation"],
+                                "equity", "asset", "debt", "cash", "liability", "rev", "operation", "receivable"],
                                 value=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev", "operation"],
+                                "equity", "asset", "debt", "cash", "liability", "rev", "operation", "receivable"],
                                 id='financial-terms-list',
                                 inline=True
                             )
