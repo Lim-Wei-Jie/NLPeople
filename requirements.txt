@@ -15,6 +15,14 @@ PyPDF2==2.12.1
 # PyPDF2==3.0.1
 # pytesseract==0.3.10
 pytesseract
+pdf2image
+pdfminer.six
+rank_bm25
+termcolor
+scikit-learn
+transformers
+spacy
+matplotlib
 opencv-contrib-python
 # CurrencyConverter
 # spacy>=3.0.0,<4.0.0
