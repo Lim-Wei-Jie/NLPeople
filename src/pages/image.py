@@ -6,6 +6,8 @@ from dash.dependencies import Input, Output, State
 import plotly.express as px
 import pandas as pd
 
+import dash_bootstrap_components as dbc
+
 import cv2
 import pytesseract
 
@@ -471,30 +473,6 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data, met
             print("myyy i", i)
             print("myyy value", str(value))
 
-            # fill in the empty row cells with possible financial metrics
-
-            # if row_cell == "":
-            #     print("went in")
-            #     value_position = col_names_list.index(user_selected_value)
-            #     print("value position", value_position)
-
-            #     new_user_selected_value = value_position+1  #position of the right next cell (of the empty cell)
-
-            #     #if column name (position) is not the last column, we safely select the right next cell
-            #     if int(user_selected_value) < len(col_names_list)-1:
-            #         right_row_cell = table_data[i][str(new_user_selected_value)]
-            #         if right_row_cell != "":
-            #             print("right row cell", right_row_cell)
-            #             row_cell = right_row_cell
-
-            #     #if this is not the first row (btw i indicates row value), we can safely select the row above
-            #     #row above's value is i-1
-            #     if i > 0:
-            #         up_row_cell = table_data[i-1][user_selected_value]                        
-            #         if up_row_cell != "":
-            #             print("up row cell", up_row_cell)
-            #             row_cell = up_row_cell
-
             if row_cell != "" and row_cell != None:
                 # print("row: ", row)
                 # print("row type", type(row))
@@ -668,6 +646,7 @@ extracted_table = dash_table.DataTable(editable=True,
                                         selected_columns=[], 
                                         selected_rows=[],
                                         column_selectable='multi',
+                                        style_table={'overflowY': 'auto'},
                                         style_cell={                # ensure adequate header width when text is shorter than cell's text
                                         'minWidth': 95, 'maxWidth': 95, 'width': 95
                                             },
@@ -689,81 +668,110 @@ input_metric = dcc.Input(id='input-metric',
 
 financial_terms_list = dcc.Checklist(
                                 options=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev"],
+                                "equity", "asset", "debt", "cash", "liability", "rev", "operation", "receivable"],
                                 value=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev"],
+                                "equity", "asset", "debt", "cash", "liability", "rev", "operation", "receivable"],
                                 id='financial-terms-list-img',
                                 inline=True
                             )
+
+preview_image_card = dbc.Card([
+    dbc.CardBody([
+        html.H4("Preview of Image", className="card-title"),
+        image
+    ])
+], style={"height":"100%"})
+
+image_output_table_card = dbc.Card([
+    dbc.CardBody([
+        html.H4("Image Output Table", className="card-title"),
+        html.Div(id='currency-is-in-img'),
+        html.Div([add_columns, 
+                html.Button('Add Column', id='adding-columns-button', n_clicks=0)
+                ], style={'height': 50}),
+        img_table,
+        html.Button('Add Row', id='adding-rows-button', n_clicks=0),
+
+        html.Button('Get Columns with Metrics!', id='spacy-button', n_clicks=0),
+        html.Button('Deselect All', id='deselect-rows-button', n_clicks=0),
+        html.Button('Extract Table', id='get-new-table-button', n_clicks=0),
+        html.P("From the shortlisted columns below, please choose 1 column which contains the financial metrics."),
+        financial_terms_cols_checklist
+    ])
+], style={"height":"100%"})
+
+functions_card = dbc.Card([
+    dbc.CardBody([
+        html.H5('Metrics'),
+        html.P("All Metrics:"),
+        financial_terms_list,
+        html.P("Add Metric:"),
+        input_metric,
+        html.Button('Add', id='add-metric-button', n_clicks=0),
+        html.Br(), html.Br(),
+        html.H5('Convert Currency'),
+        html.P('Convert from:'),
+        dcc.Dropdown(options=['USD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CHF', 'ISK', 'NOK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 'IDR', 'ILS', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR'], value='USD', id='currency-input-dropdown'),
+        html.P('Convert to:'),
+        dcc.Dropdown(options=['USD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CHF', 'ISK', 'NOK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 'IDR', 'ILS', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR'], value='USD', id='currency-output-dropdown'),
+        html.Button('Convert', id='convert-currency-button', n_clicks=0),
+        html.Br(), html.Br(),
+        html.H5('Convert Scale'),
+        html.P('Scale from:'),
+        dcc.Dropdown(options=['NA', 'real number', 'k', 'm', 'b'], id='scale-input-dropdown', value='NA'),
+        html.P('Scale to:'),
+        dcc.Dropdown(options=['NA', 'real number', 'k', 'm', 'b'], id='scale-output-dropdown', value='NA'),
+        html.Button('Convert', id='convert-scale-button', n_clicks=0),
+    ])
+], style={"height":"100%"})
+
+first_row_cards = dbc.Row(
+    [
+        dbc.Col(preview_image_card, width=5),
+        dbc.Col(image_output_table_card, width=5),
+        dbc.Col(functions_card, width=2),
+    ]
+)
+
+extracted_table_card = dbc.Card([
+    dbc.CardBody([
+        html.H4('Extracted Table'),
+        html.Div([dcc.Input(
+                            id='adding-columns-name-new-table',
+                            placeholder='Enter a column name...',
+                            value='',
+                            style={'padding': 10}
+                                ), 
+                html.Button('Add Column', id='adding-columns-button-new-table', n_clicks=0)
+                ], style={'height': 50}),
+        extracted_table,
+        html.Button('Add Row', id='adding-rows-button-new-table', n_clicks=0),
+    ])
+], style={"height":"100%"})
+
+dashboard_card = dbc.Card([
+    dbc.CardBody([
+        html.H4('Dashboard'),
+        html.P("For the dashboard to work, there are a few assumptions:"),
+        html.P("1) The first row in the Extracted Table will be the x-axis of the graph, where the first cell is variable name and the subsequent cells are the UNIQUE classes of the x-axis (the classes have to be in continuous ascending order if they are numbers)"),
+        html.P("2) Extracted Table must only have 1 column of UNIQUE row headers (Must be the first column in the table)"),
+        html.P("For the graph to appear, click any cell in the Extracted Table except for the first row."),
+        html.Div(id='line-container-img')
+    ])
+], style={"height":"100%"})
+
+second_row_cards = dbc.Row(
+    [
+        dbc.Col(extracted_table_card, width=6),
+        dbc.Col(dashboard_card, width=6),
+    ]
+)
 
 #Place into the app
 layout = html.Div([html.H4('Convert Image using OpenCV, PyTesseract, Dash'),
                         img_load,
                         html.Br(),
-                        html.Div([
-                            html.Div([
-                                html.H5('Preview of Image'),
-                                image,
-                            ], style={'width': '42%', 'display': 'inline-block'}),
-                            html.Div(style={'width': '4%', 'display': 'inline-block'}),
-                            html.Div([
-                                html.H5('Image Output Table'),
-                                html.Div(id='currency-is-in-img'),
-                                html.Div([add_columns, 
-                                        html.Button('Add Column', id='adding-columns-button', n_clicks=0)
-                                        ], style={'height': 50}),
-                                img_table,
-                                html.Button('Add Row', id='adding-rows-button', n_clicks=0),
-
-                                html.Button('Get Columns with Metrics!', id='spacy-button', n_clicks=0),
-                                html.Button('Deselect All', id='deselect-rows-button', n_clicks=0),
-                                html.Button('Extract Table', id='get-new-table-button', n_clicks=0),
-                                html.P("From the shortlisted columns below, please choose 1 column which contains the financial metrics."),
-                                financial_terms_cols_checklist
-                                ], style={'width': '42%', 'display': 'inline-block'}),
-                            html.Div(style={'width': '2%', 'display': 'inline-block'}),
-                            html.Div([
-                                html.H5('Metrics'),
-                                html.P("All Metrics:"),
-                                financial_terms_list,
-                                html.P("Add Metric:"),
-                                input_metric,
-                                html.Button('Add', id='add-metric-button', n_clicks=0),
-                                html.H5('Convert Currency'),
-                                html.P('Convert from:'),
-                                dcc.Dropdown(options=['USD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CHF', 'ISK', 'NOK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 'IDR', 'ILS', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR'], value='USD', id='currency-input-dropdown'),
-                                html.P('Convert to:'),
-                                dcc.Dropdown(options=['USD', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 'CHF', 'ISK', 'NOK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 'IDR', 'ILS', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR'], value='USD', id='currency-output-dropdown'),
-                                html.Button('Convert', id='convert-currency-button', n_clicks=0),
-                                html.Br(), html.Br(),
-                                html.H5('Convert Scale'),
-                                html.P('Scale from:'),
-                                dcc.Dropdown(options=['NA', 'real number', 'k', 'm', 'b'], id='scale-input-dropdown', value='NA'),
-                                html.P('Scale to:'),
-                                dcc.Dropdown(options=['NA', 'real number', 'k', 'm', 'b'], id='scale-output-dropdown', value='NA'),
-                                html.Button('Convert', id='convert-scale-button', n_clicks=0),
-                            ], style={'width': '10%', 'display': 'inline-block'})
-                        ]),
-                        
+                        first_row_cards,
                         html.Br(), html.Br(),
-                        
-                        html.H5('Extracted Table'),
-                        html.Div([dcc.Input(
-                                            id='adding-columns-name-new-table',
-                                            placeholder='Enter a column name...',
-                                            value='',
-                                            style={'padding': 10}
-                                                ), 
-                                html.Button('Add Column', id='adding-columns-button-new-table', n_clicks=0)
-                                ], style={'height': 50}),
-                        extracted_table,
-                        html.Button('Add Row', id='adding-rows-button-new-table', n_clicks=0),
-
-                        html.Br(), html.Br(),
-                        html.H5('Dashboard'),
-                        html.P("For the dashboard to work, there are a few assumptions:"),
-                        html.P("1) The first row in the Extracted Table will be the x-axis of the graph, where the first cell is variable name and the subsequent cells are the UNIQUE classes of the x-axis (the classes have to be in continuous ascending order if they are numbers)"),
-                        html.P("2) Extracted Table must only have 1 column of UNIQUE row headers (Must be the first column in the table)"),
-                        html.P("For the graph to appear, click any cell in the Extracted Table except for the first row."),
-                        html.Div(id='line-container-img')
+                        second_row_cards
                         ])

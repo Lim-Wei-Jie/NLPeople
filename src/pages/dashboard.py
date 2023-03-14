@@ -6,7 +6,11 @@ import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
 import dash
-from dash import Dash, dash_table, dcc, html, Input, Output, State, MATCH, no_update  # pip install dash (version 2.0.0 or higher)
+from dash import Dash, dash_table, dcc, html, Input, Output, State, exceptions, MATCH, no_update  # pip install dash (version 2.0.0 or higher)
+
+import dash_bootstrap_components as dbc
+
+import math
 
 dash.register_page(__name__)
 
@@ -62,49 +66,90 @@ def update_output(contents, filename, date, children):
                     df = pd.read_excel(io.BytesIO(decoded))
 
                 # Some cleaning
+                # print("BEFORE TRANSPOSE", df)
                 df = df.T
+                # print("AFTER TRANSPOSE", df)
                 new_header = df.iloc[0]
                 df = df[1:]
+                # print("REMOVE HEADERS", df)
                 df.columns = new_header
+                # print("WITH NEW HEADER", df)
+                print("df.columns", list(df.columns.values))
+                # print("df revenue", list(df['Revenue']))
+
+                # df.fillna("0")
+
+                # if cash flow statement, user needs to add in additional metrics from elsewhere to calculate ratios
+                it_is_a = ''
+                all_metrics = " ".join(list(df.columns.values))
+                if 'assets' in all_metrics.lower() and 'liabilities' in all_metrics.lower() and 'equity' in all_metrics.lower():
+                    it_is_a = 'balance sheet'
+                elif 'cash flow' in all_metrics.lower():
+                    it_is_a = 'cash flow statement'
+                    if "current liabilities" not in all_metrics.lower():
+                        df['current liabilities'] = ""
+                    if "total liabilities" not in all_metrics.lower():
+                        df['total liabilities'] = ""
+                else:
+                    it_is_a = 'income statement'
 
                 # Create the tables and empty graphs
-                children.append(html.Div([
-                    html.H5(filename[i]),
-
-                    dash_table.DataTable(
-                        df.to_dict('records'),
-                        [{'name': i, 'id': i, 'selectable':True} for i in df.columns],
-                        page_size=5,
-                        filter_action='native',
-                        column_selectable='single',
-                        selected_columns=[df.columns[1]], # preselect the 2nd columns
-                        style_table={'overflowX': 'auto'},
-                        id={'type': 'dynamic-table',
-                            'index': i},
-                    ),
-                    html.P('Type of Graph:'),
-                    dcc.Dropdown(id={'type':'type_of_graph', 'index':i},
-                                options=['bar', 'line'],
-                                multi=False,
-                                value='line',
-                                style={'width': '40%'}),
-                    
-                    dcc.Graph(
-                        id={
-                            'type': 'dynamic-graph',
-                            'index': i
-                        },
-                        figure={}
-                    ),
-
-                    # # For debugging
-                    # html.Div('Raw Content'),
-                    # html.Pre(contents[i][0:200] + '...', style={
-                    #     'whiteSpace': 'pre-wrap',
-                    #     'wordBreak': 'break-all'
-                    # }),
-                    html.Hr()
-            ]))
+                children.append(
+                    html.Div([
+                        dbc.Row([
+                            dbc.Col(
+                                dbc.Card([
+                                    dbc.CardBody([
+                                        html.H4(filename[i]),
+                                        dash_table.DataTable(
+                                            df.to_dict('records'),
+                                            [{'name': i, 'id': i, 'selectable':True} for i in df.columns],
+                                            page_size=5,
+                                            filter_action='native',
+                                            column_selectable='single',
+                                            selected_columns=[df.columns[1]], # preselect the 2nd columns
+                                            style_table={'overflowX': 'auto'},
+                                            id={'type': 'dynamic-table',
+                                                'index': i},
+                                            editable=True
+                                        ),
+                                        html.Br(), html.Br(),
+                                        html.H4("Financial Ratios"),
+                                        html.P(id={
+                                            'type': 'dynamic-text',
+                                            'index': i
+                                        }),
+                                        html.P(id={
+                                                    'type': 'dynamic-container',
+                                                    'index': i
+                                            }),
+                                    ])
+                                ], style={"height":"100%"}), width=6
+                            ),
+                            dbc.Col(
+                                dbc.Card([
+                                    dbc.CardBody([
+                                        html.P('Type of Graph:'),
+                                        dcc.Dropdown(id={'type':'type_of_graph', 'index':i},
+                                                    options=['bar', 'line'],
+                                                    multi=False,
+                                                    value='line',
+                                                    style={'width': '40%'}),
+                                        
+                                        dcc.Graph(
+                                            id={
+                                                'type': 'dynamic-graph',
+                                                'index': i
+                                            },
+                                            figure={}
+                                        ),
+                                    ])
+                                ], style={"height":"100%"}), width=6
+                            )
+                        ]),
+                        html.Hr()
+                    ])
+                )
 
             except Exception as e:
                 print(e)
@@ -120,14 +165,14 @@ def update_output(contents, filename, date, children):
 @dash.callback(Output({'type': 'dynamic-graph', 'index': MATCH}, 'figure'),
                 Input({'type': 'dynamic-table', 'index': MATCH}, 'derived_virtual_indices'),
                 Input({'type': 'dynamic-table', 'index': MATCH}, 'selected_columns'),
-                State({'type': 'dynamic-table', 'index': MATCH}, 'data'),
+                Input({'type': 'dynamic-table', 'index': MATCH}, 'data'),
                 Input({'type': 'type_of_graph', 'index': MATCH}, 'value')
 )
 def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
     if filtered_data is not None:
         dff = pd.DataFrame(all_data)
         dff = dff[dff.index.isin(filtered_data)].fillna(0)
-        print(dff)
+        print("dff", dff)
 
         if selected_col[0] == dff.columns[0]:
             return no_update
@@ -140,6 +185,305 @@ def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
                 fig = px.bar(dff,
                             x = dff.columns[0],
                             y = selected_col[0])
+            else:
+                raise exceptions.PreventUpdate
             return fig
 
+@dash.callback([Output({'type': 'dynamic-container', 'index': MATCH}, 'children'),
+                Output({'type': 'dynamic-text', 'index': MATCH}, 'children')],
+                Input({'type': 'dynamic-table', 'index': MATCH}, 'data'))
+def display_metrics(all_data):
+    # Income statement, cash flow or balance sheet?
+    df = pd.DataFrame(all_data)
+    df = df.fillna(0)
+    it_is_a = ''
+    all_metrics = " ".join(list(df.columns.values))
+    text = ""
+    if 'assets' in all_metrics.lower() and 'liabilities' in all_metrics.lower() and 'equity' in all_metrics.lower():
+        it_is_a = 'balance sheet'
+    elif 'cash flow' in all_metrics.lower():
+        it_is_a = 'cash flow statement'
+    else:
+        it_is_a = 'income statement'
+    
+    print("it is a", it_is_a)
 
+    key_metrics = {}
+    if it_is_a == 'income statement':
+        gross_profit = {}
+        gross_margin = {}
+        operating_income = {}
+        operating_margin = {}
+
+        revenue = {}
+        cost_of_goods_sold = {}
+        operating_expenses = {}
+
+        for h in list(df.columns.values)[1:]: # list of column names except first column
+            if 'revenue' in h.lower(): # if column is about revenue
+                for i in range(len(df[h].tolist())): # for each year store the value in a dictionary
+                    if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        revenue[df[df.columns[0]][i]] = 0
+                    else:
+                        revenue[df[df.columns[0]][i]] = df[h].tolist()[i]
+            elif 'cost of goods sold' in h.lower():
+                for i in range(len(df[h].tolist())):
+                    if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        cost_of_goods_sold[df[df.columns[0]][i]] = 0
+                    else:
+                        cost_of_goods_sold[df[df.columns[0]][i]] = df[h].tolist()[i]
+            elif 'operating expenses' in h.lower():
+                for i in range(len(df[h].tolist())):
+                    if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        operating_expenses[df[df.columns[0]][i]] = 0
+                    else:
+                        operating_expenses[df[df.columns[0]][i]] = df[h].tolist()[i]
+        
+        print("revenue:", revenue)
+        print("cost_of_goods_sold", cost_of_goods_sold)
+
+        for y in df.iloc[:, 0].tolist():
+            if y in revenue and y in cost_of_goods_sold:
+                gross_profit[y] = float(revenue[y]) - float(cost_of_goods_sold[y])
+            if y in gross_profit and y in revenue:
+                if revenue[y] == 0:
+                    gross_margin[y] = 0
+                else:
+                    gross_margin[y] = str(round(float(gross_profit[y]) / float(revenue[y]) * 100, 2)) + "%"
+            if y in gross_profit and y in operating_expenses:
+                operating_income[y] = float(gross_profit[y]) - float(operating_expenses[y])
+            if y in operating_income and y in revenue:
+                if revenue[y] == 0:
+                    gross_margin[y] = 0
+                else:
+                    operating_margin[y] = str(round(float(operating_income[y]) / float(revenue[y])*100, 2)) + "%"
+
+        # key_metrics['Gross Profit'] = gross_profit
+        key_metrics['Gross Margin'] = gross_margin
+        key_metrics['Operating Margin'] = operating_margin
+
+    elif it_is_a == 'balance sheet':
+        current_ratio = {}
+        quick_ratio = {}
+        current_assets = {}
+        current_liabilities = {}
+        inventories = {}
+        for h in list(df.columns.values)[1:]:
+            if 'current assets' == h.lower() or 'total current assets' == h.lower():
+                for i in range(len(df[h].tolist())): 
+                    if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        current_assets[df[df.columns[0]][i]] = 0
+                    else:
+                        current_assets[df[df.columns[0]][i]] = df[h].tolist()[i]
+            elif 'current liabilities' in h.lower():
+                for i in range(len(df[h].tolist())):
+                    if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        current_liabilities[df[df.columns[0]][i]] = 0
+                    else:
+                        current_liabilities[df[df.columns[0]][i]] = df[h].tolist()[i]
+            elif 'inventories' in h.lower():
+                for i in range(len(df[h].tolist())):
+                    if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        inventories[df[df.columns[0]][i]] = 0
+                    else:
+                        inventories[df[df.columns[0]][i]] = df[h].tolist()[i]
+        
+        for y in df.iloc[:, 0].tolist():
+            if y in current_assets and y in current_liabilities:
+                if current_liabilities[y] == 0:
+                    current_ratio[y] = 0
+                else:
+                    current_ratio[y] = round(float(current_assets[y]) / float(current_liabilities[y]), 2)
+            if y in current_assets and y in current_liabilities and y in inventories:
+                if current_liabilities[y] == 0:
+                    quick_ratio[y] = 0
+                else:
+                    quick_ratio[y] = round((float(current_assets[y]) - float(inventories[y])) / float(current_liabilities[y]), 2)
+
+        key_metrics['Current Ratio'] = current_ratio
+        key_metrics['Quick Ratio'] = quick_ratio
+
+    elif it_is_a == "cash flow statement":
+        cash_flow_from_operations = {}
+        cash_flow_from_investing = {}
+        cash_flow_from_financing = {}
+        current_liabilities = {}
+        total_liabilities = {}
+
+        cash_flow_coverage_ratio = {}
+        operating_cash_flow_ratio = {}
+
+        print("CASH FLOW DF", df)
+
+        for h in list(df.columns.values)[1:]:
+            if 'cash flow from operating activities' == h.lower() or 'cash flow from operations' == h.lower() or 'operating cash flow' == h.lower():
+                for i in range(len(df[h].tolist())):
+                    if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        cash_flow_from_operations[df[df.columns[0]][i]] = 0
+                    else:
+                        cash_flow_from_operations[df[df.columns[0]][i]] = df[h].tolist()[i]
+            elif 'cash flow from investing activities' == h.lower() or 'cash flow from investing' == h.lower() or 'cash flow from investment' == h.lower():
+                for i in range(len(df[h].tolist())):
+                    if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        cash_flow_from_investing[df[df.columns[0]][i]] = 0
+                    else:
+                        cash_flow_from_investing[df[df.columns[0]][i]] = df[h].tolist()[i]
+            elif 'cash flow from financing activities' == h.lower() or 'cash flow from financing' == h.lower():
+                for i in range(len(df[h].tolist())):
+                    if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        cash_flow_from_financing[df[df.columns[0]][i]] = 0
+                    else:
+                        cash_flow_from_financing[df[df.columns[0]][i]] = df[h].tolist()[i]
+            elif 'current liabilities' == h.lower():
+                for i in range(len(df[h].tolist())):
+                    if df[h].tolist()[i] == "":
+                        continue
+                    elif math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        current_liabilities[df[df.columns[0]][i]] = 0
+                    else:
+                        current_liabilities[df[df.columns[0]][i]] = df[h].tolist()[i]
+            elif 'total liabilities' == h.lower():
+                for i in range(len(df[h].tolist())):
+                    if df[h].tolist()[i] == "":
+                        continue 
+                    elif math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
+                        total_liabilities[df[df.columns[0]][i]] = 0
+                    else:
+                        total_liabilities[df[df.columns[0]][i]] = df[h].tolist()[i]
+
+        # to calc cash flow coverage ratio we need total liabilities
+        print("current liabilities", current_liabilities)
+        print("total liabilities", total_liabilities)
+        if len(current_liabilities) != len(df[df.columns[0]]):
+            text += "Enter current liabilities to calculate Operating Cash Flow Ratio. "
+        if len(total_liabilities) != len(df[df.columns[0]]):
+            text += "Enter total liabilities to calculate Cash Flow Coverage Ratio. "
+        
+        for y in df.iloc[:, 0].tolist():
+            if y in cash_flow_from_operations and y in total_liabilities:
+                if total_liabilities[y] == 0:
+                    cash_flow_coverage_ratio[y] = 0
+                else:
+                    cash_flow_coverage_ratio[y] = round(float(cash_flow_from_operations[y]) / float(total_liabilities[y]), 2)
+            if y in cash_flow_from_operations and y in current_liabilities:
+                if current_liabilities[y] == 0:
+                    operating_cash_flow_ratio[y] = 0
+                else:
+                    operating_cash_flow_ratio[y] = round(float(cash_flow_from_operations[y]) / float(current_liabilities[y]), 2)
+
+        key_metrics['Operating Cash Flow Ratio'] = operating_cash_flow_ratio
+        key_metrics['Cash Flow Coverage Ratio'] = cash_flow_coverage_ratio
+
+
+    print("key_metrics", key_metrics)
+    container = []
+    note = ""
+    poor_metrics = {}
+
+    
+    # key_metrics {'Gross Profit': {2020: 136000, 2021: 120000, 2022: 125000}, 'Gross Margin': {2020: '66.34%', 2021: '68.57%', 2022: '75.76%'}, 'Operating Margin': {2020: '17.8%', 2021: '28.29%', 2022: '27.27%'}}
+
+    for metric_name in key_metrics.keys():
+        print("iloc 0", df.iloc[:, 0].tolist())
+        metric_container = []
+        for i in range(len(key_metrics[metric_name])):
+            color = "success"
+            inverse = True
+            if len(df.iloc[:, 0].tolist()) > 0 and i>0:
+                if str(list(key_metrics[metric_name].values())[i]) < str(list(key_metrics[metric_name].values())[i-1]):
+                    color = "warning"
+                    inverse = False
+
+            # if operating margin is less than 20%, flag as red color
+            if metric_name == "Operating Margin":
+                if float(list(key_metrics[metric_name].values())[i][:-1]) < 20:
+                    color = "danger"
+                    inverse = True
+
+                    if metric_name not in poor_metrics:
+                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                    else:
+                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+
+            # if gross margin is less than 50%, flag as red color
+            if metric_name == "Gross Margin":
+                # if list(key_metrics[metric_name].values())[i] == 0:
+                if list(key_metrics[metric_name].values())[i] == 0 or float(list(key_metrics[metric_name].values())[i][:-1]) < 50:
+                    color = "danger"
+                    inverse = True
+
+                    if metric_name not in poor_metrics:
+                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                    else:
+                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+
+            # if quick ratio is less than 1, flag as red color
+            if metric_name == "Quick Ratio":
+                if float(list(key_metrics[metric_name].values())[i]) < 1:
+                    color = "danger"
+                    inverse = True
+
+                    if metric_name not in poor_metrics:
+                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                    else:
+                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+
+            # if current ratio is less than 1.5, flag as red color
+            if metric_name == "Current Ratio":
+                if float(list(key_metrics[metric_name].values())[i]) < 1.5:
+                    color = "danger"
+                    inverse = True
+
+                    if metric_name not in poor_metrics:
+                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                    else:
+                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+
+            # if operating cash flow ratio is less than 1
+            if metric_name == "Operating Cash Flow Ratio":
+                if float(list(key_metrics[metric_name].values())[i]) < 1:
+                    color = "danger"
+                    inverse = True
+
+                    if metric_name not in poor_metrics:
+                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                    else:
+                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+
+            if metric_name == "Cash Flow Coverage Ratio":
+                if float(list(key_metrics[metric_name].values())[i]) < 1:
+                    color = "danger"
+                    inverse = True
+
+                    if metric_name not in poor_metrics:
+                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                    else:
+                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+
+            element = dbc.Card(
+                        dbc.CardBody([
+                            html.P(str(list(key_metrics[metric_name].keys())[i]) + " " + str(metric_name)),
+                            html.H4(str(list(key_metrics[metric_name].values())[i]))
+                        ]), className='text-center m-4', color=color, inverse=inverse)
+            metric_container.append(dbc.Col(element))
+        container.append(dbc.Row(metric_container))
+
+    # description of what the metrics mean when they are in a bad range
+    for metric_name in poor_metrics.keys():
+        if metric_name == "Operating Margin":
+            note += "Return on sales was not managed well in " + str(', '.join(poor_metrics[metric_name])) + ". "
+        if metric_name == "Gross Margin":
+            note += "Company did not make that much money after paying for the direct cost of doing business in " + str(', '.join(poor_metrics[metric_name])) + ". "
+        if metric_name == "Current Ratio":
+            note += "Company's ability to pay short-term obligations was poor in " + str(', '.join(poor_metrics[metric_name])) + ". "
+        if metric_name == "Quick Ratio":
+            note += "Company's ability to convert liquid assets into cash to pay for its short-term financial obligations was poor in " + str(', '.join(poor_metrics[metric_name])) + ". "
+        if metric_name == "Operating Cash Flow Ratio":
+            note += "Company's ability to meet its short-term debt liabilities without considering its dividend policy was poor in " + str(', '.join(poor_metrics[metric_name])) + ". "
+        if metric_name == "Cash Flow Coverage Ratio":
+            note += "Company was in danger of default in " + str(', '.join(poor_metrics[metric_name])) + ". "
+
+    container.append(note)
+    print("TEXT", text)
+    print("to_show", container)
+    return dbc.Container(container), text
