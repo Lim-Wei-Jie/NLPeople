@@ -186,7 +186,7 @@ def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
                             x = dff.columns[0],
                             y = selected_col[0])
             elif type_of_graph == 'pie':
-                fig = px.pie(dff, values=selected_col[0], names=dff.columns[0])
+                fig = px.pie(dff, values=selected_col[0], names=dff.columns[0], title=selected_col[0])
             else:
                 raise exceptions.PreventUpdate
             return fig
@@ -403,9 +403,9 @@ def display_metrics(all_data):
                     inverse = True
 
                     if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
                     else:
-                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
 
             # if gross margin is less than 50%, flag as red color
             if metric_name == "Gross Margin":
@@ -415,9 +415,9 @@ def display_metrics(all_data):
                     inverse = True
 
                     if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
                     else:
-                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
 
             # if quick ratio is less than 1, flag as red color
             if metric_name == "Quick Ratio":
@@ -426,9 +426,9 @@ def display_metrics(all_data):
                     inverse = True
 
                     if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
                     else:
-                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
 
             # if current ratio is less than 1.5, flag as red color
             if metric_name == "Current Ratio":
@@ -437,9 +437,9 @@ def display_metrics(all_data):
                     inverse = True
 
                     if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
                     else:
-                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
 
             # if operating cash flow ratio is less than 1
             if metric_name == "Operating Cash Flow Ratio":
@@ -448,9 +448,9 @@ def display_metrics(all_data):
                     inverse = True
 
                     if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
                     else:
-                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
 
             if metric_name == "Cash Flow Coverage Ratio":
                 if float(list(key_metrics[metric_name].values())[i]) < 1:
@@ -458,9 +458,9 @@ def display_metrics(all_data):
                     inverse = True
 
                     if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(df.iloc[:, 0].tolist()[i])]
+                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
                     else:
-                        poor_metrics[metric_name].append(str(df.iloc[:, 0].tolist()[i]))
+                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
 
             element = dbc.Card(
                         dbc.CardBody([
