@@ -511,7 +511,8 @@ def update_output_div(input_scale, output_scale):
     return text
 
 @dash.callback(
-    Output(component_id='line-container', component_property='children'),
+    [Output(component_id='line-container', component_property='children'),
+    Output('rules-msg', 'children')],
     [Input(component_id='new-table', component_property="derived_virtual_data"),
     Input(component_id='new-table', component_property='derived_virtual_selected_rows'),
     Input('new-table', 'active_cell')],
@@ -541,6 +542,8 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
         # to store all the UNIQUE df.columns values without empty cells
         unique_values_for_rows = []
         for v in new_df.columns:
+            if v is None:
+                v = ""
             if v.strip() != '' and v not in unique_values_for_rows:
                 unique_values_for_rows.append(v)
         
@@ -553,6 +556,25 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
         # colors = ['#7FDBFF' if i in slctd_row_indices else '#0074D9'
         #             for i in range(len(new_df))]
         # print("new_df: ", new_df)
+
+        # alert msgs based on the rules
+        rules_msg = []
+        if len(set(classes))!=len(classes):
+            rule1_msg = dbc.Alert("First row is the x-axis. Make classes of x-axis unique!", color="danger")
+        else:
+            rule1_msg = ""
+        if len(unique_values_for_rows) != len(current_df_columns):
+            rule2_msg = dbc.Alert("Make row headers unique!", color="danger")
+        else:
+            rule2_msg = ""
+        if x_axis_variable.strip()=='':
+            rule3_msg = dbc.Alert("Fill up x-axis variable in the first cell!", color="danger")
+        else:
+            rule3_msg = ""
+
+        rules_msg.append(rule1_msg)
+        rules_msg.append(rule2_msg)
+        rules_msg.append(rule3_msg)
 
         # Show dashboard based on the 2 rules, and datatable cannot be empty
         if active_cell is not None and len(new_df)>1 and len(unique_values_for_rows) == len(current_df_columns) and x_axis_variable.strip()!='' and len(set(classes))==len(classes):
@@ -576,11 +598,11 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
                                 # ).update_layout(showlegend=False, xaxis={'categoryorder': 'total ascending'})
                                 # .update_traces(marker_color=colors, hovertemplate="<b>%{y}%</b><extra></extra>")
                                 )
-                ]
+                ], rules_msg
             else:
                 raise exceptions.PreventUpdate
         else:
-            raise exceptions.PreventUpdate
+            return "", rules_msg
     else:
         raise exceptions.PreventUpdate
 
@@ -1122,10 +1144,7 @@ extracted_table_card = dbc.Card([
 dashboard_card = dbc.Card([
     dbc.CardBody([
         html.H4('Dashboard'),
-        html.P("For the dashboard to work, there are a few assumptions:"),
-        html.P("1) The first row in the Extracted Table will be the x-axis of the graph, where the first cell is variable name and the subsequent cells are the UNIQUE classes of the x-axis (the classes have to be in continuous ascending order if they are numbers)"),
-        html.P("2) Extracted Table must only have 1 column of UNIQUE row headers (Must be the first column in the table)"),
-        html.P("For the graph to appear, click any cell in the Extracted Table except for the first row."),
+        html.Div(id="rules-msg"),
         html.Div(id='line-container')
     ])
 ], style={"height":"100%"})
