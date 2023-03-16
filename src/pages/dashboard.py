@@ -131,7 +131,7 @@ def update_output(contents, filename, date, children):
                                     dbc.CardBody([
                                         html.P('Type of Graph:'),
                                         dcc.Dropdown(id={'type':'type_of_graph', 'index':i},
-                                                    options=['bar', 'line'],
+                                                    options=['bar', 'line', 'pie'],
                                                     multi=False,
                                                     value='line',
                                                     style={'width': '40%'}),
@@ -185,6 +185,8 @@ def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
                 fig = px.bar(dff,
                             x = dff.columns[0],
                             y = selected_col[0])
+            elif type_of_graph == 'pie':
+                fig = px.pie(dff, values=selected_col[0], names=dff.columns[0])
             else:
                 raise exceptions.PreventUpdate
             return fig
