@@ -28,7 +28,7 @@ for sent in doc.sents:
     if len(sent.text.split()) > 6:
         print(sent.text)
         sentences_annual_report.append(sent.text)
-    
+
 #print(sentences_annual_report)
 
 

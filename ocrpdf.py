@@ -40,3 +40,14 @@ def print_pages(pdf_file):
 
 print_pages('Grab Q2 22.pdf')
 
+
+
+nlp_spacy = spacy.load("en_core_web_sm")
+doc = nlp_spacy("Grab Q22.txt")
+
+sentences_annual_report = []
+for sent in doc.sents:
+    if len(sent.text.split()) > 6:
+        print(sent.text)
+        sentences_annual_report.append(sent.text)
+
