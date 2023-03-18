@@ -21,6 +21,8 @@ import spacy
 import matplotlib.pyplot as plt
 import os
 import torch
+import pathlib
+import nltk
 
 
 
@@ -60,13 +62,39 @@ doc = nlp_spacy(text)
 
 sentences_annual_report = []
 for sent in doc.sents:
-    if len(sent.text.split()) > 6:
-        print(sent.text)
-        sentences_annual_report.append(sent.text)
+    #print (sent)
+    if len(sent) > 6:
+        new_lane = sent.text.split(".")
+        for x in new_lane:
+            if len(x.strip()) > 2:
+                sentences_annual_report.append(x)
+                print(x)
+         
+sentences_annual_report2 = sentences_annual_report
+
+sentences_annual_report = []
+
+# Download the words corpus
+nltk.download('words')
+
+for string in sentences_annual_report2:
     
-#print(sentences_annual_report)
+    # Split the string into words
+      words = string.split()
 
+    # Filter out non-dictionary words
+      dictionary_words = [word for word in words if word.lower() in nltk.corpus.words.words()]
 
+    # Join the remaining words back into a string
+      filtered_string = ' '.join(dictionary_words)
+                
+    #clean sentences
+      if len(filtered_string) > 2:
+          sentences_annual_report.append(filtered_string)
+            
+
+        
+     
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
 finbert = BertForSequenceClassification.from_pretrained('yiyanghkust/finbert-tone',num_labels=3)
@@ -125,3 +153,10 @@ print("Neutral :" + str(Neutral))
 
 
 sentiment.to_excel("output.xlsx")
+    
+#print(sentences_annual_report)
+
+
+
+
+
