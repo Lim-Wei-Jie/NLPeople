@@ -11,6 +11,8 @@ import pathlib
 from transformers import pipeline
 from transformers import BertTokenizer, BertForSequenceClassification
 
+import re
+
 # pdf_file = ""
 
 # def pdf_to_img(pdf_file):
@@ -43,20 +45,26 @@ print ([token.text for token in introduction_doc])
 preprocess_doc = []
 
 for token in introduction_doc:
+    # add a full stop in between every detected sentence
     if token.text == "\n\n":
         preprocess_doc.append(".")
+    # do nothing if it has a space
     elif token.text == "\n":
         preprocess_doc.append(" ")
+    # replace weird characters with a blank
     else: 
-        preprocess_doc.append(token.text)
+        new_text = re.sub(r"[^a-zA-Z0-9 ]", "", token.text)
+        preprocess_doc.append(new_text)
 
 sentences_annual_report = []
 sentence = ""
 for token in preprocess_doc:
+    # append each sentence that ends with a full stop into the list
     if token == ".":
         sentence += "."
         sentences_annual_report.append(sentence)
         sentence = ""
+    # append into the sentence if there is no full stop
     else: 
         sentence += token
         sentence += " "
