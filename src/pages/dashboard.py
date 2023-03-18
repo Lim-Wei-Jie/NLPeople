@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
 import dash
-from dash import Dash, dash_table, dcc, html, Input, Output, State, exceptions, MATCH, no_update  # pip install dash (version 2.0.0 or higher)
+from dash import Dash, dash_table, dcc, html, Input, Output, State, exceptions, MATCH, ALL, no_update, ctx  # pip install dash (version 2.0.0 or higher)
 
 import dash_bootstrap_components as dbc
 
@@ -113,12 +113,27 @@ def update_output(contents, filename, date, children):
                                                 'index': i},
                                             editable=True
                                         ),
+
+                                        html.Br(), html.Br(),
+                                        html.H4("Thresholds"),
+                                        dash_table.DataTable(
+                                            page_size=5,
+                                            style_table={'overflowX': 'auto'},
+                                            id={'type': 'threshold-boxes',
+                                                'index': i},
+                                            editable=True
+                                        ),
+                                        html.Div(id={
+                                                'type': 'threshold-note',
+                                                'index': i
+                                            }),
+
                                         html.Br(), html.Br(),
                                         html.H4("Financial Ratios"),
-                                        html.P(id={
+                                        html.Div(id={
                                             'type': 'dynamic-text',
                                             'index': i
-                                        }),
+                                        }, style={'display': 'inline-block'}),
                                         html.P(id={
                                                     'type': 'dynamic-container',
                                                     'index': i
@@ -131,7 +146,7 @@ def update_output(contents, filename, date, children):
                                     dbc.CardBody([
                                         html.P('Type of Graph:'),
                                         dcc.Dropdown(id={'type':'type_of_graph', 'index':i},
-                                                    options=['bar', 'line', 'pie'],
+                                                    options=['bar', 'line'],
                                                     multi=False,
                                                     value='line',
                                                     style={'width': '40%'}),
@@ -185,22 +200,26 @@ def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
                 fig = px.bar(dff,
                             x = dff.columns[0],
                             y = selected_col[0])
-            elif type_of_graph == 'pie':
-                fig = px.pie(dff, values=selected_col[0], names=dff.columns[0], title=selected_col[0])
             else:
                 raise exceptions.PreventUpdate
             return fig
 
 @dash.callback([Output({'type': 'dynamic-container', 'index': MATCH}, 'children'),
-                Output({'type': 'dynamic-text', 'index': MATCH}, 'children')],
-                Input({'type': 'dynamic-table', 'index': MATCH}, 'data'))
-def display_metrics(all_data):
+                Output({'type': 'dynamic-text', 'index': MATCH}, 'children'),
+                Output({'type': 'threshold-boxes', 'index': MATCH}, 'data'),
+                Output({'type': 'threshold-boxes', 'index': MATCH}, 'columns'),
+                Output({'type': 'threshold-note', 'index': MATCH}, 'children')],
+                Input({'type': 'dynamic-table', 'index': MATCH}, 'data'),
+                Input({'type': 'threshold-boxes', 'index': MATCH}, 'data'),
+                Input({'type': 'threshold-boxes', 'index': MATCH}, 'columns'))
+def display_metrics(all_data, threshold_data, threshold_columns):
+    print("ALL DATA", all_data)
     # Income statement, cash flow or balance sheet?
     df = pd.DataFrame(all_data)
     df = df.fillna(0)
     it_is_a = ''
     all_metrics = " ".join(list(df.columns.values))
-    text = ""
+    text = []
     if 'assets' in all_metrics.lower() and 'liabilities' in all_metrics.lower() and 'equity' in all_metrics.lower():
         it_is_a = 'balance sheet'
     elif 'cash flow' in all_metrics.lower():
@@ -263,6 +282,8 @@ def display_metrics(all_data):
         # key_metrics['Gross Profit'] = gross_profit
         key_metrics['Gross Margin'] = gross_margin
         key_metrics['Operating Margin'] = operating_margin
+
+        
 
     elif it_is_a == 'balance sheet':
         current_ratio = {}
@@ -357,9 +378,9 @@ def display_metrics(all_data):
         print("current liabilities", current_liabilities)
         print("total liabilities", total_liabilities)
         if len(current_liabilities) != len(df[df.columns[0]]):
-            text += "Enter current liabilities to calculate Operating Cash Flow Ratio. "
+            text.append(dbc.Alert("Enter current liabilities to calculate Operating Cash Flow Ratio.", color="primary"))
         if len(total_liabilities) != len(df[df.columns[0]]):
-            text += "Enter total liabilities to calculate Cash Flow Coverage Ratio. "
+            text.append(dbc.Alert("Enter total liabilities to calculate Cash Flow Coverage Ratio.", color="primary"))
         
         for y in df.iloc[:, 0].tolist():
             if y in cash_flow_from_operations and y in total_liabilities:
@@ -376,13 +397,49 @@ def display_metrics(all_data):
         key_metrics['Operating Cash Flow Ratio'] = operating_cash_flow_ratio
         key_metrics['Cash Flow Coverage Ratio'] = cash_flow_coverage_ratio
 
+    key_metrics_thresholds = {}
+    # thresholds for the respective metrics
+    for k in key_metrics.keys():
+        if k == "Operating Margin":
+            key_metrics_thresholds[k] = 20
+        elif k == "Gross Margin":
+            key_metrics_thresholds[k] = 50
+        elif k == "Current Ratio":
+            key_metrics_thresholds[k] = 1.5
+        elif k == "Quick Ratio":
+            key_metrics_thresholds[k] = 1
+        elif k == "Cash Flow Coverage Ratio":
+            key_metrics_thresholds[k] = 1
+        elif k == "Operating Cash Flow Ratio":
+            key_metrics_thresholds[k] = 1
+    print("KEY METRICS THRESHOLDS", key_metrics_thresholds)
+
+    print("threshold data", threshold_data)
+
+    threshold_df = pd.DataFrame(key_metrics_thresholds.values(), index=key_metrics_thresholds.keys()).T
+    print("threshold df", threshold_df)
+
+    columns = [{"name":i, "id":str(i)} for i in threshold_df.columns]
+
+    # to inform user that threshold must be a number
+    threshold_note = ""
+
+    if threshold_data is not None:
+        new_threshold_df = pd.DataFrame(threshold_data[0].values(), index=threshold_data[0].keys()).T
+        print("new_threshold_df", new_threshold_df)
+        if all(str(ele).replace('.', '').isdigit() for ele in threshold_data[0].values()):
+            if threshold_data[0] != key_metrics_thresholds:
+                key_metrics_thresholds = threshold_data[0]
+                threshold_df = new_threshold_df
+        else:
+            threshold_note = dbc.Alert("Threshold must be a number!", color='danger')
+            raise exceptions.PreventUpdate
 
     print("key_metrics", key_metrics)
     container = []
     note = ""
     poor_metrics = {}
 
-    
     # key_metrics {'Gross Profit': {2020: 136000, 2021: 120000, 2022: 125000}, 'Gross Margin': {2020: '66.34%', 2021: '68.57%', 2022: '75.76%'}, 'Operating Margin': {2020: '17.8%', 2021: '28.29%', 2022: '27.27%'}}
 
     for metric_name in key_metrics.keys():
@@ -396,9 +453,8 @@ def display_metrics(all_data):
                     color = "warning"
                     inverse = False
 
-            # if operating margin is less than 20%, flag as red color
-            if metric_name == "Operating Margin":
-                if float(list(key_metrics[metric_name].values())[i][:-1]) < 20:
+            if metric_name == "Gross Margin" or metric_name == "Operating Margin":
+                if list(key_metrics[metric_name].values())[i] == 0 or float(list(key_metrics[metric_name].values())[i][:-1]) < float(key_metrics_thresholds[metric_name]):
                     color = "danger"
                     inverse = True
 
@@ -406,54 +462,8 @@ def display_metrics(all_data):
                         poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
                     else:
                         poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
-
-            # if gross margin is less than 50%, flag as red color
-            if metric_name == "Gross Margin":
-                # if list(key_metrics[metric_name].values())[i] == 0:
-                if list(key_metrics[metric_name].values())[i] == 0 or float(list(key_metrics[metric_name].values())[i][:-1]) < 50:
-                    color = "danger"
-                    inverse = True
-
-                    if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
-                    else:
-                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
-
-            # if quick ratio is less than 1, flag as red color
-            if metric_name == "Quick Ratio":
-                if float(list(key_metrics[metric_name].values())[i]) < 1:
-                    color = "danger"
-                    inverse = True
-
-                    if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
-                    else:
-                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
-
-            # if current ratio is less than 1.5, flag as red color
-            if metric_name == "Current Ratio":
-                if float(list(key_metrics[metric_name].values())[i]) < 1.5:
-                    color = "danger"
-                    inverse = True
-
-                    if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
-                    else:
-                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
-
-            # if operating cash flow ratio is less than 1
-            if metric_name == "Operating Cash Flow Ratio":
-                if float(list(key_metrics[metric_name].values())[i]) < 1:
-                    color = "danger"
-                    inverse = True
-
-                    if metric_name not in poor_metrics:
-                        poor_metrics[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
-                    else:
-                        poor_metrics[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
-
-            if metric_name == "Cash Flow Coverage Ratio":
-                if float(list(key_metrics[metric_name].values())[i]) < 1:
+            else:
+                if float(list(key_metrics[metric_name].values())[i]) < float(key_metrics_thresholds[metric_name]):
                     color = "danger"
                     inverse = True
 
@@ -485,7 +495,14 @@ def display_metrics(all_data):
         if metric_name == "Cash Flow Coverage Ratio":
             note += "Company was in danger of default in " + str(', '.join(poor_metrics[metric_name])) + ". "
 
-    container.append(note)
+    if note != "":
+        container.append(dbc.Alert(note, color="info", style={'display': 'inline-block'}))
     print("TEXT", text)
     print("to_show", container)
-    return dbc.Container(container), text
+
+    print("threshold df2", threshold_df)
+    print("threshold data2", threshold_data)
+        
+    print("supposed to change", key_metrics_thresholds)
+    return dbc.Container(container), text, threshold_df.to_dict('records'), columns, threshold_note
+
