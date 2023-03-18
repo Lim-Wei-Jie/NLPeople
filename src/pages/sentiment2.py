@@ -145,6 +145,7 @@ def display_pdf(contents, filename):
 
         sentence_list=[]
         label_list=[]
+        score_list=[]
 
         for x, y in zip(sentences_annual_report, sentiment.label):
             sentence_list.append(x)
@@ -160,9 +161,27 @@ def display_pdf(contents, filename):
             if y == "Neutral":
                 Neutral += 1
             
-        sentiment = pd.DataFrame({"sentence": sentence_list, "label":  label_list })
+         #arrange the order of the dataframe result 
+        sentiment = pd.DataFrame({"sentence": sentence_list, "label":  label_list, "score":  score_list })
         
-        text_content_str = Positive
+        
+        #sort the dataframe by score in descending order
+        sentiment = sentiment.sort_values(by='score', ascending=False)
+        
+        
+        
+        # Filter for rows with the 'positive' label and get the top 5 by score
+        sentiment_positive_top5 = sentiment[sentiment['label'] == 'Positive'].nlargest(5, 'score')
+        
+        sentiment_positive_top5 = pd.DataFrame(sentiment_positive_top5, columns=['Row', 'Sentence', 'Score'])
+        
+        
+        # Filter for rows with the 'neutral' label and get the top 5 by score
+        sentiment_neutral_top5 = sentiment[sentiment['label'] == 'Neutral'].nlargest(5, 'score')
+        
+        
+        # Filter for rows with the 'neutral' label and get the top 5 by score
+        sentiment_negative_top5 = sentiment[sentiment['label'] == 'Negative'].nlargest(5, 'score')
 
 
 
