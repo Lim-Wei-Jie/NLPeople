@@ -741,16 +741,16 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             for m in range(len(table_data)):
                 a_dict = table_data[m]
                 for word in ["operating profit", "income from operations"]:
-                    if word in a_dict[value].lower():
+                    if a_dict[value] != None and word in a_dict[value].lower():
                         for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
                             year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
-                            if list(a_dict.values())[t] != "":
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
                                 operating_margin_numerator = list(a_dict.values())[t]
                                 operating_margin_numerator = re.sub('[^0-9.]', '', operating_margin_numerator)
                                 print("updated numerator", operating_margin_numerator)
 
                                 for k in range(len(table_data)):
-                                    if "Revenue" in table_data[k][value]:
+                                    if table_data[k][value] != None and "Revenue" in table_data[k][value]:
                                         print("gafa firee")
                                         operating_margin_denominator = list(table_data[k].values())[t]
                                         operating_margin_denominator = re.sub('[^0-9.]', '', operating_margin_denominator)
@@ -787,16 +787,16 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             for m in range(len(table_data)):
                 a_dict = table_data[m]
                 for word in ["profit for the year", "profit attributable", "of the parent", "attributable to owners", "net income"]:
-                    if word in a_dict[value].lower():
+                    if a_dict[value] != None and word in a_dict[value].lower():
                         for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
                             year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
-                            if list(a_dict.values())[t] != "":
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
                                 gross_profit_margin_numerator = list(a_dict.values())[t]
                                 gross_profit_margin_numerator = re.sub('[^0-9.]', '', gross_profit_margin_numerator)
                                 print("updated gross profit margin numerator", gross_profit_margin_numerator)
 
                                 for k in range(len(table_data)):
-                                    if "Revenue" in table_data[k][value]:
+                                    if table_data[k][value] != None and "Revenue" in table_data[k][value]:
                                         print("gafa firee")
                                         gross_profit_margin_denominator = list(table_data[k].values())[t]
                                         gross_profit_margin_denominator = re.sub('[^0-9.]', '', gross_profit_margin_denominator)
@@ -858,16 +858,16 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             for m in range(len(table_data)):
                 a_dict = table_data[m]
                 for word in ["total current asset"]:
-                    if word in a_dict[value].lower():
+                    if a_dict[value] != None and word in a_dict[value].lower():
                         for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
                             year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
-                            if list(a_dict.values())[t] != "":
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
                                 current_ratio_numerator = list(a_dict.values())[t]
                                 current_ratio_numerator = re.sub('[^0-9.]', '', current_ratio_numerator)
                                 print("updated current ratio numerator", current_ratio_numerator)
 
                                 for k in range(len(table_data)):
-                                    if "total current liabilities" in table_data[k][value].lower():
+                                    if table_data[k][value] != None and "total current liabilities" in table_data[k][value].lower():
                                         print("gafa firee")
                                         current_ratio_denominator = list(table_data[k].values())[t]
                                         current_ratio_denominator = re.sub('[^0-9.]', '', current_ratio_denominator)
@@ -914,10 +914,10 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                 for word in ["total cash", "receivable"]:
                     count_words = 0
                     total_numerator = 0.0
-                    if word in a_dict[value].lower():
+                    if a_dict[value] != None and word in a_dict[value].lower():
                         for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
                             year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
-                            if list(a_dict.values())[t] != "":
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
                                 if word == "total cash":
                                     cash_and_equiv = list(a_dict.values())[t]
                                     cash_and_equiv = re.sub('[^0-9.]', '', cash_and_equiv)
@@ -936,7 +936,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                 print("updated quick ratio numerator", quick_ratio_numerator)
 
                                 for k in range(len(table_data)):
-                                    if "total current liabilities" in table_data[k][value].lower():
+                                    if table_data[k][value] != None and "total current liabilities" in table_data[k][value].lower():
                                         print("gafa firee")
                                         quick_ratio_denominator = list(table_data[k].values())[t]
                                         quick_ratio_denominator = re.sub('[^0-9.]', '', quick_ratio_denominator)
@@ -1003,16 +1003,16 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             for m in range(len(table_data)):
                 a_dict = table_data[m]
                 for word in ["net income", "total profit", "profit for"]:
-                    if word in a_dict[value].lower():
+                    if a_dict[value] != None and  word in a_dict[value].lower():
                         for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
                             year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
-                            if list(a_dict.values())[t] != "":
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
                                 cash_flow_to_net_income_denominator = list(a_dict.values())[t]
                                 cash_flow_to_net_income_denominator = re.sub('[^0-9.]', '', cash_flow_to_net_income_denominator)
                                 print("updated current ratio denominator", cash_flow_to_net_income_denominator)
 
                                 for k in range(len(table_data)):
-                                    if "in cash and cash equivalents" in table_data[k][value].lower():
+                                    if table_data[k][value] != None and "in cash and cash equivalents" in table_data[k][value].lower():
                                         print("gafa firee")
                                         cash_flow_to_net_income_numerator = list(table_data[k].values())[t]
                                         cash_flow_to_net_income_numerator = re.sub('[^0-9.]', '', cash_flow_to_net_income_numerator)
