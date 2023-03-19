@@ -648,6 +648,9 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
     if n_clicks_fin_col > 0 and n_clicks_extracted > 0 and n_clicks_fin_ratio > 0 and value != None:
         print("tabla", table_data)
 
+    # if n_clicks_fin_col > 0:
+    #     print("tabla", table_data)
+
         #Step 1: App determines what kind of financial data table_data is. (implement NLP if needed)
             #go through row cells in selected financial column to find terms 
             #checks if table_data is from an income statement, balance sheet or cash-flow statement.
@@ -828,7 +831,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                     html.H4(str(key_metrics[financial_ratio][year_key]))
                                 ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True)
                     financial_ratio_cards.append(dbc.Col(element))
-            return dbc.Container(financial_ratio_cards)
+            return dbc.Container(dbc.Row(financial_ratio_cards))
 
                     
                     
@@ -979,7 +982,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                     html.H4(str(key_metrics[financial_ratio][year_key]))
                                 ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True)
                     financial_ratio_cards.append(dbc.Col(element))
-            return dbc.Container(financial_ratio_cards)
+            return dbc.Container(dbc.Row(financial_ratio_cards))
 
 
         if financial_data_type == "cash flow statement":
@@ -1057,7 +1060,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                     html.H4(str(key_metrics[financial_ratio][year_key]))
                                 ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True)
                     financial_ratio_cards.append(dbc.Col(element))
-            return dbc.Container(financial_ratio_cards)
+            return dbc.Container(dbc.Row(financial_ratio_cards))
 
 
 #Upload component:
