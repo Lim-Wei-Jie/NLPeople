@@ -116,6 +116,11 @@ def update_output(contents, filename, date, children):
 
                                         html.Br(), html.Br(),
                                         html.H4("Thresholds"),
+                                        html.Div(id={
+                                                'type': 'app-calculated-ratios',
+                                                'index': i
+                                            }, style={'display': 'inline-block'}),
+                                        html.Br(), html.Br(),
                                         dash_table.DataTable(
                                             page_size=5,
                                             style_table={'overflowX': 'auto'},
@@ -208,7 +213,8 @@ def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
                 Output({'type': 'dynamic-text', 'index': MATCH}, 'children'),
                 Output({'type': 'threshold-boxes', 'index': MATCH}, 'data'),
                 Output({'type': 'threshold-boxes', 'index': MATCH}, 'columns'),
-                Output({'type': 'threshold-note', 'index': MATCH}, 'children')],
+                Output({'type': 'threshold-note', 'index': MATCH}, 'children'),
+                Output({'type': 'app-calculated-ratios', 'index': MATCH}, 'children')],
                 Input({'type': 'dynamic-table', 'index': MATCH}, 'data'),
                 Input({'type': 'threshold-boxes', 'index': MATCH}, 'data'),
                 Input({'type': 'threshold-boxes', 'index': MATCH}, 'columns'))
@@ -228,6 +234,8 @@ def display_metrics(all_data, threshold_data, threshold_columns):
         it_is_a = 'income statement'
     
     print("it is a", it_is_a)
+
+    required_metrics_for_ratio = {}
 
     key_metrics = {}
     if it_is_a == 'income statement':
@@ -283,6 +291,9 @@ def display_metrics(all_data, threshold_data, threshold_columns):
         key_metrics['Gross Margin'] = gross_margin
         key_metrics['Operating Margin'] = operating_margin
 
+        required_metrics_for_ratio['Gross Margin'] = ["Revenue", "Cost of Goods Sold"]
+        required_metrics_for_ratio['Operating Margin'] = ["Revenue", "Cost of Goods Sold", "Operating Expenses"]
+
         
 
     elif it_is_a == 'balance sheet':
@@ -325,6 +336,9 @@ def display_metrics(all_data, threshold_data, threshold_columns):
 
         key_metrics['Current Ratio'] = current_ratio
         key_metrics['Quick Ratio'] = quick_ratio
+
+        required_metrics_for_ratio['Current Ratio'] = ["Current Assets", "Current Liabilities"]
+        required_metrics_for_ratio['Quick Ratio'] = ["Current Assets", "Inventories"]
 
     elif it_is_a == "cash flow statement":
         cash_flow_from_operations = {}
@@ -397,6 +411,9 @@ def display_metrics(all_data, threshold_data, threshold_columns):
         key_metrics['Operating Cash Flow Ratio'] = operating_cash_flow_ratio
         key_metrics['Cash Flow Coverage Ratio'] = cash_flow_coverage_ratio
 
+        required_metrics_for_ratio['Operating Cash Flow Ratio'] = ["Cash Flow from Operating Activities", "Current Liabilities"]
+        required_metrics_for_ratio['Cash Flow Coverage Ratio'] = ["Cash Flow from Operating Activities", "Total Liabilities"]
+
     key_metrics_thresholds = {}
     # thresholds for the respective metrics
     for k in key_metrics.keys():
@@ -427,13 +444,24 @@ def display_metrics(all_data, threshold_data, threshold_columns):
     if threshold_data is not None:
         new_threshold_df = pd.DataFrame(threshold_data[0].values(), index=threshold_data[0].keys()).T
         print("new_threshold_df", new_threshold_df)
+        # if any of the thresholds is not a number, alert user
         if all(str(ele).replace('.', '').isdigit() for ele in threshold_data[0].values()):
             if threshold_data[0] != key_metrics_thresholds:
                 key_metrics_thresholds = threshold_data[0]
                 threshold_df = new_threshold_df
         else:
-            threshold_note = dbc.Alert("Threshold must be a number!", color='danger')
+            # threshold_note = dbc.Alert("Threshold must be a number!", color='danger')
             raise exceptions.PreventUpdate
+
+
+    app_calculated_ratios = []
+    app_calculated_ratios.append(html.P("App calculated ratios for " + it_is_a + " are:"))
+    for ratio_name, metrics_needed in required_metrics_for_ratio.items():
+        app_calculated_ratios.append(dbc.Badge([html.Span(str(ratio_name), id='tooltip-calc-ratio' + str(ratio_name) + str(all_data), style={"textDecoration": "underline", "cursor": "pointer"}),
+                                        dbc.Tooltip("Metrics needed for calculation: " + ", ".join(metrics_needed), target="tooltip-calc-ratio" + str(ratio_name) + str(all_data))], color="white", text_color="dark", className="border me-1")
+                                        )
+    print(app_calculated_ratios)
+
 
     print("key_metrics", key_metrics)
     container = []
@@ -504,5 +532,6 @@ def display_metrics(all_data, threshold_data, threshold_columns):
     print("threshold data2", threshold_data)
         
     print("supposed to change", key_metrics_thresholds)
-    return dbc.Container(container), text, threshold_df.to_dict('records'), columns, threshold_note
+    print("--------------------------------------")
+    return dbc.Container(container), text, threshold_df.to_dict('records'), columns, threshold_note, app_calculated_ratios
 
