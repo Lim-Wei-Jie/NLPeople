@@ -749,25 +749,25 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                         operating_margin_denominator = re.sub('[^0-9.]', '', operating_margin_denominator)
                                         print("updated denominator", operating_margin_denominator)
 
-                                    if operating_margin_numerator != "" and operating_margin_denominator != "":
-                                        operating_margin = round(float(operating_margin_numerator) / float(operating_margin_denominator),2)
-                                        print("operating margin check: ", operating_margin)
-                                        if "Operating Margin" not in key_metrics:
-                                            key_metrics["Operating Margin"] = {}
-                                            key_metrics["Operating Margin"][year] = operating_margin
-                                        else:
-                                            key_metrics["Operating Margin"][year] = operating_margin
-                                        if "Operating Margin" not in card_colors:
-                                            card_colors["Operating Margin"] = {}
-                                            if operating_margin < 0.2:
-                                                card_colors["Operating Margin"][year] = "danger"
-                                            elif operating_margin > 0.2:
-                                                card_colors["Operating Margin"][year] = "success"
-                                        else:
-                                            if operating_margin < 0.2:
-                                                card_colors["Operating Margin"][year] = "danger"
-                                            elif operating_margin > 0.2:
-                                                card_colors["Operating Margin"][year] = "success"
+                                        if operating_margin_numerator != "" and operating_margin_denominator != "":
+                                            operating_margin = round(float(operating_margin_numerator) / float(operating_margin_denominator),2)
+                                            print("operating margin check: ", operating_margin)
+                                            if "Operating Margin" not in key_metrics:
+                                                key_metrics["Operating Margin"] = {}
+                                                key_metrics["Operating Margin"][year] = operating_margin
+                                            else:
+                                                key_metrics["Operating Margin"][year] = operating_margin
+                                            if "Operating Margin" not in card_colors:
+                                                card_colors["Operating Margin"] = {}
+                                                if operating_margin < 0.2:
+                                                    card_colors["Operating Margin"][year] = "danger"
+                                                elif operating_margin > 0.2:
+                                                    card_colors["Operating Margin"][year] = "success"
+                                            else:
+                                                if operating_margin < 0.2:
+                                                    card_colors["Operating Margin"][year] = "danger"
+                                                elif operating_margin > 0.2:
+                                                    card_colors["Operating Margin"][year] = "success"
 
 
 
@@ -795,25 +795,25 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                         gross_profit_margin_denominator = re.sub('[^0-9.]', '', gross_profit_margin_denominator)
                                         print("updated denominator", gross_profit_margin_denominator)
 
-                                    if gross_profit_margin_numerator != "" and gross_profit_margin_denominator != "":
-                                        gross_profit_margin = round(float(gross_profit_margin_numerator) / float(gross_profit_margin_denominator),2)
-                                        print("gross profit margin check: ", gross_profit_margin)
-                                        if "Gross Profit Margin" not in key_metrics:
-                                            key_metrics["Gross Profit Margin"] = {}
-                                            key_metrics["Gross Profit Margin"][year] = gross_profit_margin
-                                        else:
-                                            key_metrics["Gross Profit Margin"][year] = gross_profit_margin
-                                        if "Gross Profit Margin" not in card_colors:
-                                            card_colors["Gross Profit Margin"] = {}
-                                            if gross_profit_margin < 0.5:
-                                                card_colors["Gross Profit Margin"][year] = "danger"
-                                            elif gross_profit_margin > 0.5:
-                                                card_colors["Gross Profit Margin"][year] = "success"
-                                        else:
-                                            if gross_profit_margin < 0.5:
-                                                card_colors["Gross Profit Margin"][year] = "danger"
-                                            elif gross_profit_margin > 0.5:
-                                                card_colors["Gross Profit Margin"][year] = "success"
+                                        if gross_profit_margin_numerator != "" and gross_profit_margin_denominator != "":
+                                            gross_profit_margin = round(float(gross_profit_margin_numerator) / float(gross_profit_margin_denominator),2)
+                                            print("gross profit margin check: ", gross_profit_margin)
+                                            if "Gross Profit Margin" not in key_metrics:
+                                                key_metrics["Gross Profit Margin"] = {}
+                                                key_metrics["Gross Profit Margin"][year] = gross_profit_margin
+                                            else:
+                                                key_metrics["Gross Profit Margin"][year] = gross_profit_margin
+                                            if "Gross Profit Margin" not in card_colors:
+                                                card_colors["Gross Profit Margin"] = {}
+                                                if gross_profit_margin < 0.5:
+                                                    card_colors["Gross Profit Margin"][year] = "danger"
+                                                elif gross_profit_margin > 0.5:
+                                                    card_colors["Gross Profit Margin"][year] = "success"
+                                            else:
+                                                if gross_profit_margin < 0.5:
+                                                    card_colors["Gross Profit Margin"][year] = "danger"
+                                                elif gross_profit_margin > 0.5:
+                                                    card_colors["Gross Profit Margin"][year] = "success"
             print("key_metrics to check gross profit margin ratio: ", key_metrics)
 
             # for financial_ratio in key_metrics:
@@ -866,32 +866,32 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                         current_ratio_denominator = re.sub('[^0-9.]', '', current_ratio_denominator)
                                         print("updated current ratio denominator", current_ratio_denominator)
 
-                                    if current_ratio_numerator != "" and current_ratio_denominator != "":
-                                        current_ratio_margin = round(float(current_ratio_numerator) / float(current_ratio_denominator),2)
-                                        print("current ratio check: ", current_ratio_margin)
-                                        # if "Current Ratio" not in key_metrics:
-                                        #     key_metrics["Current Ratio"] = {}
-                                        #     key_metrics["Current Ratio"][year] = current_ratio_margin
-                                        # else:
-                                        #     key_metrics["Current Ratio"][year] = current_ratio_margin
+                                        if current_ratio_numerator != "" and current_ratio_denominator != "":
+                                            current_ratio_margin = round(float(current_ratio_numerator) / float(current_ratio_denominator),2)
+                                            print("current ratio check: ", current_ratio_margin)
+                                            # if "Current Ratio" not in key_metrics:
+                                            #     key_metrics["Current Ratio"] = {}
+                                            #     key_metrics["Current Ratio"][year] = current_ratio_margin
+                                            # else:
+                                            #     key_metrics["Current Ratio"][year] = current_ratio_margin
 
 
-                                        if "Current Ratio" not in key_metrics:
-                                            key_metrics["Current Ratio"] = {}
-                                            key_metrics["Current Ratio"][year] = current_ratio_margin
-                                        else:
-                                            key_metrics["Current Ratio"][year] = current_ratio_margin
-                                        if "Current Ratio" not in card_colors:
-                                            card_colors["Current Ratio"] = {}
-                                            if current_ratio_margin < 1.5:
-                                                card_colors["Current Ratio"][year] = "danger"
-                                            elif current_ratio_margin > 1.5:
-                                                card_colors["Current Ratio"][year] = "success"
-                                        else:
-                                            if current_ratio_margin< 1.5:
-                                                card_colors["Current Ratio"][year] = "danger"
-                                            elif current_ratio_margin > 1.5:
-                                                card_colors["Current Ratio"][year] = "success"
+                                            if "Current Ratio" not in key_metrics:
+                                                key_metrics["Current Ratio"] = {}
+                                                key_metrics["Current Ratio"][year] = current_ratio_margin
+                                            else:
+                                                key_metrics["Current Ratio"][year] = current_ratio_margin
+                                            if "Current Ratio" not in card_colors:
+                                                card_colors["Current Ratio"] = {}
+                                                if current_ratio_margin < 1.5:
+                                                    card_colors["Current Ratio"][year] = "danger"
+                                                elif current_ratio_margin > 1.5:
+                                                    card_colors["Current Ratio"][year] = "success"
+                                            else:
+                                                if current_ratio_margin< 1.5:
+                                                    card_colors["Current Ratio"][year] = "danger"
+                                                elif current_ratio_margin > 1.5:
+                                                    card_colors["Current Ratio"][year] = "success"
 
             print("key_metrics to check current ratio: ", key_metrics)
         
@@ -935,32 +935,32 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                         quick_ratio_denominator = re.sub('[^0-9.]', '', quick_ratio_denominator)
                                         print("updated quick ratio denominator", quick_ratio_denominator)
 
-                                    if quick_ratio_numerator != "" and quick_ratio_denominator != "":
-                                        quick_ratio_margin = round(float(quick_ratio_numerator) / float(quick_ratio_denominator),2)
-                                        print("quick ratio check: ", quick_ratio_margin)
-                                        # if "Quick Ratio" not in key_metrics:
-                                        #     key_metrics["Quick Ratio"] = {}
-                                        #     key_metrics["Quick Ratio"][year] = quick_ratio_margin
-                                        # else:
-                                        #     key_metrics["Quick Ratio"][year] = quick_ratio_margin
+                                        if quick_ratio_numerator != "" and quick_ratio_denominator != "":
+                                            quick_ratio_margin = round(float(quick_ratio_numerator) / float(quick_ratio_denominator),2)
+                                            print("quick ratio check: ", quick_ratio_margin)
+                                            # if "Quick Ratio" not in key_metrics:
+                                            #     key_metrics["Quick Ratio"] = {}
+                                            #     key_metrics["Quick Ratio"][year] = quick_ratio_margin
+                                            # else:
+                                            #     key_metrics["Quick Ratio"][year] = quick_ratio_margin
 
 
-                                        if "Quick Ratio" not in key_metrics:
-                                            key_metrics["Quick Ratio"] = {}
-                                            key_metrics["Quick Ratio"][year] = quick_ratio_margin
-                                        else:
-                                            key_metrics["Quick Ratio"][year] = quick_ratio_margin
-                                        if "Quick Ratio" not in card_colors:
-                                            card_colors["Quick Ratio"] = {}
-                                            if quick_ratio_margin < 1.5:
-                                                card_colors["Quick Ratio"][year] = "danger"
-                                            elif quick_ratio_margin > 1.5:
-                                                card_colors["Quick Ratio"][year] = "success"
-                                        else:
-                                            if quick_ratio_margin < 1.5:
-                                                card_colors["Quick Ratio"][year] = "danger"
-                                            elif quick_ratio_margin > 1.5:
-                                                card_colors["Quick Ratio"][year] = "success"
+                                            if "Quick Ratio" not in key_metrics:
+                                                key_metrics["Quick Ratio"] = {}
+                                                key_metrics["Quick Ratio"][year] = quick_ratio_margin
+                                            else:
+                                                key_metrics["Quick Ratio"][year] = quick_ratio_margin
+                                            if "Quick Ratio" not in card_colors:
+                                                card_colors["Quick Ratio"] = {}
+                                                if quick_ratio_margin < 1.5:
+                                                    card_colors["Quick Ratio"][year] = "danger"
+                                                elif quick_ratio_margin > 1.5:
+                                                    card_colors["Quick Ratio"][year] = "success"
+                                            else:
+                                                if quick_ratio_margin < 1.5:
+                                                    card_colors["Quick Ratio"][year] = "danger"
+                                                elif quick_ratio_margin > 1.5:
+                                                    card_colors["Quick Ratio"][year] = "success"
 
 
             print("key_metrics to check quick ratio: ", key_metrics)
@@ -1011,32 +1011,32 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                         cash_flow_to_net_income_numerator = re.sub('[^0-9.]', '', cash_flow_to_net_income_numerator)
                                         print("updated current ratio numerator", cash_flow_to_net_income_numerator)
 
-                                    if cash_flow_to_net_income_numerator != "" and cash_flow_to_net_income_denominator != "":
-                                        cash_flow_to_net_income = round(float(cash_flow_to_net_income_numerator) / float(cash_flow_to_net_income_denominator),2)
-                                        print("cash flow to net income check: ", cash_flow_to_net_income)
-                                        # if "Cash Flow To Net Income" not in key_metrics:
-                                        #     key_metrics["Cash Flow To Net Income"] = {}
-                                        #     key_metrics["Cash Flow To Net Income"][year] = cash_flow_to_net_income
-                                        # else:
-                                        #     key_metrics["Cash Flow To Net Income"][year] = cash_flow_to_net_income
+                                        if cash_flow_to_net_income_numerator != "" and cash_flow_to_net_income_denominator != "":
+                                            cash_flow_to_net_income = round(float(cash_flow_to_net_income_numerator) / float(cash_flow_to_net_income_denominator),2)
+                                            print("cash flow to net income check: ", cash_flow_to_net_income)
+                                            # if "Cash Flow To Net Income" not in key_metrics:
+                                            #     key_metrics["Cash Flow To Net Income"] = {}
+                                            #     key_metrics["Cash Flow To Net Income"][year] = cash_flow_to_net_income
+                                            # else:
+                                            #     key_metrics["Cash Flow To Net Income"][year] = cash_flow_to_net_income
 
 
-                                        if "Cash Flow To Net Income" not in key_metrics:
-                                            key_metrics["Cash Flow To Net Income"] = {}
-                                            key_metrics["Cash Flow To Net Income"][year] = cash_flow_to_net_income
-                                        else:
-                                            key_metrics["Cash Flow To Net Income"][year] = cash_flow_to_net_income
-                                        if "Cash Flow To Net Income" not in card_colors:
-                                            card_colors["Cash Flow To Net Income"] = {}
-                                            if cash_flow_to_net_income < 1:
-                                                card_colors["Cash Flow To Net Income"][year] = "danger"
-                                            elif cash_flow_to_net_income > 1:
-                                                card_colors["Cash Flow To Net Income"][year] = "success"
-                                        else:
-                                            if cash_flow_to_net_income < 1:
-                                                card_colors["Cash Flow To Net Income"][year] = "danger"
-                                            elif cash_flow_to_net_income > 1:
-                                                card_colors["Cash Flow To Net Income"][year] = "success"                                            
+                                            if "Cash Flow To Net Income" not in key_metrics:
+                                                key_metrics["Cash Flow To Net Income"] = {}
+                                                key_metrics["Cash Flow To Net Income"][year] = cash_flow_to_net_income
+                                            else:
+                                                key_metrics["Cash Flow To Net Income"][year] = cash_flow_to_net_income
+                                            if "Cash Flow To Net Income" not in card_colors:
+                                                card_colors["Cash Flow To Net Income"] = {}
+                                                if cash_flow_to_net_income < 1:
+                                                    card_colors["Cash Flow To Net Income"][year] = "danger"
+                                                elif cash_flow_to_net_income > 1:
+                                                    card_colors["Cash Flow To Net Income"][year] = "success"
+                                            else:
+                                                if cash_flow_to_net_income < 1:
+                                                    card_colors["Cash Flow To Net Income"][year] = "danger"
+                                                elif cash_flow_to_net_income > 1:
+                                                    card_colors["Cash Flow To Net Income"][year] = "success"                                            
 
 
 
