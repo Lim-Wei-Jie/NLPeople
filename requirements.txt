@@ -20,7 +20,7 @@ pdfminer.six
 rank_bm25
 termcolor
 scikit-learn
-transformers
+sentence-transformers
 spacy
 matplotlib
 opencv-contrib-python

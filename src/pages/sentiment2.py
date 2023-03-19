@@ -10,7 +10,6 @@ from dash.dependencies import Input, Output, State
 import pytesseract
 from pdf2image import convert_from_path
 import io
-import os
 from PyPDF2 import PdfFileReader
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
@@ -28,20 +27,19 @@ from pdfminer.high_level import extract_text
 from termcolor import colored
 import spacy
 import matplotlib.pyplot as plt
-import os
 import torch
 import pathlib
 import nltk
 
 
-app = dash.Dash(__name__)
+dash.register_page(__name__)
 
-app.layout = html.Div([
+layout = html.Div([
     dcc.Upload(id='upload-pdf', children=html.Button('Upload PDF')),
     html.Div(id='output-pdf')
 ])
 
-@app.callback(Output('output-pdf', 'children'),
+@dash.callback(Output('output-pdf', 'children'),
               Input('upload-pdf', 'contents'),
               State('upload-pdf', 'filename'))
 def display_pdf(contents, filename):
@@ -205,5 +203,5 @@ def display_pdf(contents, filename):
     else:
         return html.Div()
 
-if __name__ == '__main__':
-    app.run_server(debug=True)
+# if __name__ == '__main__':
+#     app.run_server(debug=True)
