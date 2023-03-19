@@ -550,8 +550,9 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
         # to store all the df.columns values without empty cells
         current_df_columns = []
         for v in new_df.columns:
-            if v.strip() != '' and v.strip() != None:
-                current_df_columns.append(v)
+            if v != None:
+                if v.strip() != '':
+                    current_df_columns.append(v)
 
         # colors = ['#7FDBFF' if i in slctd_row_indices else '#0074D9'
         #             for i in range(len(new_df))]
@@ -567,17 +568,23 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
             rule2_msg = dbc.Alert("Make row headers unique!", color="danger")
         else:
             rule2_msg = ""
-        if x_axis_variable.strip()=='':
-            rule3_msg = dbc.Alert("Fill up x-axis variable in the first cell!", color="danger")
-        else:
-            rule3_msg = ""
+        if x_axis_variable != None:
+            if x_axis_variable.strip()=='':
+                rule3_msg = dbc.Alert("Fill up x-axis variable in the first cell!", color="danger")
+                rules_msg.append(rule3_msg)
+            else:
+                rule3_msg = ""
+                rules_msg.append(rule3_msg)
+        if x_axis_variable == None:
+                rule3_msg = dbc.Alert("Fill up x-axis variable in the first cell!", color="danger")
+                rules_msg.append(rule3_msg)
+
 
         rules_msg.append(rule1_msg)
         rules_msg.append(rule2_msg)
-        rules_msg.append(rule3_msg)
 
         # Show dashboard based on the 2 rules, and datatable cannot be empty
-        if active_cell is not None and len(new_df)>1 and len(unique_values_for_rows) == len(current_df_columns) and x_axis_variable.strip()!='' and len(set(classes))==len(classes):
+        if active_cell is not None and len(new_df)>1 and len(unique_values_for_rows) == len(current_df_columns) and x_axis_variable!= None and x_axis_variable.strip()!='' and len(set(classes))==len(classes):
             if active_cell["row"]!=0:
                 row = active_cell["row"]
                 print("row: ", row)
