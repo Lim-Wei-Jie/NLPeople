@@ -29,7 +29,7 @@ from termcolor import colored
 import spacy
 import matplotlib.pyplot as plt
 import os
-import torch
+#import torch
 import pathlib
 import nltk
 
@@ -147,9 +147,10 @@ def display_pdf(contents, filename):
         label_list=[]
         score_list=[]
 
-        for x, y in zip(sentences_annual_report, sentiment.label):
+        for x, y,z in zip(sentences_annual_report, sentiment.label,sentiment.score):
             sentence_list.append(x)
             label_list.append(y)
+            score_list.append(z)
             if y == "Positive":
                 Positive += 1
 
