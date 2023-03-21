@@ -4,8 +4,8 @@ import io
 import re
 import tempfile
 import string
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import numpy as np
+import pandas as pd
 
 import dash
 from dash import Dash, dash_table, dcc, html, exceptions, ctx
@@ -153,28 +153,15 @@ def display_pdf(contents, filename):
         
         # Filter for rows with the 'neutral' label and get the top 5 by score
         sentiment_neutral_top5 = sentiment[sentiment['label'] == 'Neutral'].nlargest(5, 'score')
-        
-        
+
         # Filter for rows with the 'neutral' label and get the top 5 by score
         sentiment_negative_top5 = sentiment[sentiment['label'] == 'Negative'].nlargest(5, 'score')
-
-
 
         print("Positive :" + str(Positive))
         print("Negative :" + str(Negative))
         print("Neutral :" + str(Neutral))
 
-
         sentiment.to_excel("output.xlsx")
-
-
-        # extract the text content of each page in the PDF file
-        
-
-        # format the text content as a string and return it as a DIV element
-        #text_content_str = '\n\n'.join(text_content)
-        
-        
         
         return html.Div([html.H3(filename), html.P("Positive: " + str(Positive)),  html.P("Negative: " + str(Negative)),  html.P("Neutral: " + str(Neutral))])
 
@@ -182,6 +169,3 @@ layout = html.Div([
     dcc.Upload(id='upload-pdf', children=html.Button('Upload PDF')),
     html.Div(id='output-pdf')
 ])
-
-# if __name__ == '__main__':
-#     app.run_server(debug=True)
