@@ -212,27 +212,39 @@ def display_pdf(contents, filename):
                 id='table1',
                 columns=[{"name": i, "id": i} for i in sentiment_positive_top5.columns],
                 style_table={'width': '100%'},
+                style_cell={
+                    'whiteSpace': 'normal',
+                    'height': 'auto',
+                },
                 data=sentiment_positive_top5.to_dict('records')
             )
-        ], style={'display': '', 'width': '50%'}),
+        ], style={'display': '', 'width': '100%'}),
 
         html.Div(children=[
             dash_table.DataTable(
                 id='table2',
                 columns=[{"name": i, "id": i} for i in sentiment_neutral_top5.columns],
                 style_table={'width': '100%'},
+                style_cell={
+                    'whiteSpace': 'normal',
+                    'height': 'auto',
+                },
                 data=sentiment_neutral_top5.to_dict('records')
             )
-        ], style={'display': '', 'width': '50%'}),
+        ], style={'display': '', 'width': '100%'}),
         
         html.Div(children=[
             dash_table.DataTable(
                 id='table3',
                 columns=[{"name": i, "id": i} for i in sentiment_negative_top5.columns],
                 style_table={'width': '100%'},
+                style_cell={
+                    'whiteSpace': 'normal',
+                    'height': 'auto',
+                },
                 data=sentiment_negative_top5.to_dict('records')
             )
-        ], style={'display': '', 'width': '50%'})
+        ], style={'display': '', 'width': '100%'})
     ])
             
         
