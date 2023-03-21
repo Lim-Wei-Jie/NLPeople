@@ -162,6 +162,17 @@ def display_pdf(contents, filename):
         # print("Neutral :" + str(Neutral))
 
         sentiment.to_excel("output.xlsx")
+        
+        # dash table to show top 5 positive comments
+        table = dash_table.DataTable(
+            id='my-table',
+            columns=[{'name': col, 'id': col} for col in sentiment_positive_top5.columns],
+            data=sentiment_positive_top5.to_dict('records')
+        )
+        
+        
+        for x in sentiment_positive_top5.columns:
+            print(x)
 
         return html.Div([html.H3(filename), html.P("Positive: " + str(Positive)),  html.P("Negative: " + str(Negative)),  html.P("Neutral: " + str(Neutral))])
 
