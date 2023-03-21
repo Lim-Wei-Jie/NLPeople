@@ -206,9 +206,14 @@ def display_pdf(contents, filename):
         
         
         
-        table = dash_table.DataTable(
+        table_positive = dash_table.DataTable(
         data=sentiment_positive_top5.to_dict('records'),
         columns=[{'name': col, 'id': col} for col in sentiment_positive_top5.columns]
+        )
+        
+        table_neutral = dash_table.DataTable(
+        data=sentiment_neutral_top5.to_dict('records'),
+        columns=[{'name': col, 'id': col} for col in sentiment_neutral_top5.columns]
         )
         
         
@@ -241,7 +246,7 @@ def display_pdf(contents, filename):
 
         
         
-        return html.Div([html.H3(filename), html.P("Positive: " + str(Positive)), html.P("Negative: " + str(Negative)), html.P("Neutral: " + str(Neutral)), table])
+        return html.Div([html.H3(filename), html.P("Positive: " + str(Positive)), html.P("Negative: " + str(Negative)), html.P("Neutral: " + str(Neutral)), table_positive,table_neutral])
     else:
         return html.Div()
 
