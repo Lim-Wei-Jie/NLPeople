@@ -206,16 +206,38 @@ def display_pdf(contents, filename):
         
         
         
-        table_positive = dash_table.DataTable(
-        data=sentiment_positive_top5.to_dict('records'),
-        columns=[{'name': col, 'id': col} for col in sentiment_positive_top5.columns]
-        )
+        table = html.Div(children=[
+        html.Div(children=[
+            dash_table.DataTable(
+                id='table1',
+                columns=[{"name": i, "id": i} for i in sentiment_positive_top5.columns],
+                style_table={'width': '100%'},
+                data=sentiment_positive_top5.to_dict('records')
+            )
+        ], style={'display': '', 'width': '50%'}),
+
+        html.Div(children=[
+            dash_table.DataTable(
+                id='table2',
+                columns=[{"name": i, "id": i} for i in sentiment_neutral_top5.columns],
+                style_table={'width': '100%'},
+                data=sentiment_neutral_top5.to_dict('records')
+            )
+        ], style={'display': '', 'width': '50%'}),
         
-        table_neutral = dash_table.DataTable(
-        data=sentiment_neutral_top5.to_dict('records'),
-        columns=[{'name': col, 'id': col} for col in sentiment_neutral_top5.columns]
-        )
+        html.Div(children=[
+            dash_table.DataTable(
+                id='table3',
+                columns=[{"name": i, "id": i} for i in sentiment_negative_top5.columns],
+                style_table={'width': '100%'},
+                data=sentiment_negative_top5.to_dict('records')
+            )
+        ], style={'display': '', 'width': '50%'})
+    ])
+            
         
+        
+      
         
         duty = sentiment_positive_top5.to_dict('records')
         print(sentiment_positive_top5)
@@ -246,7 +268,7 @@ def display_pdf(contents, filename):
 
         
         
-        return html.Div([html.H3(filename), html.P("Positive: " + str(Positive)), html.P("Negative: " + str(Negative)), html.P("Neutral: " + str(Neutral)), table_positive,table_neutral])
+        return html.Div([html.H3(filename), html.P("Positive: " + str(Positive)), html.P("Negative: " + str(Negative)), html.P("Neutral: " + str(Neutral)), table])
     else:
         return html.Div()
 
