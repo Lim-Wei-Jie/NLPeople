@@ -1,23 +1,23 @@
 import base64
 import os
-import PyPDF2
-import tempfile
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-from dash.dependencies import Input, Output, State
-
-import pytesseract
-from pdf2image import convert_from_path
 import io
-from PyPDF2 import PdfFileReader
+import re
+import tempfile
+import string
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+
+import dash
+from dash import Dash, dash_table, dcc, html, exceptions, ctx
+from dash.dependencies import Input, Output, State
+
+import PyPDF2
+import pytesseract
+from pdf2image import convert_from_path
+from PyPDF2 import PdfFileReader
 pd.options.display.max_colwidth=-1
 pd.options.display.min_rows=100
-import re
 from rank_bm25 import BM25Okapi
-import string 
 from sklearn.feature_extraction import _stop_words
 from transformers import pipeline
 from transformers import BertTokenizer, BertForSequenceClassification
@@ -31,18 +31,19 @@ import torch
 import pathlib
 import nltk
 
+#tesseract file directory
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 dash.register_page(__name__)
 
-layout = html.Div([
-    dcc.Upload(id='upload-pdf', children=html.Button('Upload PDF')),
-    html.Div(id='output-pdf')
-])
-
-@dash.callback(Output('output-pdf', 'children'),
-              Input('upload-pdf', 'contents'),
-              State('upload-pdf', 'filename'))
+@dash.callback(
+    Output('output-pdf', 'children'),
+    Input('upload-pdf', 'contents'),
+    State('upload-pdf', 'filename')
+)
 def display_pdf(contents, filename):
+    if contents is None:
+        raise exceptions.PreventUpdate
     if contents is not None:
         # decode the contents of the uploaded PDF file
         decoded_content = base64.b64decode(contents.split(',')[1])
@@ -56,19 +57,8 @@ def display_pdf(contents, filename):
             # create a PdfFileReader object from the temporary file
             pdf_reader = PyPDF2.PdfFileReader(temp_filename)
             
-            info = pdf_reader.getDocumentInfo()
-            author = info.author
-            title = info.title
-            num_pages = pdf_reader.getNumPages()
-            
             # use pdf2image 
             pages = convert_from_path(temp_filename, 300)
-            
-            #tesseract file directory
-            pytesseract.pytesseract.tesseract_cmd = (
-                r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-            ) 
-            
             
             # extract text from image
             text = ''
@@ -111,10 +101,7 @@ def display_pdf(contents, filename):
             if len(filtered_string) > 2:
                 sentences_annual_report.append(filtered_string)
                     
-
-        
         #apply model to give label to each sentence
-            
         tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
         finbert = BertForSequenceClassification.from_pretrained('yiyanghkust/finbert-tone',num_labels=3)
@@ -124,22 +111,17 @@ def display_pdf(contents, filename):
 
         results = nlp(sentences_annual_report)
 
-
         #put the result in a dataframe
-
-        sentiment = pd.DataFrame({"docs": sentences_annual_report,
-                                "label": [r["label"] for r in results],
-                                "score":[r["score"] for r in results],
-                                "docs": sentences_annual_report})
-
-
-
+        sentiment = pd.DataFrame({
+            "docs": sentences_annual_report,
+            "label": [r["label"] for r in results],
+            "score":[r["score"] for r in results],
+            "docs": sentences_annual_report
+        })
 
         Positive = 0
         Negative = 0
         Neutral = 0
-
-  
 
         sentence_list=[]
         label_list=[]
@@ -152,28 +134,22 @@ def display_pdf(contents, filename):
             if y == "Positive":
                 Positive += 1
 
-                
             if y == "Negative":
                 Negative += 1
-                
                 
             if y == "Neutral":
                 Neutral += 1
             
-         #arrange the order of the dataframe result 
+        #arrange the order of the dataframe result 
         sentiment = pd.DataFrame({"sentence": sentence_list, "label":  label_list, "score":  score_list })
-        
         
         #sort the dataframe by score in descending order
         sentiment = sentiment.sort_values(by='score', ascending=False)
-        
-        
         
         # Filter for rows with the 'positive' label and get the top 5 by score
         sentiment_positive_top5 = sentiment[sentiment['label'] == 'Positive'].nlargest(5, 'score')
         
         sentiment_positive_top5 = pd.DataFrame(sentiment_positive_top5, columns=['Row', 'Sentence', 'Score'])
-        
         
         # Filter for rows with the 'neutral' label and get the top 5 by score
         sentiment_neutral_top5 = sentiment[sentiment['label'] == 'Neutral'].nlargest(5, 'score')
@@ -201,8 +177,11 @@ def display_pdf(contents, filename):
         
         
         return html.Div([html.H3(filename), html.P("Positive: " + str(Positive)),  html.P("Negative: " + str(Negative)),  html.P("Neutral: " + str(Neutral))])
-    else:
-        return html.Div()
+
+layout = html.Div([
+    dcc.Upload(id='upload-pdf', children=html.Button('Upload PDF')),
+    html.Div(id='output-pdf')
+])
 
 # if __name__ == '__main__':
 #     app.run_server(debug=True)
