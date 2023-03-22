@@ -645,18 +645,23 @@ def add_metric_to_list(new_metric, metric_list, n_clicks):
                 Input('get-new-table-button', 'n_clicks'),
                 Input('financial-terms-cols-boxes', 'value'),
                 Input('new-table', 'columns'),
-                Input('new-table', 'data')
+                Input('new-table', 'data'),
+                # Input('pdf-viewer', 'selected_rows')
                 ],
                 prevent_initial_call = True)
 def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_extracted, value, columns, table_data):
-    if (n_clicks_fin_col == 0 or n_clicks_extracted ==0 or value == None) and n_clicks_fin_ratio > 0:
-        return "Please click on the 'GET COLUMNS WITH METRICS' button and make a selection. Then, click on the 'EXTRACT TABLE' button."
-    
-    if n_clicks_fin_col > 0 and n_clicks_extracted > 0 and n_clicks_fin_ratio > 0 and value != None:
-        print("tabla", table_data)
 
-    # if n_clicks_fin_col > 0:
-    #     print("tabla", table_data)
+
+    # if (n_clicks_fin_col == 0 or n_clicks_extracted ==0 or value == None) and n_clicks_fin_ratio > 0:
+    #     return "Please click on the 'GET COLUMNS WITH METRICS' button and make a selection. Then, click on the 'EXTRACT TABLE' button."
+    
+    if (n_clicks_fin_col > 0 and n_clicks_extracted > 0 and n_clicks_fin_ratio > 0 and value != None) or (n_clicks_extracted > 0 and n_clicks_fin_ratio > 0):
+        print("tabla", table_data)
+        # print("selected_rows", selected_rows)
+
+        if n_clicks_extracted and n_clicks_fin_ratio > 0:
+            value = "0"
+
 
         #Step 1: App determines what kind of financial data table_data is. (implement NLP if needed)
             #go through row cells in selected financial column to find terms 
