@@ -210,17 +210,17 @@ def display_pdf(contents, filename):
         table1 = dash_table.DataTable(
                 data=sentiment_positive_top5.to_dict('records'),
                 columns=[{"name": i, "id": i} for i in sentiment_positive_top5.columns],
-                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': 'none','textAlign': 'left'})
+                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': 'none','textAlign': 'left','whiteSpace': 'pre-wrap'})
         
         table2 = dash_table.DataTable(
                 data=sentiment_negative_top5.to_dict('records'),
                 columns=[{"name": i, "id": i} for i in sentiment_negative_top5.columns],
-                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': 'none','textAlign': 'left'})
+                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': 'none','textAlign': 'left','whiteSpace': 'pre-wrap'})
         
         table3 = dash_table.DataTable(
                 data=sentiment_neutral_top5.to_dict('records'),
                 columns=[{"name": i, "id": i} for i in sentiment_neutral_top5.columns],
-                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': 'none', 'height': 'auto','textAlign': 'left'}
+                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px', 'maxHeight': 'none','textAlign': 'left','whiteSpace': 'pre-wrap'}
             )
             
         
