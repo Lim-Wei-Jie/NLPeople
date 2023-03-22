@@ -11,6 +11,7 @@ from dash import Dash, dash_table, dcc, html, Input, Output, State, exceptions, 
 import dash_bootstrap_components as dbc
 
 import math
+import re
 
 dash.register_page(__name__)
 
@@ -115,7 +116,9 @@ def update_output(contents, filename, date, children):
                                         ),
 
                                         html.Br(), html.Br(),
-                                        html.H4("Thresholds"),
+                                        html.H4("Thresholds", id={"type": "threshold-heading-tooltip", "index": i}, style={"cursor": "pointer", 'display': 'inline-block'}),
+                                        dbc.Tooltip("Threshold values must be numbers!", target={"type": "threshold-heading-tooltip", "index": i}, placement="top"),
+                                        html.Br(), 
                                         html.Div(id={
                                                 'type': 'app-calculated-ratios',
                                                 'index': i
@@ -126,12 +129,30 @@ def update_output(contents, filename, date, children):
                                             style_table={'overflowX': 'auto'},
                                             id={'type': 'threshold-boxes',
                                                 'index': i},
-                                            editable=True
+                                            editable=True,
                                         ),
+
+                                        html.Br(), html.Br(),
+                                        html.H4("Add Calculations", id={"type": "add-calculations-heading-tooltip", "index": i}, style={"cursor": "pointer", 'display': 'inline-block'}),
+                                        dbc.Tooltip("Column 1 and Column 2 accepts EXACT column names or already defined ratio names. Operator accepts +, -, *, /. Ratio Name is text of your choice.", target={"type": "add-calculations-heading-tooltip", "index": i}, placement="top"),
+                                        html.Br(),
+                                        dash_table.DataTable(
+                                            page_size=5,
+                                            style_table={'overflowX': 'auto'},
+                                            id={'type': 'user-add-ratios',
+                                                'index': i},
+                                            editable=True,
+                                            row_selectable='multi',
+                                            row_deletable=True
+                                        ),
+                                        html.Button('Add Row', 
+                                                    id={'type': 'add-rows-for-ratios',
+                                                        'index': i},
+                                                    n_clicks=0),
                                         html.Div(id={
-                                                'type': 'threshold-note',
-                                                'index': i
-                                            }),
+                                            'type': 'add-calculations-warning-note',
+                                            'index': i
+                                        }),
 
                                         html.Br(), html.Br(),
                                         html.H4("Financial Ratios"),
@@ -213,12 +234,22 @@ def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
                 Output({'type': 'dynamic-text', 'index': MATCH}, 'children'),
                 Output({'type': 'threshold-boxes', 'index': MATCH}, 'data'),
                 Output({'type': 'threshold-boxes', 'index': MATCH}, 'columns'),
-                Output({'type': 'threshold-note', 'index': MATCH}, 'children'),
-                Output({'type': 'app-calculated-ratios', 'index': MATCH}, 'children')],
+                Output({'type': 'app-calculated-ratios', 'index': MATCH}, 'children'),
+                Output({'type': 'user-add-ratios', 'index': MATCH}, 'data'),
+                Output({'type': 'user-add-ratios', 'index': MATCH}, 'columns'),
+                Output({'type': 'add-calculations-warning-note', 'index': MATCH}, 'children')],
+                # Output({'type': 'add-rows-for-ratios', 'index': MATCH}, 'n_clicks'),
+                # Output({'type': 'add-rows-for-thresholds', 'index': MATCH}, 'n_clicks')],
                 Input({'type': 'dynamic-table', 'index': MATCH}, 'data'),
                 Input({'type': 'threshold-boxes', 'index': MATCH}, 'data'),
-                Input({'type': 'threshold-boxes', 'index': MATCH}, 'columns'))
-def display_metrics(all_data, threshold_data, threshold_columns):
+                Input({'type': 'threshold-boxes', 'index': MATCH}, 'columns'),
+                State({'type': 'user-add-ratios', 'index': MATCH}, 'data'),
+                Input({'type': 'user-add-ratios', 'index': MATCH}, 'columns'),
+                Input({'type': 'user-add-ratios', 'index': MATCH}, 'selected_rows'),
+                
+                # Input({'type': 'add-rows-for-thresholds', 'index': MATCH}, 'n_clicks'),
+                Input({'type': 'add-rows-for-ratios', 'index': MATCH}, 'n_clicks'))
+def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios_datatable, user_add_ratios_columns, selected_rows, add_rows_n_clicks):
     print("ALL DATA", all_data)
     # Income statement, cash flow or balance sheet?
     df = pd.DataFrame(all_data)
@@ -235,8 +266,11 @@ def display_metrics(all_data, threshold_data, threshold_columns):
     
     print("it is a", it_is_a)
 
+    # this is for user to know the metrics needed to calculate the financial ratios 
+    # required metrics will be shown in tooltip
     required_metrics_for_ratio = {}
 
+    # key_metrics is financial ratios 
     key_metrics = {}
     if it_is_a == 'income statement':
         gross_profit = {}
@@ -414,32 +448,39 @@ def display_metrics(all_data, threshold_data, threshold_columns):
         required_metrics_for_ratio['Operating Cash Flow Ratio'] = ["Cash Flow from Operating Activities", "Current Liabilities"]
         required_metrics_for_ratio['Cash Flow Coverage Ratio'] = ["Cash Flow from Operating Activities", "Total Liabilities"]
 
+    # pre-define thresholds for the ratios calculated by our app
+    thresholds_by_app = {}
+    # all key metrics thresholds
     key_metrics_thresholds = {}
     # thresholds for the respective metrics
     for k in key_metrics.keys():
         if k == "Operating Margin":
             key_metrics_thresholds[k] = 20
+            thresholds_by_app[k] = 20
         elif k == "Gross Margin":
             key_metrics_thresholds[k] = 50
+            thresholds_by_app[k] = 50
         elif k == "Current Ratio":
             key_metrics_thresholds[k] = 1.5
+            thresholds_by_app[k] = 1.5
         elif k == "Quick Ratio":
             key_metrics_thresholds[k] = 1
+            thresholds_by_app[k] = 1
         elif k == "Cash Flow Coverage Ratio":
             key_metrics_thresholds[k] = 1
+            thresholds_by_app[k] = 1
         elif k == "Operating Cash Flow Ratio":
             key_metrics_thresholds[k] = 1
+            thresholds_by_app[k] = 1
     print("KEY METRICS THRESHOLDS", key_metrics_thresholds)
 
     print("threshold data", threshold_data)
-
+    
+    # create threshold table for user to edit the thresholds
     threshold_df = pd.DataFrame(key_metrics_thresholds.values(), index=key_metrics_thresholds.keys()).T
     print("threshold df", threshold_df)
 
     columns = [{"name":i, "id":str(i)} for i in threshold_df.columns]
-
-    # to inform user that threshold must be a number
-    threshold_note = ""
 
     if threshold_data is not None:
         new_threshold_df = pd.DataFrame(threshold_data[0].values(), index=threshold_data[0].keys()).T
@@ -449,11 +490,10 @@ def display_metrics(all_data, threshold_data, threshold_columns):
             if threshold_data[0] != key_metrics_thresholds:
                 key_metrics_thresholds = threshold_data[0]
                 threshold_df = new_threshold_df
-        else:
-            # threshold_note = dbc.Alert("Threshold must be a number!", color='danger')
+        else: #if threshold is not a number, dont update
             raise exceptions.PreventUpdate
 
-
+    # list of the ratios predefined by the app
     app_calculated_ratios = []
     app_calculated_ratios.append(html.P("App calculated ratios for " + it_is_a + " are:"))
     for ratio_name, metrics_needed in required_metrics_for_ratio.items():
@@ -463,13 +503,15 @@ def display_metrics(all_data, threshold_data, threshold_columns):
     print(app_calculated_ratios)
 
 
-    print("key_metrics", key_metrics)
+    print("line 496 key_metrics", key_metrics)
+    # container to output the financial ratios in cards
     container = []
-    note = ""
-    poor_metrics = {}
+    note = "" # inform user about what the poor ratios mean
+    poor_metrics = {} # record the poor ratios
 
-    # key_metrics {'Gross Profit': {2020: 136000, 2021: 120000, 2022: 125000}, 'Gross Margin': {2020: '66.34%', 2021: '68.57%', 2022: '75.76%'}, 'Operating Margin': {2020: '17.8%', 2021: '28.29%', 2022: '27.27%'}}
+    # Example of key_metrics {'Gross Profit': {2020: 136000, 2021: 120000, 2022: 125000}, 'Gross Margin': {2020: '66.34%', 2021: '68.57%', 2022: '75.76%'}, 'Operating Margin': {2020: '17.8%', 2021: '28.29%', 2022: '27.27%'}}
 
+    # making the cards for each year for each ratio
     for metric_name in key_metrics.keys():
         print("iloc 0", df.iloc[:, 0].tolist())
         metric_container = []
@@ -523,8 +565,6 @@ def display_metrics(all_data, threshold_data, threshold_columns):
         if metric_name == "Cash Flow Coverage Ratio":
             note += "Company was in danger of default in " + str(', '.join(poor_metrics[metric_name])) + ". "
 
-    if note != "":
-        container.append(dbc.Alert(note, color="info", style={'display': 'inline-block'}))
     print("TEXT", text)
     print("to_show", container)
 
@@ -532,6 +572,150 @@ def display_metrics(all_data, threshold_data, threshold_columns):
     print("threshold data2", threshold_data)
         
     print("supposed to change", key_metrics_thresholds)
+
+    # table for user to add more ratio calculations
+    user_add_ratios_df = pd.DataFrame(columns=["Column 1", "Operator", "Column 2", "Ratio Name"])
+    user_add_ratios_columns = [{"name":i, "id":str(i)} for i in user_add_ratios_df.columns]
+    print("user_add_ratios_df", user_add_ratios_df)
+
+    user_add_ratios_data = user_add_ratios_df.to_dict('records')
+
+    if user_add_ratios_datatable != None:
+        user_add_ratios_data = user_add_ratios_datatable
+
+    print(add_rows_n_clicks)
+    # add more rows to add more ratio calculations
+    print("line 583 user add ratios", user_add_ratios_datatable)
+    print("line 584 user add ratios data", user_add_ratios_data)
+    print("line 588 triggered id", ctx.triggered_id)
+    if add_rows_n_clicks > 0:
+        if 'add-rows-for-ratios' == ctx.triggered_id['type']:
+            user_add_ratios_data.append({c['id']: '' for c in user_add_ratios_columns})
+    
+    print("USER ADD RATIO DATA", user_add_ratios_data)
+
+    print("df line 572", df)
+    # get list of names of added ratios by user
+    names_of_added_ratios = []
+    poor_metrics_added = {} # identify the poor ones
+    add_calculations_warning_note = ""
+
+    # all equations in the table is calculated, selected rows will appear in threshold_df and cards
+    if user_add_ratios_datatable is not None:
+        print("entering for loop", key_metrics)
+        print("selected rows 575", selected_rows)
+        for i in range(len(user_add_ratios_datatable)):
+            if any(ele==None for ele in user_add_ratios_data[i].values()) or any(len(ele)==0 for ele in user_add_ratios_data[i].values()):
+                break
+            else:
+                new_metric_dict = {}
+                for v in user_add_ratios_data[i].values(): #check that each cell in the row is not None or not empty string
+                    if v != None and v.strip() != "":
+                        column_1 = user_add_ratios_data[i]['Column 1']
+                        column_2 = user_add_ratios_data[i]['Column 2']
+                        print("line 616 key_metrics", key_metrics)
+                        for j in range(len(df.iloc[:,0].tolist())): # for each year/quarter
+                            print(column_1)
+                            print(list(df.columns.values))
+                            print(df.iloc[j])
+                            if column_1 in list(df.columns.values):
+                                column_1_val = float(df.iloc[j][column_1])
+                            elif column_1 not in list(df.columns.values) and column_1 in key_metrics.keys():
+                                print("line 621 values", list(key_metrics[column_1].values()))
+                                column_1_val = float(re.sub("[^0-9.]", "", str(list(key_metrics[column_1].values())[j])))
+                            else:
+                                add_calculations_warning_note = dbc.Alert("Check if Column name exists or is spelled correctly", color="warning", style={'display': 'inline-block'})
+                                break
+                            if column_2 in list(df.columns.values):
+                                column_2_val = float(df.iloc[j][column_2])
+                            elif column_2 not in list(df.columns.values) and column_2 in key_metrics.keys():
+                                column_2_val = float(re.sub("[^0-9.]", "", str(list(key_metrics[column_2].values())[j])))
+                            else:
+                                add_calculations_warning_note = dbc.Alert("Check if Column name exists or is spelled correctly", color="warning", style={'display': 'inline-block'})
+                                break
+
+                            year = df.iloc[j,0]
+                            print(year)
+                            if user_add_ratios_data[i]['Operator'] == "+":
+                                new_metric_dict[year] = round(column_1_val + column_2_val, 2)
+                            
+                            elif user_add_ratios_data[i]['Operator'] == "-":
+                                new_metric_dict[year] = round(column_1_val - column_2_val, 2)
+                            
+                            elif user_add_ratios_data[i]['Operator'] == "*":
+                                new_metric_dict[year] = round(column_1_val * column_2_val, 2)
+                            
+                            elif user_add_ratios_data[i]['Operator'] == "/":
+                                new_metric_dict[year] = round(column_1_val / column_2_val, 2)
+                            print(new_metric_dict)
+
+                key_metrics[user_add_ratios_data[i]['Ratio Name']] = new_metric_dict
+                print("for loop 643", key_metrics)
+            if selected_rows is not None:
+                for i in selected_rows:
+                    if any(ele==None for ele in user_add_ratios_data[i].values()) or any(len(ele)==0 for ele in user_add_ratios_data[i].values()): #or column_1 not in list(df.columns.values) or column_1 not in key_metrics.keys() or column_2 not in list(df.columns.values) or column_2 not in key_metrics.keys():
+                        break
+                    #append selected ratios to key_metrics_thresholds
+                    if user_add_ratios_data[i]['Ratio Name'] not in threshold_df:
+                        threshold_df[user_add_ratios_data[i]['Ratio Name']] = 0
+                    print("line 623", list(threshold_columns[0].keys()))
+                    print("line 624", threshold_columns)
+                    if user_add_ratios_data[i]['Ratio Name'] not in [d['name'] for d in threshold_columns]:
+                        threshold_columns.append({
+                            'name': user_add_ratios_data[i]['Ratio Name'], 'id': user_add_ratios_data[i]['Ratio Name'], 'deletable': True
+                        })
+                    columns = threshold_columns
+
+                    names_of_added_ratios.append(user_add_ratios_data[i]['Ratio Name'])
+
+        print("key metrics lines 631", key_metrics)
+        print("line 632", list(threshold_columns[0].keys()))
+        print("columns 633", columns)
+        print("columns 634", list(threshold_columns[0]))
+    print("line 635", threshold_df)
+    print("line 636", key_metrics_thresholds)
+    print("line 637", key_metrics)
+
+
+    # make cards for the selected ratios
+    if names_of_added_ratios != []:
+        for metric_name in names_of_added_ratios:
+            metric_container = []
+            if metric_name in key_metrics.keys():
+                for i in range(len(key_metrics[metric_name])):
+                    color = "success"
+                    inverse = True
+                    if i>0:
+                        if str(list(key_metrics[metric_name].values())[i]) < str(list(key_metrics[metric_name].values())[i-1]):
+                            color = "warning"
+                            inverse = False
+                    if float(list(key_metrics[metric_name].values())[i]) < float(threshold_df.iloc[0][metric_name]):
+                        color = "danger"
+                        inverse = True
+
+                        if metric_name not in poor_metrics_added:
+                            poor_metrics_added[metric_name] = [str(list(key_metrics[metric_name].keys())[i])]
+                        else:
+                            poor_metrics_added[metric_name].append(str(list(key_metrics[metric_name].keys())[i]))
+
+                    element = dbc.Card(
+                                dbc.CardBody([
+                                    html.P(str(list(key_metrics[metric_name].keys())[i]) + " " + str(metric_name)),
+                                    html.H4(str(list(key_metrics[metric_name].values())[i]))
+                                ]), className='text-center m-4', color=color, inverse=inverse)
+                    metric_container.append(dbc.Col(element))
+                container.append(dbc.Row(metric_container))
+
+    # place note here to inform the user about the poor metrics below the added ratios
+    if note != "":
+        container.append(dbc.Alert(note, color="info", style={'display': 'inline-block'}))
+
+    print(threshold_df)
+    print(threshold_columns)
+    print("line 639 container", container)
+
+    
+
     print("--------------------------------------")
-    return dbc.Container(container), text, threshold_df.to_dict('records'), columns, threshold_note, app_calculated_ratios
+    return dbc.Container(container), text, threshold_df.to_dict('records'), columns, app_calculated_ratios, user_add_ratios_data, user_add_ratios_columns, add_calculations_warning_note
 
