@@ -159,7 +159,9 @@ def update_output(contents, filename, date, children):
                                         }),
 
                                         html.Br(), html.Br(),
-                                        html.H4("Financial Ratios"),
+                                        html.H4("Financial Ratios", id={"type": "financial-ratios-tooltip", "index": i}, style={"cursor": "pointer", 'display': 'inline-block'}),
+                                        dbc.Tooltip("Ratios shown are based on the ratios in the 'Thresholds' table", target={"type": "financial-ratios-tooltip", "index": i}, placement="top"),
+                                        html.Br(),
                                         html.Div(id={
                                             'type': 'dynamic-text',
                                             'index': i
