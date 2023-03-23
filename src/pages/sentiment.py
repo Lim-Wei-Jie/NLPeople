@@ -141,52 +141,65 @@ def display_pdf(contents, filename, children):
             'Age': [25, 30, 35, 40],
             'Country': ['USA', 'Canada', 'UK', 'Australia']
         })
-
-        table = html.Div(children=[
-            html.Div(children=[
-                dash_table.DataTable(
-                    id='table1',
-                    columns=[{"name": i, "id": i} for i in sentiment_positive_top5.columns],
-                    style_table={'width': '100%'},
-                    style_cell={
-                        'whiteSpace': 'normal',
-                        'height': 'auto',
-                    },
-                    data=sentiment_positive_top5.to_dict('records')
-                )
-            ], style={'display': '', 'width': '100%'}),
-
-            html.Div(children=[
-                dash_table.DataTable(
-                    id='table2',
-                    columns=[{"name": i, "id": i} for i in sentiment_neutral_top5.columns],
-                    style_table={'width': '100%'},
-                    style_cell={
-                        'whiteSpace': 'normal',
-                        'height': 'auto',
-                    },
-                    data=sentiment_neutral_top5.to_dict('records')
-                )
-            ], style={'display': '', 'width': '100%'}),
         
-            html.Div(children=[
-                dash_table.DataTable(
-                    id='table3',
-                    columns=[{"name": i, "id": i} for i in sentiment_negative_top5.columns],
-                    style_table={'width': '100%'},
-                    style_cell={
-                        'whiteSpace': 'normal',
-                        'height': 'auto',
-                    },
-                    data=sentiment_negative_top5.to_dict('records')
-                )
-            ], style={'display': '', 'width': '100%'})
-        ])
+        
+        print(type(df))
+        print(type(sentiment_positive_top5))
+        
+        
+        
+        
+        table1 = dash_table.DataTable(
+                data=sentiment_positive_top5.to_dict('records'),
+                columns=[{"name": i, "id": i} for i in sentiment_positive_top5.columns],
+                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'})
+        
+        table2 = dash_table.DataTable(
+                data=sentiment_negative_top5.to_dict('records'),
+                columns=[{"name": i, "id": i} for i in sentiment_negative_top5.columns],
+                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'})
+        
+        table3 = dash_table.DataTable(
+                data=sentiment_neutral_top5.to_dict('records'),
+                columns=[{"name": i, "id": i} for i in sentiment_neutral_top5.columns],
+                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px', 'maxHeight': 'none','textAlign': 'left','whiteSpace': 'pre-wrap'}
+            )
+            
+        
+        
+      
+        
+        duty = sentiment_positive_top5.to_dict('records')
+        print(sentiment_positive_top5)
+        
+        for x in sentiment_positive_top5:
+            print(x)
+        
+   
+
+
+
+        print("Positive :" + str(Positive))
+        print("Negative :" + str(Negative))
+        print("Neutral :" + str(Neutral))
+
 
         sentiment.to_excel("output.xlsx")
-        
-        return html.Div([html.H3(filename), html.P("Positive: " + str(Positive)), html.P("Negative: " + str(Negative)), html.P("Neutral: " + str(Neutral)), table])
 
+
+        # extract the text content of each page in the PDF file
+        
+
+        # format the text content as a string and return it as a DIV element
+        #text_content_str = '\n\n'.join(text_content)
+        
+        
+        # dash table to show top 5 positive comments
+
+        
+        
+        
+        return html.Div([html.H3(filename),  html.P("Positive: " + str(Positive)), html.P("Negative: " + str(Negative)), html.P("Neutral: " + str(Neutral)),  html.H3('Top 5 Positive Statement'), table1 , html.H3('Top 5 Negative Statement') ,table2, html.H3('Top 5 Neutral Statement'), table3])
     else:
         return html.Div()
 
