@@ -13,6 +13,9 @@ import dash_bootstrap_components as dbc
 import math
 import re
 
+import openai
+openai.api_key = "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"
+
 dash.register_page(__name__)
 
 
@@ -149,6 +152,7 @@ def update_output(contents, filename, date, children):
                                                     id={'type': 'add-rows-for-ratios',
                                                         'index': i},
                                                     n_clicks=0),
+                                        html.Br(), html.Br(),
                                         html.Div(id={
                                             'type': 'add-calculations-warning-note',
                                             'index': i
@@ -164,6 +168,20 @@ def update_output(contents, filename, date, children):
                                                     'type': 'dynamic-container',
                                                     'index': i
                                             }),
+
+                                        html.Br(), html.Br(),
+                                        html.H4("GPT Analysis", id={"type": "gpt-analysis-tooltip", "index": i}, style={"cursor": "pointer", 'display': 'inline-block'}),
+                                        dbc.Tooltip("GPT Analysis is based on the ratios in the 'Thresholds' table", target={"type": "gpt-analysis-tooltip", "index": i}, placement="top"),
+                                        html.Br(),
+                                        html.Button('GPT Analysis', 
+                                                    id={'type': 'gpt-button',
+                                                        'index': i},
+                                                    n_clicks=0),
+                                        html.Br(), html.Br(),
+                                        html.P(id={
+                                                    'type': 'gpt-output',
+                                                    'index': i
+                                            })
                                     ])
                                 ], style={"height":"100%"}), width=6
                             ),
@@ -237,19 +255,17 @@ def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
                 Output({'type': 'app-calculated-ratios', 'index': MATCH}, 'children'),
                 Output({'type': 'user-add-ratios', 'index': MATCH}, 'data'),
                 Output({'type': 'user-add-ratios', 'index': MATCH}, 'columns'),
-                Output({'type': 'add-calculations-warning-note', 'index': MATCH}, 'children')],
-                # Output({'type': 'add-rows-for-ratios', 'index': MATCH}, 'n_clicks'),
-                # Output({'type': 'add-rows-for-thresholds', 'index': MATCH}, 'n_clicks')],
+                Output({'type': 'add-calculations-warning-note', 'index': MATCH}, 'children'),
+                Output({'type': 'gpt-output', 'index': MATCH}, 'children')],
                 Input({'type': 'dynamic-table', 'index': MATCH}, 'data'),
                 Input({'type': 'threshold-boxes', 'index': MATCH}, 'data'),
                 Input({'type': 'threshold-boxes', 'index': MATCH}, 'columns'),
                 State({'type': 'user-add-ratios', 'index': MATCH}, 'data'),
                 Input({'type': 'user-add-ratios', 'index': MATCH}, 'columns'),
                 Input({'type': 'user-add-ratios', 'index': MATCH}, 'selected_rows'),
-                
-                # Input({'type': 'add-rows-for-thresholds', 'index': MATCH}, 'n_clicks'),
-                Input({'type': 'add-rows-for-ratios', 'index': MATCH}, 'n_clicks'))
-def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios_datatable, user_add_ratios_columns, selected_rows, add_rows_n_clicks):
+                Input({'type': 'add-rows-for-ratios', 'index': MATCH}, 'n_clicks'),
+                Input({'type': 'gpt-button', 'index': MATCH}, 'n_clicks'))
+def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios_datatable, user_add_ratios_columns, selected_rows, add_rows_n_clicks, gpt_n_clicks):
     print("ALL DATA", all_data)
     # Income statement, cash flow or balance sheet?
     df = pd.DataFrame(all_data)
@@ -678,11 +694,14 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
 
 
     # make cards for the selected ratios
+    temp = []
     if names_of_added_ratios != []:
         for metric_name in names_of_added_ratios:
-            metric_container = []
+            print("line 692", container)
+            # metric_container = []
             if metric_name in key_metrics.keys():
-                for i in range(len(key_metrics[metric_name])):
+                metric_container = []
+                for i in range(len(key_metrics[metric_name])): # for each year
                     color = "success"
                     inverse = True
                     if i>0:
@@ -704,7 +723,13 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                                     html.H4(str(list(key_metrics[metric_name].values())[i]))
                                 ]), className='text-center m-4', color=color, inverse=inverse)
                     metric_container.append(dbc.Col(element))
-                container.append(dbc.Row(metric_container))
+                    print("line 718", metric_container)
+            temp.append(dbc.Row(metric_container))
+            
+    print("line 723", temp)
+    if selected_rows is not None and temp != []:
+        for i in range(0, len(selected_rows)):
+            container.append(temp[i])
 
     # place note here to inform the user about the poor metrics below the added ratios
     if note != "":
@@ -714,8 +739,29 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
     print(threshold_columns)
     print("line 639 container", container)
 
+    # to get gpt analysis
+    gpt_output = ""
+    global_keymetrics = {}
+
+    selected_rows_names = [] # the metric names for gpt to analyse
+    for d in columns:
+        selected_rows_names.append(d['name'])
     
+    for metric_name in key_metrics.keys():
+        if metric_name in selected_rows_names:
+            global_keymetrics[metric_name] = key_metrics[metric_name]
+    print("line 746 triggered id", ctx.triggered_id)
+    if gpt_n_clicks > 0 and global_keymetrics != {}:
+        if 'gpt-button' == ctx.triggered_id['type']:
+            response = openai.Completion.create(model="text-davinci-003", 
+                                        prompt="write a short report explaining the negatives and possibly any positives based on this statistics(" + str(global_keymetrics) + "). Provide insights and meaning. Do not make any filler sentences. Do not make any suggestions. Do not describe. Do not explain the financial terms.", 
+                                        temperature=0.9, 
+                                        max_tokens=150)
+            gpt_output = dbc.Alert(response["choices"][0]["text"], color="info", style={'display': 'inline-block'})
+    # elif gpt_n_clicks > 0 and global_keymetrics == {}:
+    #     if 'gpt-button' == ctx.triggered_id['type']:
+    #         gpt_output = dbc.Alert("Select the metrics from 'Add Calculations' section to analyse", color="warning", style={'display': 'inline-block'})
 
     print("--------------------------------------")
-    return dbc.Container(container), text, threshold_df.to_dict('records'), columns, app_calculated_ratios, user_add_ratios_data, user_add_ratios_columns, add_calculations_warning_note
+    return dbc.Container(container), text, threshold_df.to_dict('records'), columns, app_calculated_ratios, user_add_ratios_data, user_add_ratios_columns, add_calculations_warning_note, gpt_output
 

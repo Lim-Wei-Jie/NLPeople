@@ -22,3 +22,4 @@ opencv-contrib-python
 # forex-python
 gunicorn
 # dash-tools
+openai
