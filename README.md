@@ -38,7 +38,7 @@ python -m pip install -r ./requirements.txt
 Usage:
 open terminal, run
 ```
-python app.py
+python src/app.py
 ```
 
 Flaws of the app:
