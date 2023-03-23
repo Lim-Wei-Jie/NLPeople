@@ -756,7 +756,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
     if gpt_n_clicks > 0 and global_keymetrics != {}:
         if 'gpt-button' == ctx.triggered_id['type']:
             response = openai.Completion.create(model="text-davinci-003", 
-                                        prompt="write a short report explaining the negatives and possibly any positives based on this statistics(" + str(global_keymetrics) + "). Provide insights and meaning. Do not make any filler sentences. Do not make any suggestions. Do not describe. Do not explain the financial terms.", 
+                                        prompt="Provide a concise report that is only one paragraph long and discusses the positives and negatives of a company with the following financial statistics:(" + str(global_keymetrics) + ")  Your report should contain a single suggestion, but avoid explaining the financial terms and fillers. Do not refer to yourself as an individua.", 
                                         temperature=0.9, 
                                         max_tokens=150)
             gpt_output = dbc.Alert(response["choices"][0]["text"], color="info", style={'display': 'inline-block'})
