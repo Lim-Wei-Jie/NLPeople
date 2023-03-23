@@ -5,11 +5,12 @@ import pandas as pd
 pd.options.display.max_colwidth=-1
 pd.options.display.min_rows=100
 
+import plotly.express as px
+
 import dash
 from dash import dash_table, dcc, html
 from dash.dependencies import Input, Output, State
 
-import PyPDF2
 import pytesseract
 from pdf2image import convert_from_path
 
@@ -29,7 +30,7 @@ dash.register_page(__name__)
     Input('upload-pdf', 'contents'),
     State('upload-pdf', 'filename')
 )
-def display_pdf(contents, filename, children):
+def display_pdf(contents, filename):
     if contents is not None:
         # decode the contents of the uploaded PDF file
         decoded_content = base64.b64decode(contents.split(',')[1])
@@ -54,13 +55,11 @@ def display_pdf(contents, filename, children):
 
         sentences_annual_report = []
         for sent in doc.sents:
-            #print (sent)
             if len(sent) > 6:
                 new_lane = sent.text.split(".")
                 for x in new_lane:
                     if len(x.strip()) > 2:
                         sentences_annual_report.append(x)
-                        print(x)
                 
         sentences_annual_report2 = sentences_annual_report
 
@@ -136,75 +135,66 @@ def display_pdf(contents, filename, children):
         # Filter for rows with the 'neutral' label and get the top 5 by score
         sentiment_negative_top5 = sentiment[sentiment['label'] == 'Negative'].nlargest(5, 'score')
 
-        df = pd.DataFrame({
-            'Name': ['Alice', 'Bob', 'Charlie', 'David'],
-            'Age': [25, 30, 35, 40],
-            'Country': ['USA', 'Canada', 'UK', 'Australia']
-        })
-        
-        
-        print(type(df))
-        print(type(sentiment_positive_top5))
-        
-        
-        
-        
         table1 = dash_table.DataTable(
-                data=sentiment_positive_top5.to_dict('records'),
-                columns=[{"name": i, "id": i} for i in sentiment_positive_top5.columns],
-                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'})
+            data=sentiment_positive_top5.to_dict('records'),
+            columns=[{"name": i, "id": i} for i in sentiment_positive_top5.columns],
+            style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'}
+        )
         
         table2 = dash_table.DataTable(
-                data=sentiment_negative_top5.to_dict('records'),
-                columns=[{"name": i, "id": i} for i in sentiment_negative_top5.columns],
-                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'})
+            data=sentiment_negative_top5.to_dict('records'),
+            columns=[{"name": i, "id": i} for i in sentiment_negative_top5.columns],
+            style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'}
+        )
         
         table3 = dash_table.DataTable(
-                data=sentiment_neutral_top5.to_dict('records'),
-                columns=[{"name": i, "id": i} for i in sentiment_neutral_top5.columns],
-                style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px', 'maxHeight': 'none','textAlign': 'left','whiteSpace': 'pre-wrap'}
-            )
-            
-        
-        
-      
-        
-        duty = sentiment_positive_top5.to_dict('records')
-        print(sentiment_positive_top5)
-        
-        for x in sentiment_positive_top5:
-            print(x)
-        
-   
+            data=sentiment_neutral_top5.to_dict('records'),
+            columns=[{"name": i, "id": i} for i in sentiment_neutral_top5.columns],
+            style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px', 'maxHeight': 'none','textAlign': 'left','whiteSpace': 'pre-wrap'}
+        )
 
+        # sentiment.to_excel("output.xlsx")
 
+        # bar chart
+        dff = sentiment
+        fig = px.bar(
+            dff,
+            x='label',
+            y='score'
+        )
 
-        print("Positive :" + str(Positive))
-        print("Negative :" + str(Negative))
-        print("Neutral :" + str(Neutral))
+        # create dashtable and bar chart
+        children=html.Div([
+            html.Br(),
+            html.H3(filename),
+            html.Br(),
+            html.P("Positive: " + str(Positive)),
+            html.P("Negative: " + str(Negative)),
+            html.P("Neutral: " + str(Neutral)),
+            html.Br(),
+            dcc.Graph(
+                id='bar-chart',
+                figure=fig
+            ),
+            html.Br(),
+            html.H3('Top 5 Positive Statement'),
+            table1,
+            html.Br(),
+            html.H3('Top 5 Negative Statement'),
+            table2,
+            html.Br(),
+            html.H3('Top 5 Neutral Statement'),
+            table3,
+        ])
 
+        return children
 
-        sentiment.to_excel("output.xlsx")
-
-
-        # extract the text content of each page in the PDF file
-        
-
-        # format the text content as a string and return it as a DIV element
-        #text_content_str = '\n\n'.join(text_content)
-        
-        
-        # dash table to show top 5 positive comments
-
-        
-        
-        
-        return html.Div([html.H3(filename),  html.P("Positive: " + str(Positive)), html.P("Negative: " + str(Negative)), html.P("Neutral: " + str(Neutral)),  html.H3('Top 5 Positive Statement'), table1 , html.H3('Top 5 Negative Statement') ,table2, html.H3('Top 5 Neutral Statement'), table3])
     else:
         return html.Div()
 
 
 layout = html.Div([
+    html.H4('Upload PDF file to do Sentiment Analysis'),
     dcc.Upload(
         id='upload-pdf',
         children=html.Div([
