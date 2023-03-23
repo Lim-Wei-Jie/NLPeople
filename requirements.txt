@@ -15,11 +15,22 @@ PyPDF2==2.12.1
 # PyPDF2==3.0.1
 # pytesseract==0.3.10
 pytesseract
+pdf2image
+pdfminer.six
+rank_bm25
+termcolor
+scikit-learn
+sentence-transformers
+spacy
+matplotlib
 opencv-contrib-python
 # CurrencyConverter
 # spacy>=3.0.0,<4.0.0
-# en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.4.0/en_core_web_sm-3.4.0-py3-none-any.whl
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.4.0/en_core_web_sm-3.4.0-py3-none-any.whl
 # forex-python
 gunicorn
 # dash-tools
 openai
+torch 
+torchvision 
+torchaudio
