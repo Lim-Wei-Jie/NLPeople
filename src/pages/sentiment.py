@@ -10,6 +10,7 @@ import plotly.express as px
 import dash
 from dash import dash_table, dcc, html
 from dash.dependencies import Input, Output, State
+import dash_bootstrap_components as dbc
 
 import pytesseract
 from pdf2image import convert_from_path
@@ -138,19 +139,22 @@ def display_pdf(contents, filename):
         table1 = dash_table.DataTable(
             data=sentiment_positive_top5.to_dict('records'),
             columns=[{"name": i, "id": i} for i in sentiment_positive_top5.columns],
-            style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'}
+            style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'},
+            style_cell_conditional=[{'if': {'column_id': 'sentence'}, 'width': '70%'}]
         )
         
         table2 = dash_table.DataTable(
             data=sentiment_negative_top5.to_dict('records'),
             columns=[{"name": i, "id": i} for i in sentiment_negative_top5.columns],
-            style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'}
+            style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px','textAlign': 'left','whiteSpace': 'pre-wrap'},
+            style_cell_conditional=[{'if': {'column_id': 'sentence'}, 'width': '70%'}]
         )
         
         table3 = dash_table.DataTable(
             data=sentiment_neutral_top5.to_dict('records'),
             columns=[{"name": i, "id": i} for i in sentiment_neutral_top5.columns],
-            style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px', 'maxHeight': 'none','textAlign': 'left','whiteSpace': 'pre-wrap'}
+            style_cell={'minWidth': '180px', 'width': '180px', 'maxWidth': '180px', 'maxHeight': 'none','textAlign': 'left','whiteSpace': 'pre-wrap'},
+            style_cell_conditional=[{'if': {'column_id': 'sentence'}, 'width': '70%'}]
         )
 
         # sentiment.to_excel("output.xlsx")
@@ -160,33 +164,64 @@ def display_pdf(contents, filename):
         fig = px.bar(
             dff,
             x='label',
-            y='score'
+            y='score',
+            title="Scores of total Postive, Negative, Neutral sentences"
+        )
+
+        # pie chart
+        piefig = px.pie(
+            dff,
+            values='score',
+            names='label',
+            title="Scores of total Postive, Negative, Neutral sentences (in %)"
         )
 
         # create dashtable and bar chart
         children=html.Div([
-            html.Br(),
-            html.H3(filename),
-            html.Br(),
-            html.P("Positive: " + str(Positive)),
-            html.P("Negative: " + str(Negative)),
-            html.P("Neutral: " + str(Neutral)),
-            html.Br(),
-            dcc.Graph(
-                id='bar-chart',
-                figure=fig
-            ),
-            html.Br(),
-            html.H3('Top 5 Positive Statement'),
-            table1,
-            html.Br(),
-            html.H3('Top 5 Negative Statement'),
-            table2,
-            html.Br(),
-            html.H3('Top 5 Neutral Statement'),
-            table3,
+            html.Br(), html.Br(),
+            # html.H3(filename),
+            # html.Br(),
+            html.Div([
+                dbc.Row([
+                    dbc.Card([dbc.CardBody([
+                        html.H3(filename),
+                        html.Br(),
+                        dbc.Row([
+                            dbc.Col(dbc.Card(dbc.CardBody([html.P("Positive"), html.H4(str(Positive))]), className='text-center m-4', color="success", inverse=True)),
+                            dbc.Col(dbc.Card(dbc.CardBody([html.P("Negative"), html.H4(str(Negative))]), className='text-center m-4', color="danger", inverse=True)),
+                            dbc.Col(dbc.Card(dbc.CardBody([html.P("Neutral"), html.H4(str(Neutral))]), className='text-center m-4', color="info", inverse=False))
+                        ])
+                    ])])
+                ]),
+                html.Br(), html.Br(),
+                dbc.Row([
+                    dbc.Col(dbc.Card([dbc.CardBody([
+                        dcc.Graph(
+                            id='pie-chart',
+                            figure=piefig
+                        )
+                    ])], style={}), width=6),
+                    dbc.Col(dbc.Card([dbc.CardBody([
+                        dcc.Graph(
+                            id='bar-chart',
+                            figure=fig
+                        )
+                    ])], style={}), width=6),
+                ]),
+                html.Br(), html.Br(),
+                dbc.Row([dbc.Card([dbc.CardBody([
+                    html.H3('Top 5 Positive Statement'),
+                    table1,
+                    html.Br(), html.Br(),
+                    html.H3('Top 5 Negative Statement'),
+                    table2,
+                    html.Br(), html.Br(),
+                    html.H3('Top 5 Neutral Statement'),
+                    table3
+                ])])
+                ])
+            ]),
         ])
-
         return children
 
     else:
@@ -194,7 +229,9 @@ def display_pdf(contents, filename):
 
 
 layout = html.Div([
-    html.H4('Upload PDF file to do Sentiment Analysis'),
+    html.H4('Upload PDF file to do Sentiment Analysis', id="first-title", style={"cursor": "pointer", 'display': 'inline-block'}),
+    dbc.Tooltip("Sentiment Analysis takes awhile depending on the size of the file. Please wait for it to load.", target="first-title", placement="top"),
+    html.Br(),
     dcc.Upload(
         id='upload-pdf',
         children=html.Div([
