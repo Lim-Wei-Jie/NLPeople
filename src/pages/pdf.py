@@ -789,7 +789,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                         print("updated denominator", operating_margin_denominator)
 
                                         if operating_margin_numerator != "" and operating_margin_denominator != "":
-                                            operating_margin = round(float(operating_margin_numerator) / float(operating_margin_denominator),2) * 100
+                                            operating_margin = round((float(operating_margin_numerator) / float(operating_margin_denominator))*100,2)
                                             print("operating margin check: ", operating_margin)
                                             if "Operating Margin" not in key_metrics:
                                                 key_metrics["Operating Margin"] = {}
@@ -854,7 +854,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                         print("updated denominator", gross_profit_margin_denominator)
 
                                         if gross_profit_margin_numerator != "" and gross_profit_margin_denominator != "":
-                                            gross_profit_margin = round(float(gross_profit_margin_numerator) / float(gross_profit_margin_denominator),2) * 100
+                                            gross_profit_margin = round((float(gross_profit_margin_numerator) / float(gross_profit_margin_denominator)) * 100,2)
                                             print("gross profit margin check: ", gross_profit_margin)
                                             if "Gross Margin" not in key_metrics:
                                                 key_metrics["Gross Margin"] = {}
