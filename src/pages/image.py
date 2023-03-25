@@ -23,7 +23,8 @@ from nltk.stem import WordNetLemmatizer
 # initialize the WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"/usr/local/Cellar/tesseract/5.3.0_1/bin/tesseract"
 
 dash.register_page(__name__)
 
