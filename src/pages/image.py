@@ -416,6 +416,7 @@ def shortlisted_financial_term_columns_for_user_selection(table_data, n_clicks, 
                     checkbox_options[col_names_list[i]] = col_names_list[i]
 
             print("list of dicts", list_of_dicts)
+
     else:
         raise exceptions.PreventUpdate       
                 
@@ -445,13 +446,11 @@ def deselect_all_rows(n_clicks_deselect):
         raise exceptions.PreventUpdate
     return selected_rows
 
-def shortlisted_financial_term_columns_for_user_selection(value, table_data, metric_list):    # if len(value) != 0:
+def shortlisted_financial_term_columns_for_user_selection(value, table_data, metric_list):   
+    # if len(value) != 0:
     if value is not None:
         print("value", value)
         print("data for shortlisted-fin-terms-cols", table_data)
-
-    # stemmed_master_list = ["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-    #                             "equity", "asset", "debt", "cash", "liability", "rev"]
 
     # get column names in list of dicts --> first key of every list
     col_names_list = []
@@ -474,9 +473,9 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data, met
             print("myyy i", i)
             print("myyy value", str(value))
 
+            # fill in the empty row cells with possible financial metrics
+
             if row_cell != "" and row_cell != None:
-                # print("row: ", row)
-                # print("row type", type(row))
                 tokenised_row_cell = row_cell.split(" ")
                 for token in tokenised_row_cell:
                     #remove special ch
@@ -549,8 +548,9 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
         # to store all the df.columns values without empty cells
         current_df_columns = []
         for v in new_df.columns:
-            if v.strip() != '':
-                current_df_columns.append(v)
+            if v != None:
+                if v.strip() != '':
+                    current_df_columns.append(v)
 
         # colors = ['#7FDBFF' if i in slctd_row_indices else '#0074D9'
         #             for i in range(len(new_df))]
@@ -566,20 +566,31 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
             rule2_msg = dbc.Alert("Make row headers unique!", color="danger")
         else:
             rule2_msg = ""
-        if x_axis_variable.strip()=='':
-            rule3_msg = dbc.Alert("Fill up x-axis variable in the first cell!", color="danger")
-        else:
-            rule3_msg = ""
+        if x_axis_variable != None:
+            if x_axis_variable.strip()=='':
+                rule3_msg = dbc.Alert("Fill up x-axis variable in the first cell!", color="danger")
+                rules_msg.append(rule3_msg)
+            else:
+                rule3_msg = ""
+                rules_msg.append(rule3_msg)
+        if x_axis_variable == None:
+                rule3_msg = dbc.Alert("Fill up x-axis variable in the first cell!", color="danger")
+                rules_msg.append(rule3_msg)
+
 
         rules_msg.append(rule1_msg)
         rules_msg.append(rule2_msg)
-        rules_msg.append(rule3_msg)
 
         # Show dashboard based on the 2 rules, and datatable cannot be empty
         if active_cell is not None and len(new_df)>1 and len(unique_values_for_rows) == len(current_df_columns) and x_axis_variable.strip()!='' and len(set(classes))==len(classes):
             if active_cell["row"]!=0:
                 row = active_cell["row"]
                 print("row: ", row)
+                # metrics = []
+                # for i in range(1, len(dff)):
+                #     metrics.append(dff[i][0])
+                # print("metrics: ", metrics)
+                # print("metrics[row] ", metrics[row])
 
                 return [
                     dcc.Graph(id='graph',
@@ -587,7 +598,10 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
                                     data_frame = new_df, 
                                     x = new_df.columns[0],
                                     y = new_df.columns[row]
+                                    # labels = {"Revenue": "% of Pop took online course"}
                                 ).update_layout(autotypenumbers='convert types')
+                                # ).update_layout(showlegend=False, xaxis={'categoryorder': 'total ascending'})
+                                # .update_traces(marker_color=colors, hovertemplate="<b>%{y}%</b><extra></extra>")
                                 )
                 ], rules_msg
             else:
@@ -621,6 +635,515 @@ def add_metric_to_list(new_metric, metric_list, n_clicks):
         raise exceptions.PreventUpdate
     return metric_list
 
+
+
+@dash.callback(Output('display-financial-ratio-img', 'children'),
+                [Input('get-financial-ratios', "n_clicks"),
+                Input('spacy-button', 'n_clicks'),
+                Input('get-new-table-button', 'n_clicks'),
+                Input('financial-terms-cols-boxes-img', 'value'),
+                Input('new-table-img', 'columns'),
+                Input('new-table-img', 'data'),
+                # Input('pdf-viewer', 'selected_rows')
+                ],
+                prevent_initial_call = True)
+def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_extracted, value, columns, table_data):
+
+
+    # if (n_clicks_fin_col == 0 or n_clicks_extracted ==0 or value == None) and n_clicks_fin_ratio > 0:
+    #     return "Please click on the 'GET COLUMNS WITH METRICS' button and make a selection. Then, click on the 'EXTRACT TABLE' button."
+    
+    if (n_clicks_fin_col > 0 and n_clicks_extracted > 0 and n_clicks_fin_ratio > 0 and value != None) or (n_clicks_extracted > 0 and n_clicks_fin_ratio > 0):
+        print("tabla", table_data)
+        # print("selected_rows", selected_rows)
+
+        if n_clicks_extracted and n_clicks_fin_ratio > 0:
+            value = "0"
+
+
+        #Step 1: App determines what kind of financial data table_data is. (implement NLP if needed)
+            #go through row cells in selected financial column to find terms 
+            #checks if table_data is from an income statement, balance sheet or cash-flow statement.
+
+      
+        financial_data_type_list = [ { "revenue": 1, "operating profit": 2, "gross profit": 1, "earnings per share": 2, "owners of the parent": 1, "cost of": 1,
+            "other income": 1, "controlling interest": 1, "net income": 1, "interest expense": 1, "per common share": 2, "per share": 1,
+            "tax expense": 1, "sales": 1 }, # dictionary for words from income statements
+
+        { "current assets": 2, "fixed assets": 2, "total assets": 2, "inventory": 1, "inventories": 1, "liabilities": 1, "current liabilities": 3,
+            "taxes payable": 1, "long-term debt": 3, "total current liabilities": 3, "equity": 1, "shareholders' equity": 2, "common shares": 2,
+            "common stock": 2 }, # dictionary for words from balance sheets
+        
+        { "cash flow from operating activities": 10, "cash flow from investing activities": 10, "cash flow from financing activities": 10,
+            "cash flows from operating activities": 15, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
+            "cash flow from": 10, "cash flows from": 10} ] # dictionary for words from cash flow statements
+        
+        income_total_weight = 0
+        balance_total_weight = 0
+        cash_total_weight = 0
+        financial_data_type = ""
+
+        collect_lowered_fin_terms_from_col = []
+        for a_dict in table_data:
+            if a_dict[value] != None:
+                collect_lowered_fin_terms_from_col.append(a_dict[value].lower())
+        print("collect_lowered_fin_terms_from_col: ", collect_lowered_fin_terms_from_col)
+
+        for fin_data_type_dict in financial_data_type_list:
+            if financial_data_type_list[0] == fin_data_type_dict:
+                for income_key in fin_data_type_dict:
+                    for collected_term in collect_lowered_fin_terms_from_col:
+                        if income_key in collected_term:
+                            income_total_weight += fin_data_type_dict[income_key]
+                            print("added income key: ", income_key)
+
+            if financial_data_type_list[1] == fin_data_type_dict:
+                for balance_key in fin_data_type_dict:
+                    for collected_term in collect_lowered_fin_terms_from_col:
+                        if balance_key in collected_term:
+                            balance_total_weight += fin_data_type_dict[balance_key]
+                            print("added balance key: ", balance_key)
+
+
+            if financial_data_type_list[2] == fin_data_type_dict:
+                for cash_key in fin_data_type_dict:
+                    for collected_term in collect_lowered_fin_terms_from_col:
+                        if cash_key in collected_term:
+                            cash_total_weight += fin_data_type_dict[cash_key]
+                            print("added cash key: ", cash_key)
+
+        list_of_weights = [income_total_weight, balance_total_weight, cash_total_weight]
+
+        print("list_of_weights: ", list_of_weights)
+        max_value = max(list_of_weights)
+        index = list_of_weights.index(max_value)
+
+        if index == 0:
+            financial_data_type = "income statement"
+            print("financial data type is income statement")
+        elif index == 1:
+            financial_data_type = "balance sheet"
+            print("financial data type is balance sheet")
+        else:
+            financial_data_type = "cash flow statement"
+            print("financial data type is cash flow statement")
+
+        key_metrics = {}  #{'Operating Margin': {'2020': 0.11, '2020': 0.1}, 'Gross Profit Margin': {'2021': 0.07, '2021': 0.06}}
+        card_colors = {} #{'Operating Margin': {'2020': "Danger", '2020': "Danger"}, 'Gross Profit Margin': {'2021': "Success", '2021': "Success"}}
+        output_string = ""
+        financial_ratio_cards = []
+
+
+        if financial_data_type == "income statement":
+
+            # calculating operating margin for INCOME STATEMENT #
+
+            operating_margin_numerator = ""
+            operating_margin_denominator = ""
+            operating_margin = "Value cannot be generated, please make further edits to extracted table."
+
+            cost_of_goods_sold_row_op_position = ""
+            revenue_row_op_position = ""
+            operating_expenses_row_op_position = ""
+
+            cost_of_goods_sold_op = ""
+            revenue_attained_op = ""
+            operating_expenses = ""
+
+            for s in range(len(table_data)):
+                for t in range(1, len(table_data[0])):
+                    if "cost of goods sold" in table_data[s]["0"].lower():
+                        cost_of_goods_sold_row_op_position = s
+                    if "Revenue" in table_data[s]["0"]:
+                        revenue_row_op_position = s
+                    if "operating expense" in table_data[s]["0"].lower():
+                        operating_expenses_row_op_position  = s
+
+
+            for m in range(len(table_data)):
+                a_dict = table_data[m]
+                if cost_of_goods_sold_row_op_position != "" and revenue_row_op_position != "" and operating_expenses_row_op_position != "":
+                    if a_dict[value] != None:
+                        for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
+                            year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
+
+                                cost_of_goods_sold_op = list(table_data[cost_of_goods_sold_row_op_position].values())[t]
+                                cost_of_goods_sold_op = re.sub('[^0-9.]', '', cost_of_goods_sold_op)
+                                revenue_attained_op = list(table_data[revenue_row_op_position].values())[t]
+                                revenue_attained_op = re.sub('[^0-9.]', '', revenue_attained_op)
+                                operating_expenses = list(table_data[operating_expenses_row_op_position].values())[t]
+                                operating_expenses = re.sub('[^0-9.]', '', operating_expenses)
+
+                                # operating_margin_numerator = list(a_dict.values())[t]
+                                operating_margin_numerator = round(float(revenue_attained_op) - float(cost_of_goods_sold_op) - float(operating_expenses),2)
+                                print("updated numerator", operating_margin_numerator)
+
+                                for k in range(len(table_data)):
+                                    if table_data[k][value] != None and "Revenue" in table_data[k][value]:
+                                        print("gafa firee")
+                                        operating_margin_denominator = list(table_data[k].values())[t]
+                                        operating_margin_denominator = re.sub('[^0-9.]', '', operating_margin_denominator)
+                                        print("updated denominator", operating_margin_denominator)
+
+                                        if operating_margin_numerator != "" and operating_margin_denominator != "":
+                                            operating_margin = round((float(operating_margin_numerator) / float(operating_margin_denominator))*100,2)
+                                            print("operating margin check: ", operating_margin)
+                                            if "Operating Margin" not in key_metrics:
+                                                key_metrics["Operating Margin"] = {}
+                                                key_metrics["Operating Margin"][year] = str(operating_margin) + "%"
+                                            else:
+                                                key_metrics["Operating Margin"][year] = str(operating_margin) + "%"
+                                            if "Operating Margin" not in card_colors:
+                                                card_colors["Operating Margin"] = {}
+                                                if operating_margin < 20:
+                                                    card_colors["Operating Margin"][year] = "danger"
+                                                elif operating_margin > 20:
+                                                    card_colors["Operating Margin"][year] = "success"
+                                            else:
+                                                if operating_margin < 20:
+                                                    card_colors["Operating Margin"][year] = "danger"
+                                                elif operating_margin > 20:
+                                                    card_colors["Operating Margin"][year] = "success"
+
+
+
+
+            # calculating gross profit margin for INCOME STATEMENT #
+
+            gross_profit_margin_numerator = ""
+            gross_profit_margin_denominator = ""
+            gross_profit_margin = "Value cannot be generated, please make further edits to extracted table."
+
+            cost_of_goods_sold_row_position = ""
+            revenue_row_position = ""
+            cost_of_goods_sold = ""
+            revenue_attained = ""
+
+            for s in range(len(table_data)):
+                for t in range(1, len(table_data[0])):
+                    if "cost of goods sold" in table_data[s]["0"].lower():
+                        cost_of_goods_sold_row_position = s
+                    if "Revenue" in table_data[s]["0"]:
+                        revenue_row_position = s
+
+            
+            for m in range(len(table_data)):
+                a_dict = table_data[m]
+                if cost_of_goods_sold_row_position != "" and revenue_row_position != "":
+                    if a_dict[value] != None:
+                        for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
+                            year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
+                                cost_of_goods_sold = list(table_data[cost_of_goods_sold_row_position].values())[t]
+                                cost_of_goods_sold = re.sub('[^0-9.]', '', cost_of_goods_sold)
+                                revenue_attained = list(table_data[revenue_row_position].values())[t]
+                                revenue_attained = re.sub('[^0-9.]', '', revenue_attained)
+
+                                #gross_profit_margin_numerator = list(a_dict.values())[t]
+                                gross_profit_margin_numerator = round(float(revenue_attained) - float(cost_of_goods_sold),2)
+                                print("updated gross profit margin numerator", gross_profit_margin_numerator)
+
+                                for k in range(len(table_data)):
+                                    if table_data[k][value] != None and "Revenue" in table_data[k][value]:
+                                        print("gafa firee")
+                                        gross_profit_margin_denominator = list(table_data[k].values())[t]
+                                        gross_profit_margin_denominator = re.sub('[^0-9.]', '', gross_profit_margin_denominator)
+                                        print("updated denominator", gross_profit_margin_denominator)
+
+                                        if gross_profit_margin_numerator != "" and gross_profit_margin_denominator != "":
+                                            gross_profit_margin = round((float(gross_profit_margin_numerator) / float(gross_profit_margin_denominator)) * 100,2)
+                                            print("gross profit margin check: ", gross_profit_margin)
+                                            if "Gross Margin" not in key_metrics:
+                                                key_metrics["Gross Margin"] = {}
+                                                key_metrics["Gross Margin"][year] = str(gross_profit_margin) + "%"
+                                            else:
+                                                key_metrics["Gross Margin"][year] = str(gross_profit_margin) + "%"
+                                            if "Gross Margin" not in card_colors:
+                                                card_colors["Gross Margin"] = {}
+                                                if gross_profit_margin < 50:
+                                                    card_colors["Gross Margin"][year] = "danger"
+                                                elif gross_profit_margin > 50:
+                                                    card_colors["Gross Margin"][year] = "success"
+                                            else:
+                                                if gross_profit_margin < 50:
+                                                    card_colors["Gross Margin"][year] = "danger"
+                                                elif gross_profit_margin > 50:
+                                                    card_colors["Gross Margin"][year] = "success"
+            print("key_metrics to check gross profit margin ratio: ", key_metrics)
+
+            # for financial_ratio in key_metrics:
+            #     for year_key in key_metrics[financial_ratio]:
+            #         output_string  += year_key + " " + financial_ratio + ": " + str(key_metrics[financial_ratio][year_key]) + "  "
+
+            # return output_string
+            print("card colors for income statement: " , card_colors)
+
+            for financial_ratio in key_metrics:
+                for year_key in key_metrics[financial_ratio]:
+                    element = dbc.Card(
+                                dbc.CardBody([
+                                    html.P(str(year_key) + " " + str(financial_ratio)),
+                                    html.H4(str(key_metrics[financial_ratio][year_key]))
+                                ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True)
+                    financial_ratio_cards.append(dbc.Col(element))
+            return dbc.Container(dbc.Row(financial_ratio_cards))
+
+                    
+
+
+        elif financial_data_type == "balance sheet":
+
+          # calculating current ratio for BALANCE SHEET #
+
+            current_ratio_numerator = ""
+            current_ratio_denominator = ""
+            current_ratio_margin = "Value cannot be generated, please make further edits to extracted table."
+            
+            for m in range(len(table_data)):
+                a_dict = table_data[m]
+                for word in ["total current asset", "current asset"]:
+                    if a_dict[value] != None and word in a_dict[value].lower():
+                        for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
+                            year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
+                                current_ratio_numerator = list(a_dict.values())[t]
+                                current_ratio_numerator = re.sub('[^0-9.]', '', current_ratio_numerator)
+                                print("updated current ratio numerator", current_ratio_numerator)
+
+                                for k in range(len(table_data)):
+                                    if table_data[k][value] != None and "current liabilities" in table_data[k][value].lower():
+                                        print("gafa firee")
+                                        current_ratio_denominator = list(table_data[k].values())[t]
+                                        current_ratio_denominator = re.sub('[^0-9.]', '', current_ratio_denominator)
+                                        print("updated current ratio denominator", current_ratio_denominator)
+
+                                        if current_ratio_numerator != "" and current_ratio_denominator != "":
+                                            current_ratio_margin = round(float(current_ratio_numerator) / float(current_ratio_denominator),2)
+                                            print("current ratio check: ", current_ratio_margin)
+
+
+                                            if "Current Ratio" not in key_metrics:
+                                                key_metrics["Current Ratio"] = {}
+                                                key_metrics["Current Ratio"][year] = current_ratio_margin
+                                            else:
+                                                key_metrics["Current Ratio"][year] = current_ratio_margin
+                                            if "Current Ratio" not in card_colors:
+                                                card_colors["Current Ratio"] = {}
+                                                if current_ratio_margin < 1.5:
+                                                    card_colors["Current Ratio"][year] = "danger"
+                                                elif current_ratio_margin > 1.5:
+                                                    card_colors["Current Ratio"][year] = "success"
+                                            else:
+                                                if current_ratio_margin< 1.5:
+                                                    card_colors["Current Ratio"][year] = "danger"
+                                                elif current_ratio_margin > 1.5:
+                                                    card_colors["Current Ratio"][year] = "success"
+
+            print("key_metrics to check current ratio: ", key_metrics)
+        
+
+            # calculating quick ratio for BALANCE SHEET #
+
+
+            quick_ratio_numerator = ""
+            quick_ratio_denominator = ""
+            quick_ratio_margin = "Value cannot be generated, please make further edits to extracted table."
+
+            current_assets_row_position = ""
+            inventory_row_position = ""
+            current_liabilities_row_position = ""
+
+            current_assets_value = ""
+            inventory_value = ""
+            current_liabilities_value = ""
+
+            for s in range(len(table_data)):
+                for t in range(1, len(table_data[0])):
+                    if "current asset" in table_data[s]["0"].lower():
+                        current_assets_row_position = s
+                    if "inventories" in table_data[s]["0"].lower():
+                        inventory_row_position = s
+                    if "current liabilities" in table_data[s]["0"].lower():
+                        current_liabilities_row_position  = s
+
+
+            for m in range(len(table_data)):
+                a_dict = table_data[m]
+                if current_assets_row_position != "" and inventory_row_position != "" and current_liabilities_row_position != "":
+                    if a_dict[value] != None:
+                        for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
+                            year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
+                                current_assets_value = list(table_data[current_assets_row_position].values())[t]
+                                current_assets_value = re.sub('[^0-9.]', '', current_assets_value)
+                                inventory_value = list(table_data[inventory_row_position].values())[t]
+                                inventory_value = re.sub('[^0-9.]', '', inventory_value)
+                                current_liabilities_value = list(table_data[current_liabilities_row_position].values())[t]
+                                current_liabilities_value = re.sub('[^0-9.]', '', current_liabilities_value)
+
+                                quick_ratio_numerator = round(float(current_assets_value) - float(inventory_value) - float(current_liabilities_value),2)
+                                print("updated quick ratio numerator", quick_ratio_numerator)
+
+                                for k in range(len(table_data)):
+                                    if table_data[k][value] != None and "current liabilities" in table_data[k][value].lower():
+                                        print("gafa firee")
+                                        quick_ratio_denominator = list(table_data[k].values())[t]
+                                        quick_ratio_denominator = re.sub('[^0-9.]', '', quick_ratio_denominator)
+                                        print("updated quick ratio denominator", quick_ratio_denominator)
+
+                                        if quick_ratio_numerator != "" and quick_ratio_denominator != "":
+                                            quick_ratio_margin = round(float(quick_ratio_numerator) / float(quick_ratio_denominator),2)
+                                            print("quick ratio check: ", quick_ratio_margin)
+
+
+                                            if "Quick Ratio" not in key_metrics:
+                                                key_metrics["Quick Ratio"] = {}
+                                                key_metrics["Quick Ratio"][year] = quick_ratio_margin
+                                            else:
+                                                key_metrics["Quick Ratio"][year] = quick_ratio_margin
+                                            if "Quick Ratio" not in card_colors:
+                                                card_colors["Quick Ratio"] = {}
+                                                if quick_ratio_margin < 1:
+                                                    card_colors["Quick Ratio"][year] = "danger"
+                                                elif quick_ratio_margin > 1:
+                                                    card_colors["Quick Ratio"][year] = "success"
+                                            else:
+                                                if quick_ratio_margin < 1:
+                                                    card_colors["Quick Ratio"][year] = "danger"
+                                                elif quick_ratio_margin > 1:
+                                                    card_colors["Quick Ratio"][year] = "success"
+
+
+            print("key_metrics to check quick ratio: ", key_metrics)
+
+            # for financial_ratio in key_metrics:
+            #     for year_key in key_metrics[financial_ratio]:
+            #         output_string  += year_key + " " + financial_ratio + ": " + str(key_metrics[financial_ratio][year_key]) + "  "
+
+
+            # return output_string
+
+            print("card colors for quick ratio: " , card_colors)
+
+            for financial_ratio in key_metrics:
+                for year_key in key_metrics[financial_ratio]:
+                    element = dbc.Card(
+                                dbc.CardBody([
+                                    html.P(str(year_key) + " " + str(financial_ratio)),
+                                    html.H4(str(key_metrics[financial_ratio][year_key]))
+                                ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True)
+                    financial_ratio_cards.append(dbc.Col(element))
+            return dbc.Container(dbc.Row(financial_ratio_cards))
+
+
+        if financial_data_type == "cash flow statement":
+
+            # calculating operating cash flow ratio for CASH FLOW STATEMENT #
+
+            operating_cash_flow_numerator = ""
+            operating_cash_flow_denominator = ""
+            operating_cash_flow_ratio = "Value cannot be generated, please make further edits to extracted table."
+            for m in range(len(table_data)):
+                a_dict = table_data[m]
+                for word in ["cash flow from operating activities"]:
+                    if a_dict[value] != None and word in a_dict[value].lower():
+                        for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
+                            year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
+                                operating_cash_flow_numerator = list(a_dict.values())[t]
+                                operating_cash_flow_numerator = re.sub('[^0-9.]', '', operating_cash_flow_numerator)
+                                print("updated operating_cash_flow_numerator", operating_cash_flow_numerator)
+
+                                for k in range(len(table_data)):
+                                    if table_data[k][value] != None and "current liabilities" in table_data[k][value].lower():
+                                        operating_cash_flow_denominator = list(table_data[k].values())[t]
+                                        operating_cash_flow_denominator = re.sub('[^0-9.]', '', operating_cash_flow_denominator)
+                                        print("updated operating_cash_flow_denominator", operating_cash_flow_denominator)
+
+                                        if operating_cash_flow_denominator != "" and operating_cash_flow_numerator != "":
+                                            operating_cash_flow_ratio = round(float(operating_cash_flow_numerator) / float(operating_cash_flow_denominator),2)
+                                            print("Operating Cash Flow Ratio check: ", operating_cash_flow_ratio)
+
+                                            if "Operating Cash Flow Ratio" not in key_metrics:
+                                                key_metrics["Operating Cash Flow Ratio"] = {}
+                                                key_metrics["Operating Cash Flow Ratio"][year] = operating_cash_flow_ratio
+                                            else:
+                                                key_metrics["Operating Cash Flow Ratio"][year] = operating_cash_flow_ratio
+                                            if "Operating Cash Flow Ratio" not in card_colors:
+                                                card_colors["Operating Cash Flow Ratio"] = {}
+                                                if operating_cash_flow_ratio < 1:
+                                                    card_colors["Operating Cash Flow Ratio"][year] = "danger"
+                                                elif operating_cash_flow_ratio > 1:
+                                                    card_colors["Operating Cash Flow Ratio"][year] = "success"
+                                            else:
+                                                if operating_cash_flow_ratio < 1:
+                                                    card_colors["Operating Cash Flow Ratio"][year] = "danger"
+                                                elif operating_cash_flow_ratio > 1:
+                                                    card_colors["Operating Cash Flow Ratio"][year] = "success"                                            
+
+            print("key_metrics to check Operating Cash Flow Ratio: ", key_metrics)
+
+            
+            # calculating cash flow coverage ratio for CASH FLOW STATEMENT #
+
+            cash_flow_coverage_numerator = ""
+            cash_flow_coverage_denominator = ""
+            cash_flow_coverage_ratio = "Value cannot be generated, please make further edits to extracted table."
+            for m in range(len(table_data)):
+                a_dict = table_data[m]
+                for word in ["cash flow from operating activities"]:
+                    if a_dict[value] != None and word in a_dict[value].lower():
+                        for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
+                            year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
+                            if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
+                                cash_flow_coverage_numerator = list(a_dict.values())[t]
+                                cash_flow_coverage_numerator = re.sub('[^0-9.]', '', cash_flow_coverage_numerator)
+                                print("updated cash flow coverage numerator", cash_flow_coverage_numerator)
+
+                                for k in range(len(table_data)):
+                                    if table_data[k][value] != None and "total liabilities" in table_data[k][value].lower():
+                                        cash_flow_coverage_denominator = list(table_data[k].values())[t]
+                                        cash_flow_coverage_denominator = re.sub('[^0-9.]', '', cash_flow_coverage_denominator)
+                                        print("updated operating_cash_flow_numerator", cash_flow_coverage_denominator)
+
+                                        if cash_flow_coverage_numerator != "" and cash_flow_coverage_denominator != "":
+                                            cash_flow_coverage_ratio = round(float(cash_flow_coverage_numerator) / float(cash_flow_coverage_denominator),2)
+                                            print("cash_flow_coverage_ratio check: ", cash_flow_coverage_ratio)
+
+                                            if "Cash Flow Coverage Ratio" not in key_metrics:
+                                                key_metrics["Cash Flow Coverage Ratio"] = {}
+                                                key_metrics["Cash Flow Coverage Ratio"][year] = cash_flow_coverage_ratio
+                                            else:
+                                                key_metrics["Cash Flow Coverage Ratio"][year] = cash_flow_coverage_ratio
+                                            if "Cash Flow Coverage Ratio" not in card_colors:
+                                                card_colors["Cash Flow Coverage Ratio"] = {}
+                                                if cash_flow_coverage_ratio < 1:
+                                                    card_colors["Cash Flow Coverage Ratio"][year] = "danger"
+                                                elif cash_flow_coverage_ratio > 1:
+                                                    card_colors["Cash Flow Coverage Ratio"][year] = "success"
+                                            else:
+                                                if cash_flow_coverage_ratio < 1:
+                                                    card_colors["Cash Flow Coverage Ratio"][year] = "danger"
+                                                elif cash_flow_coverage_ratio > 1:
+                                                    card_colors["Cash Flow Coverage Ratio"][year] = "success"                                            
+
+            print("key_metrics to check Cash Flow Coverage Ratio: ", key_metrics)
+
+
+            print("card colors for cash flow to net income: " , card_colors)
+
+            for financial_ratio in key_metrics:
+                for year_key in key_metrics[financial_ratio]:
+                    element = dbc.Card(
+                                dbc.CardBody([
+                                    html.P(str(year_key) + " " + str(financial_ratio)),
+                                    html.H4(str(key_metrics[financial_ratio][year_key]))
+                                ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True)
+                    financial_ratio_cards.append(dbc.Col(element))
+            return dbc.Container(dbc.Row(financial_ratio_cards))
+
+
 # Upload component:
 img_load = dcc.Upload(id='img-upload',
                         children=html.Div(['Drag and Drop or ', html.A('Select Image files')]),
@@ -633,6 +1156,10 @@ img_load = dcc.Upload(id='img-upload',
 img_table = dash_table.DataTable(editable=True,
                                 row_deletable=True,
                                 export_format='xlsx',
+                                # page_action='none',
+                                # fixed_rows={'headers': True},
+                                # style_table={'height': 500, 'overflowY': 'auto'},
+                                # style_header={'overflowY': 'auto'}
                                 id='img-viewer',
                                 row_selectable='multi', 
                                 selected_columns=[], 
@@ -704,6 +1231,7 @@ preview_image_card = dbc.Card([
         image
     ])
 ], style={"height":"100%"})
+# color='rgba(33, 175, 191, 0.7)', 
 
 image_output_table_card = dbc.Card([
     dbc.CardBody([
@@ -714,7 +1242,6 @@ image_output_table_card = dbc.Card([
                 ], style={'height': 50}),
         img_table,
         html.Button('Add Row', id='adding-rows-button', n_clicks=0),
-
         html.Button('Get Columns with Metrics!', id='spacy-button', n_clicks=0),
         html.Button('Deselect All', id='deselect-rows-button', n_clicks=0),
         html.Button('Extract Table', id='get-new-table-button', n_clicks=0),
@@ -769,6 +1296,16 @@ extracted_table_card = dbc.Card([
                 ], style={'height': 50}),
         extracted_table,
         html.Button('Add Row', id='adding-rows-button-new-table', n_clicks=0),
+
+        html.Br(), html.Br(),
+
+        html.Div([
+        html.H4('Financial Ratios'),
+        html.Button('Get Financial Ratios!', id='get-financial-ratios', n_clicks=0),
+        html.Br(), html.Br(),
+        html.Div(id='display-financial-ratio-img'),
+        html.Br(), html.Br()
+        ])
     ])
 ], style={"height":"100%"})
 

@@ -476,8 +476,6 @@ def shortlisted_financial_term_columns_for_user_selection(value, table_data, met
             # fill in the empty row cells with possible financial metrics
 
             if row_cell != "" and row_cell != None:
-                # print("row: ", row)
-                # print("row type", type(row))
                 tokenised_row_cell = row_cell.split(" ")
                 for token in tokenised_row_cell:
                     #remove special ch
