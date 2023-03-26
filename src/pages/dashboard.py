@@ -767,10 +767,29 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
             global_keymetrics[metric_name] = key_metrics[metric_name]
     print("line 746 triggered id", ctx.triggered_id)
     print("line 774 global_keymetrics", str(global_keymetrics))
+
+    # remove empty dictionary for ratio in global_keymetrics
+    # eg {'Gross Margin': {}, 'Operating Margin': {1: '15.05%', 2: '11.76%', 3: '9.25%', 4: '10.51%', 5: '7.8%', 6: '8.36%', 7: '8.06%', 8: '8.8%'}, '2xRevenue': {1: 264.4, 2: 546.0, 3: 1079.2, 4: 291.2, 5: 590.0, 6: 550.0, 7: 1240.0, 8: 1250.0}}
+    # remove gross margin ratio since its empty
+    metrics_to_remove = []
+    for k,v in global_keymetrics.items():
+        if v == {}:
+            metrics_to_remove.append(k)
+    for m in metrics_to_remove:
+        del global_keymetrics[m]
+    print("line 780 global_keymetrics", str(global_keymetrics))
+    
+    # thresholds to base on for gpt analysis
+    gpt_analysis_thresholds = {}
+    for k,v in key_metrics_thresholds.items():
+        if k in global_keymetrics.keys():
+            gpt_analysis_thresholds[k] = v
+    print("line 787 gpt_analysis_thresholds", str(gpt_analysis_thresholds))
+
     if gpt_n_clicks > 0 and global_keymetrics != {}:
         if 'gpt-button' == ctx.triggered_id['type']:
             response = openai.Completion.create(model="text-davinci-003", 
-                                        prompt="Provide a concise report that is only one paragraph long and discusses the positives and negatives of a company with the following financial statistics:(" + str(global_keymetrics) + ")  Your report should contain a single suggestion, but avoid explaining the financial terms and fillers. Do not refer to yourself as an individual.", 
+                                        prompt="Provide a concise report that is only one paragraph long and discusses the positives and negatives of a company with the following financial statistics:(" + str(global_keymetrics) + "). The financial statistics should be higher than their respective thresholds:(" + str(gpt_analysis_thresholds) + ") to be considered good perfomance. Your report should contain a single suggestion for improving performance, but avoid explaining the financial terms and fillers. Do not refer to yourself as an individual.", 
                                         temperature=0.9, 
                                         max_tokens=150)
             gpt_output = dbc.Alert(response["choices"][0]["text"], color="info", style={'display': 'inline-block'})
