@@ -738,7 +738,6 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
 
         key_metrics = {}  #{'Operating Margin': {'2020': 0.11, '2020': 0.1}, 'Gross Profit Margin': {'2021': 0.07, '2021': 0.06}}
         card_colors = {} #{'Operating Margin': {'2020': "Danger", '2020': "Danger"}, 'Gross Profit Margin': {'2021': "Success", '2021': "Success"}}
-        output_string = ""
         financial_ratio_cards = []
 
 
@@ -755,11 +754,13 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             revenue_row_op_position = ""
             operating_expenses_row_op_position = ""
             word_operating_profit_row_op_position = ""
+            gross_profit_position = ""
 
             cost_of_goods_sold_op = ""
             revenue_attained_op = ""
             operating_expenses = ""
             operating_profit = ""
+            gross_profit_attained = ""
 
 
             for s in range(len(table_data)):
@@ -768,20 +769,23 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                         for word_cost in ["cost of goods sold", "cost", "cost of good", "goods"]:
                             if word_cost in table_data[s]["0"].lower():
                                 cost_of_goods_sold_row_op_position = s
-                        for word_rev in ["revenue"]:
+                        for word_rev in ["revenue", "net income", "net sales", "rev"]:
                             if word_rev in table_data[s]["0"].lower():
                                 revenue_row_op_position = s
                         for word_opex in ["operating expense", "expense"]:
                             if word_opex in table_data[s]["0"].lower():
                                 operating_expenses_row_op_position  = s
-                        for word_operating_profit in ["operating profit"]:
+                        for word_operating_profit in ["operating profit", "operating income"]:
                             if word_operating_profit in table_data[s]["0"].lower():
                                 word_operating_profit_row_op_position = s
+                        for word_rev in ["gross profit"]:
+                            if word_rev in table_data[s]["0"].lower():
+                                gross_profit_position = s
 
 
             for m in range(len(table_data)):
                 a_dict = table_data[m]
-                if (cost_of_goods_sold_row_op_position != "" and revenue_row_op_position != "" and operating_expenses_row_op_position != "") or (word_operating_profit_row_op_position != "" and word_operating_profit_row_op_position != None):
+                if (cost_of_goods_sold_row_op_position != "" and revenue_row_op_position != "" and operating_expenses_row_op_position != "") or (word_operating_profit_row_op_position != "") or (gross_profit_position != "" and operating_expenses_row_op_position != ""):
                     if a_dict[value] != None:
                         for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
                             year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
@@ -794,7 +798,6 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                     revenue_attained_op = re.sub('[^0-9.]', '', revenue_attained_op)
                                     operating_expenses = list(table_data[operating_expenses_row_op_position].values())[t]
                                     operating_expenses = re.sub('[^0-9.]', '', operating_expenses)
-                                    # operating_margin_numerator = list(a_dict.values())[t]
                                     if cost_of_goods_sold_op != "" and  revenue_attained_op != "" and operating_expenses != "":
                                         operating_margin_numerator = round(float(revenue_attained_op) - float(cost_of_goods_sold_op) - float(operating_expenses),2)
                                         print("updated operating profit numerator first if", operating_margin_numerator)
@@ -805,11 +808,21 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                     if operating_profit != "":
                                         print("check this operating_profit : ", operating_profit)
                                         operating_margin_numerator = round(float(operating_profit),2)
-                                        print("updated numerator second elif", operating_margin_numerator)
+                                        print("updated numerator first elif", operating_margin_numerator)
+
+                                elif gross_profit_position != "" and operating_expenses_row_op_position != "":
+                                    gross_profit_attained = list(table_data[gross_profit_position].values())[t]
+                                    gross_profit_attained = re.sub('[^0-9.]', '', gross_profit_attained)
+                                    operating_expenses = list(table_data[operating_expenses_row_op_position].values())[t]
+                                    operating_expenses = re.sub('[^0-9.]', '', operating_expenses)
+                                    if gross_profit_attained != "" and operating_expenses != "":
+                                        operating_margin_numerator = round(float(gross_profit_attained) - float(operating_expenses),2)
+                                        print("updated operating profit numerator second elif ", operating_margin_numerator)
+                                
 
                                 for k in range(len(table_data)):
                                     if table_data[k][value] != None:
-                                        for word in ["revenue", "rev"]: 
+                                        for word in ["revenue", "net income", "net sales", "rev"]: 
                                             if word in table_data[k][value].lower():
                                                 print("gafa firee")
                                                 operating_margin_denominator = list(table_data[k].values())[t]
@@ -847,9 +860,11 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
 
             cost_of_goods_sold_row_position = ""
             revenue_row_position = ""
+            gross_profit_position = ""
 
             cost_of_goods_sold = ""
             revenue_attained = ""
+            gross_profit_attained = ""
 
             for s in range(len(table_data)):
                 for t in range(1, len(table_data[0])):
@@ -857,61 +872,80 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                         for word_cost in ["cost of goods sold", "cost", "cost of good", "goods"]:
                             if word_cost in table_data[s]["0"].lower():
                                 cost_of_goods_sold_row_position = s
-                        for word_rev in ["revenue"]:
+                        for word_rev in ["revenue", "net income", "net sales", "rev"]:
                             if word_rev in table_data[s]["0"].lower():
                                 revenue_row_position = s
+                        for word_rev in ["gross profit"]:
+                            if word_rev in table_data[s]["0"].lower():
+                                gross_profit_position = s
 
             
             for m in range(len(table_data)):
                 a_dict = table_data[m]
-                if cost_of_goods_sold_row_position != "" and revenue_row_position != "":
+                if (cost_of_goods_sold_row_position != "" and revenue_row_position != "") or gross_profit_position != "":
                     if a_dict[value] != None:
                         for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
                             year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
                             if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
-                                if cost_of_goods_sold_row_position != "" and revenue_row_position != "":
+
+
+                                if gross_profit_position != "":
+                                    gross_profit_attained = list(table_data[gross_profit_position].values())[t]
+                                    gross_profit_attained = re.sub('[^0-9.]', '', gross_profit_attained)
+                                    
+                                    if gross_profit_attained != "":
+                                        #gross_profit_margin_numerator = list(a_dict.values())[t]
+                                        gross_profit_margin_numerator = round(float(gross_profit_attained),2)
+                                        print("updated gross profit margin numerator if", gross_profit_margin_numerator)
+
+
+                                elif cost_of_goods_sold_row_position != "" and revenue_row_position != "":
 
                                     cost_of_goods_sold = list(table_data[cost_of_goods_sold_row_position].values())[t]
                                     cost_of_goods_sold = re.sub('[^0-9.]', '', cost_of_goods_sold)
+                                    print("cost_of_goods for operating_margin", cost_of_goods_sold)
                                     revenue_attained = list(table_data[revenue_row_position].values())[t]
                                     revenue_attained = re.sub('[^0-9.]', '', revenue_attained)
+                                    print("revenue_attained for operating_margin", revenue_attained)
 
                                     if revenue_attained != "" and cost_of_goods_sold != "":
                                         #gross_profit_margin_numerator = list(a_dict.values())[t]
                                         gross_profit_margin_numerator = round(float(revenue_attained) - float(cost_of_goods_sold),2)
-                                        print("updated gross profit margin numerator", gross_profit_margin_numerator)
+                                        print("updated gross profit margin numerator elif", gross_profit_margin_numerator)
 
-                                        for k in range(len(table_data)):
-                                            if table_data[k][value] != None:
-                                                for word in ["revenue", "rev"]: 
-                                                    if word in table_data[k][value].lower():
-                                                        print("gafa firee")
-                                                        gross_profit_margin_denominator = list(table_data[k].values())[t]
-                                                        gross_profit_margin_denominator = re.sub('[^0-9.]', '', gross_profit_margin_denominator)
-                                                        print("updated denominator", gross_profit_margin_denominator)
 
-                                                        if gross_profit_margin_numerator != "" and gross_profit_margin_numerator != None and gross_profit_margin_denominator != "" and gross_profit_margin_denominator != None: # need this line coz for income
-                                                                                                                                                                                #ratios we do subtraction in numerator. If there's "" or None cant compute so error
-                                                            gross_profit_margin = round((float(gross_profit_margin_numerator) / float(gross_profit_margin_denominator)) * 100,2)
-                                                            print("gross profit margin check: ", gross_profit_margin)
-                                                            if "Gross Margin" not in key_metrics:
-                                                                key_metrics["Gross Margin"] = {}
-                                                                string_gross_profit_margin = str(gross_profit_margin) + "%"
-                                                                key_metrics["Gross Margin"][year] = string_gross_profit_margin
-                                                            else:
-                                                                string_gross_profit_margin = str(gross_profit_margin) + "%"
-                                                                key_metrics["Gross Margin"][year] = string_gross_profit_margin 
-                                                            if "Gross Margin" not in card_colors:
-                                                                card_colors["Gross Margin"] = {}
-                                                                if gross_profit_margin < 50:
-                                                                    card_colors["Gross Margin"][year] = "danger"
-                                                                elif gross_profit_margin > 50:
-                                                                    card_colors["Gross Margin"][year] = "success"
-                                                            else:
-                                                                if gross_profit_margin < 50:
-                                                                    card_colors["Gross Margin"][year] = "danger"
-                                                                if gross_profit_margin > 50:
-                                                                    card_colors["Gross Margin"][year] = "success"                 
+
+                                for k in range(len(table_data)):
+                                    if table_data[k][value] != None:
+                                        for word in ["revenue", "net income", "net sales", "rev"]: 
+                                            if word in table_data[k][value].lower():
+                                                print("gafa firee")
+                                                gross_profit_margin_denominator = list(table_data[k].values())[t]
+                                                gross_profit_margin_denominator = re.sub('[^0-9.]', '', gross_profit_margin_denominator)
+                                                print("updated denominator", gross_profit_margin_denominator)
+
+                                                if gross_profit_margin_numerator != "" and gross_profit_margin_numerator != None and gross_profit_margin_denominator != "" and gross_profit_margin_denominator != None: # need this line coz for income
+                                                                                                                                                                        #ratios we do subtraction in numerator. If there's "" or None cant compute so error
+                                                    gross_profit_margin = round((float(gross_profit_margin_numerator) / float(gross_profit_margin_denominator)) * 100,2)
+                                                    print("gross profit margin check: ", gross_profit_margin)
+                                                    if "Gross Margin" not in key_metrics:
+                                                        key_metrics["Gross Margin"] = {}
+                                                        string_gross_profit_margin = str(gross_profit_margin) + "%"
+                                                        key_metrics["Gross Margin"][year] = string_gross_profit_margin
+                                                    else:
+                                                        string_gross_profit_margin = str(gross_profit_margin) + "%"
+                                                        key_metrics["Gross Margin"][year] = string_gross_profit_margin 
+                                                    if "Gross Margin" not in card_colors:
+                                                        card_colors["Gross Margin"] = {}
+                                                        if gross_profit_margin < 50:
+                                                            card_colors["Gross Margin"][year] = "danger"
+                                                        elif gross_profit_margin > 50:
+                                                            card_colors["Gross Margin"][year] = "success"
+                                                    else:
+                                                        if gross_profit_margin < 50:
+                                                            card_colors["Gross Margin"][year] = "danger"
+                                                        if gross_profit_margin > 50:
+                                                            card_colors["Gross Margin"][year] = "success"                 
 
         
             print("card colors for income statement: " , card_colors)
