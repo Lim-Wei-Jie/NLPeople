@@ -210,13 +210,13 @@ def display_pdf(contents, filename):
                 ]),
                 html.Br(), html.Br(),
                 dbc.Row([dbc.Card([dbc.CardBody([
-                    html.H3('Top 5 Positive Statement'),
+                    html.H3('Top 5 Positive Statements'),
                     table1,
                     html.Br(), html.Br(),
-                    html.H3('Top 5 Negative Statement'),
+                    html.H3('Top 5 Negative Statements'),
                     table2,
                     html.Br(), html.Br(),
-                    html.H3('Top 5 Neutral Statement'),
+                    html.H3('Top 5 Neutral Statements'),
                     table3
                 ])])
                 ])
