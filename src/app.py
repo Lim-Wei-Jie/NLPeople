@@ -11,7 +11,7 @@ server = app.server
 app.layout = html.Div(
     [
         # Framework of the main app
-        html.H1("Python Multipage App with Dash", style={'textAlign':'center'}),
+        html.H1("FinExtract", style={'textAlign':'center'}),
         html.Div([
             dcc.Link(page['name'] + "  |  ", href=page['path'])
             for page in dash.page_registry.values()

@@ -1320,9 +1320,11 @@ input_metric = dcc.Input(id='input-metric',
 
 financial_terms_list = dcc.Checklist(
                                 options=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev", "operation", "receivable"],
+                                "equity", "asset", "debt", "cash", "liability", "rev", "operation", "receivable",
+                                "expense", "income", "operating", "liabilities", "inventories", "cash flow"],
                                 value=["revenue", "cost", "gross", "profit", "loss", "net", "ebitda",
-                                "equity", "asset", "debt", "cash", "liability", "rev", "operation", "receivable"],
+                                "equity", "asset", "debt", "cash", "liability", "rev", "operation", "receivable",
+                                "expense", "income", "operating", "liabilities", "inventories", "cash flow"],
                                 id='financial-terms-list',
                                 inline=True
                             )
