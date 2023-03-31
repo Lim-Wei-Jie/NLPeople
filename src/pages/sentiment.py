@@ -173,7 +173,10 @@ def display_pdf(contents, filename):
             dff,
             values='score',
             names='label',
-            title="Scores of total Postive, Negative, Neutral sentences (in %)"
+            color='label',
+            title="Scores of total Postive, Negative, Neutral sentences (in %)",
+            # color_discrete_sequence={"green", "red", "blue"},
+            color_discrete_map={"Positive":"green", "Negative":"red", "Neutral":"blue"}
         )
 
         # create dashtable and bar chart

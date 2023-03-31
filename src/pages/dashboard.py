@@ -913,7 +913,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
     if gpt_n_clicks > 0 and global_keymetrics != {}:
         if 'gpt-button' == ctx.triggered_id['type']:
             response = openai.Completion.create(model="text-davinci-003", 
-                                        prompt="Provide a concise report that is only one paragraph long and discusses the positives and negatives of a company with the following financial statistics:(" + str(global_keymetrics) + "). The financial statistics should be higher than their respective thresholds:(" + str(gpt_analysis_thresholds) + ") to be considered good perfomance. Your report should contain a single suggestion for improving performance, but avoid explaining the financial terms and fillers. Do not refer to yourself as an individual.", 
+                                        prompt="Provide a concise report that is only one paragraph long and discusses the positives and negatives of a company with the following financial statistics:(" + str(global_keymetrics) + "). The financial statistics should be higher than their respective thresholds:(" + str(gpt_analysis_thresholds) + ") to be considered good perfomance. Your report should contain suggestions for improving performance and provide insights, but avoid explaining the financial terms and fillers. Do not describe the data. Do not refer to yourself as an individual.", 
                                         temperature=0.9, 
                                         max_tokens=150)
             gpt_output = dbc.Alert(response["choices"][0]["text"], color="info", style={'display': 'inline-block'})
