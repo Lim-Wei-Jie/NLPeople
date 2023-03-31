@@ -12,6 +12,7 @@ import dash_bootstrap_components as dbc
 
 import math
 import re
+import numpy as np
 
 import openai
 openai.api_key = "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"
@@ -83,19 +84,78 @@ def update_output(contents, filename, date, children):
 
                 # df.fillna("0")
 
-                # if cash flow statement, user needs to add in additional metrics from elsewhere to calculate ratios
                 it_is_a = ''
-                all_metrics = " ".join(list(df.columns.values))
-                if 'assets' in all_metrics.lower() and 'liabilities' in all_metrics.lower() and 'equity' in all_metrics.lower():
-                    it_is_a = 'balance sheet'
-                elif 'cash flow' in all_metrics.lower():
-                    it_is_a = 'cash flow statement'
-                    if "current liabilities" not in all_metrics.lower():
-                        df['current liabilities'] = ""
-                    if "total liabilities" not in all_metrics.lower():
-                        df['total liabilities'] = ""
+                all_metrics = list(df.columns.values)
+                ########
+                financial_data_type_list = [ { "revenue": 1, "operating profit": 2, "gross profit": 1, "earnings per share": 2, "owners of the parent": 1, "cost of": 1,
+                        "other income": 1, "controlling interest": 1, "net income": 1, "interest expense": 1, "per common share": 2, "per share": 1,
+                        "tax expense": 1, "sales": 1 }, # dictionary for words from income statements
+
+                    { "current assets": 2, "fixed assets": 2, "total assets": 2, "inventory": 1, "inventories": 1, "liabilities": 1, "current liabilities": 3,
+                        "taxes payable": 1, "long-term debt": 3, "total current liabilities": 3, "equity": 1, "shareholders' equity": 2, "common shares": 2,
+                        "common stock": 2 }, # dictionary for words from balance sheets
+                    
+                    { "cash flow from operating activities": 10, "cash flow from investing activities": 10, "cash flow from financing activities": 10,
+                        "cash flows from operating activities": 15, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
+                        "cash flow from": 10, "cash flows from": 10} ] # dictionary for words from cash flow statements
+                    
+                income_total_weight = 0
+                balance_total_weight = 0
+                cash_total_weight = 0
+                it_is_a = ""
+
+                collect_lowered_fin_terms_from_col = []
+                print("line 306 collect_lowered_fin_terms_from_col", collect_lowered_fin_terms_from_col)
+                for m in all_metrics:
+                    collect_lowered_fin_terms_from_col.append(m.lower())
+                print("collect_lowered_fin_terms_from_col: ", collect_lowered_fin_terms_from_col)
+
+                for fin_data_type_dict in financial_data_type_list:
+                    if financial_data_type_list[0] == fin_data_type_dict:
+                        for income_key in fin_data_type_dict:
+                            for collected_term in collect_lowered_fin_terms_from_col:
+                                if income_key in collected_term:
+                                    income_total_weight += fin_data_type_dict[income_key]
+                                    print("added income key: ", income_key)
+
+                    if financial_data_type_list[1] == fin_data_type_dict:
+                        for balance_key in fin_data_type_dict:
+                            for collected_term in collect_lowered_fin_terms_from_col:
+                                if balance_key in collected_term:
+                                    balance_total_weight += fin_data_type_dict[balance_key]
+                                    print("added balance key: ", balance_key)
+
+
+                    if financial_data_type_list[2] == fin_data_type_dict:
+                        for cash_key in fin_data_type_dict:
+                            for collected_term in collect_lowered_fin_terms_from_col:
+                                if cash_key in collected_term:
+                                    cash_total_weight += fin_data_type_dict[cash_key]
+                                    print("added cash key: ", cash_key)
+
+                list_of_weights = [income_total_weight, balance_total_weight, cash_total_weight]
+
+                print("list_of_weights: ", list_of_weights)
+                max_value = max(list_of_weights)
+                index = list_of_weights.index(max_value)
+
+                if index == 0:
+                    it_is_a = "income statement"
+                    print("financial data type is income statement")
+                elif index == 1:
+                    it_is_a = "balance sheet"
+                    print("financial data type is balance sheet")
                 else:
-                    it_is_a = 'income statement'
+                    it_is_a = "cash flow statement"
+                    print("financial data type is cash flow statement")
+
+                #######
+                # if cash flow statement, user needs to add in additional metrics from elsewhere to calculate ratios
+                if it_is_a == 'cash flow statement':
+                    if "current liabilities" not in collect_lowered_fin_terms_from_col:
+                        df['current liabilities'] = np.nan
+                    if "total liabilities" not in collect_lowered_fin_terms_from_col:
+                        df['total liabilities'] = np.nan
 
                 # Create the tables and empty graphs
                 children.append(
@@ -233,6 +293,8 @@ def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
     if filtered_data is not None:
         dff = pd.DataFrame(all_data)
         dff = dff[dff.index.isin(filtered_data)].fillna(0)
+        dff.replace(r'\D+','', regex=True, inplace=True)
+        dff = dff.astype(float)
         print("dff", dff)
 
         if selected_col[0] == dff.columns[0]:
@@ -273,15 +335,75 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
     df = pd.DataFrame(all_data)
     df = df.fillna(0)
     it_is_a = ''
-    all_metrics = " ".join(list(df.columns.values))
+    all_metrics = list(df.columns.values)
+    print("line 279", all_metrics)
     text = []
-    if 'assets' in all_metrics.lower() and 'liabilities' in all_metrics.lower() and 'equity' in all_metrics.lower():
-        it_is_a = 'balance sheet'
-    elif 'cash flow' in all_metrics.lower():
-        it_is_a = 'cash flow statement'
-    else:
-        it_is_a = 'income statement'
     
+    ####################
+    financial_data_type_list = [ { "revenue": 1, "operating profit": 2, "gross profit": 1, "earnings per share": 2, "owners of the parent": 1, "cost of": 1,
+            "other income": 1, "controlling interest": 1, "net income": 1, "interest expense": 1, "per common share": 2, "per share": 1,
+            "tax expense": 1, "sales": 1 }, # dictionary for words from income statements
+
+        { "current assets": 2, "fixed assets": 2, "total assets": 2, "inventory": 1, "inventories": 1, "liabilities": 1, "current liabilities": 3,
+            "taxes payable": 1, "long-term debt": 3, "total current liabilities": 3, "equity": 1, "shareholders' equity": 2, "common shares": 2,
+            "common stock": 2 }, # dictionary for words from balance sheets
+        
+        { "cash flow from operating activities": 10, "cash flow from investing activities": 10, "cash flow from financing activities": 10,
+            "cash flows from operating activities": 15, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
+            "cash flow from": 10, "cash flows from": 10} ] # dictionary for words from cash flow statements
+        
+    income_total_weight = 0
+    balance_total_weight = 0
+    cash_total_weight = 0
+    it_is_a = ""
+
+    collect_lowered_fin_terms_from_col = []
+    print("line 306 collect_lowered_fin_terms_from_col", collect_lowered_fin_terms_from_col)
+    for m in all_metrics:
+        collect_lowered_fin_terms_from_col.append(m.lower())
+    print("collect_lowered_fin_terms_from_col: ", collect_lowered_fin_terms_from_col)
+
+    for fin_data_type_dict in financial_data_type_list:
+        if financial_data_type_list[0] == fin_data_type_dict:
+            for income_key in fin_data_type_dict:
+                for collected_term in collect_lowered_fin_terms_from_col:
+                    if income_key in collected_term:
+                        income_total_weight += fin_data_type_dict[income_key]
+                        print("added income key: ", income_key)
+
+        if financial_data_type_list[1] == fin_data_type_dict:
+            for balance_key in fin_data_type_dict:
+                for collected_term in collect_lowered_fin_terms_from_col:
+                    if balance_key in collected_term:
+                        balance_total_weight += fin_data_type_dict[balance_key]
+                        print("added balance key: ", balance_key)
+
+
+        if financial_data_type_list[2] == fin_data_type_dict:
+            for cash_key in fin_data_type_dict:
+                for collected_term in collect_lowered_fin_terms_from_col:
+                    if cash_key in collected_term:
+                        cash_total_weight += fin_data_type_dict[cash_key]
+                        print("added cash key: ", cash_key)
+
+    list_of_weights = [income_total_weight, balance_total_weight, cash_total_weight]
+
+    print("list_of_weights: ", list_of_weights)
+    max_value = max(list_of_weights)
+    index = list_of_weights.index(max_value)
+
+    if index == 0:
+        it_is_a = "income statement"
+        print("financial data type is income statement")
+    elif index == 1:
+        it_is_a = "balance sheet"
+        print("financial data type is balance sheet")
+    else:
+        it_is_a = "cash flow statement"
+        print("financial data type is cash flow statement")
+
+    #######
+
     print("it is a", it_is_a)
 
     # this is for user to know the metrics needed to calculate the financial ratios 
@@ -338,19 +460,19 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
 
         for y in df.iloc[:, 0].tolist():
             if y in revenue and y in cost_of_goods_sold:
-                gross_profit[y] = float(revenue[y]) - float(cost_of_goods_sold[y])
+                gross_profit[y] = float(re.sub("[^0-9.]", "", str(revenue[y]))) - float(re.sub("[^0-9.]", "", str(cost_of_goods_sold[y])))
             if y in gross_profit and y in revenue:
                 if revenue[y] == 0:
                     gross_margin[y] = 0
                 else:
-                    gross_margin[y] = str(round(float(gross_profit[y]) / float(revenue[y]) * 100, 2)) + "%"
+                    gross_margin[y] = str(round(float(re.sub("[^0-9.]", "", str(gross_profit[y]))) / float(re.sub("[^0-9.]", "", str(revenue[y]))) * 100, 2)) + "%"
             if y in gross_profit and y in operating_expenses:
-                operating_income[y] = float(gross_profit[y]) - float(operating_expenses[y])
+                operating_income[y] = float(re.sub("[^0-9.]", "", str(gross_profit[y]))) - float(re.sub("[^0-9.]", "", str(operating_expenses[y])))
             if y in operating_income and y in revenue:
                 if revenue[y] == 0:
                     gross_margin[y] = 0
                 else:
-                    operating_margin[y] = str(round(float(operating_income[y]) / float(revenue[y])*100, 2)) + "%"
+                    operating_margin[y] = str(round(float(re.sub("[^0-9.]", "", str(operating_income[y]))) / float(re.sub("[^0-9.]", "", str(revenue[y])))*100, 2)) + "%"
 
         # key_metrics['Gross Profit'] = gross_profit
         key_metrics['Gross Margin'] = gross_margin
@@ -391,13 +513,13 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
             if y in current_assets and y in current_liabilities:
                 if current_liabilities[y] == 0:
                     current_ratio[y] = 0
-                else:
-                    current_ratio[y] = round(float(current_assets[y]) / float(current_liabilities[y]), 2)
+                else: 
+                    current_ratio[y] = round(float(re.sub("[^0-9.]", "", str(current_assets[y]))) / float(re.sub("[^0-9.]", "", str(current_liabilities[y]))), 2)
             if y in current_assets and y in current_liabilities and y in inventories:
                 if current_liabilities[y] == 0:
                     quick_ratio[y] = 0
                 else:
-                    quick_ratio[y] = round((float(current_assets[y]) - float(inventories[y])) / float(current_liabilities[y]), 2)
+                    quick_ratio[y] = round((float(re.sub("[^0-9.]", "", str(current_assets[y]))) - float(re.sub("[^0-9.]", "", str(inventories[y])))) / float(re.sub("[^0-9.]", "", str(current_liabilities[y]))), 2)
 
         key_metrics['Current Ratio'] = current_ratio
         key_metrics['Quick Ratio'] = quick_ratio
@@ -456,9 +578,11 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
         # to calc cash flow coverage ratio we need total liabilities
         print("current liabilities", current_liabilities)
         print("total liabilities", total_liabilities)
-        if len(current_liabilities) != len(df[df.columns[0]]):
+        # if len(current_liabilities) != len(df[df.columns[0]]):
+        if (df['current liabilities'] == 0).any():
             text.append(dbc.Alert("Enter current liabilities to calculate Operating Cash Flow Ratio.", color="primary"))
-        if len(total_liabilities) != len(df[df.columns[0]]):
+        # if len(total_liabilities) != len(df[df.columns[0]]):
+        if (df['total liabilities'] == 0).any():
             text.append(dbc.Alert("Enter total liabilities to calculate Cash Flow Coverage Ratio.", color="primary"))
         
         for y in df.iloc[:, 0].tolist():
@@ -466,12 +590,12 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                 if total_liabilities[y] == 0:
                     cash_flow_coverage_ratio[y] = 0
                 else:
-                    cash_flow_coverage_ratio[y] = round(float(cash_flow_from_operations[y]) / float(total_liabilities[y]), 2)
+                    cash_flow_coverage_ratio[y] = round(float(re.sub("[^0-9.]", "", str(cash_flow_from_operations[y]))) / float(re.sub("[^0-9.]", "", str(total_liabilities[y]))), 2)
             if y in cash_flow_from_operations and y in current_liabilities:
                 if current_liabilities[y] == 0:
                     operating_cash_flow_ratio[y] = 0
                 else:
-                    operating_cash_flow_ratio[y] = round(float(cash_flow_from_operations[y]) / float(current_liabilities[y]), 2)
+                    operating_cash_flow_ratio[y] = round(float(re.sub("[^0-9.]", "", str(cash_flow_from_operations[y]))) / float(re.sub("[^0-9.]", "", str(current_liabilities[y]))), 2)
 
         key_metrics['Operating Cash Flow Ratio'] = operating_cash_flow_ratio
         key_metrics['Cash Flow Coverage Ratio'] = cash_flow_coverage_ratio
@@ -650,7 +774,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                             print(list(df.columns.values))
                             print(df.iloc[j])
                             if column_1 in list(df.columns.values):
-                                column_1_val = float(df.iloc[j][column_1])
+                                column_1_val = float(re.sub("[^0-9.]", "", str(df.iloc[j][column_1])))
                             elif column_1 not in list(df.columns.values) and column_1 in key_metrics.keys():
                                 print("line 621 values", list(key_metrics[column_1].values()))
                                 column_1_val = float(re.sub("[^0-9.]", "", str(list(key_metrics[column_1].values())[j])))
@@ -658,7 +782,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                                 add_calculations_warning_note = dbc.Alert("Check if Column name exists or is spelled correctly", color="warning", style={'display': 'inline-block'})
                                 break
                             if column_2 in list(df.columns.values):
-                                column_2_val = float(df.iloc[j][column_2])
+                                column_2_val = float(re.sub("[^0-9.]", "", str(df.iloc[j][column_2])))
                             elif column_2 not in list(df.columns.values) and column_2 in key_metrics.keys():
                                 column_2_val = float(re.sub("[^0-9.]", "", str(list(key_metrics[column_2].values())[j])))
                             else:
