@@ -84,8 +84,14 @@ def update_output(contents, filename, date, children):
 
                 # df.fillna("0")
 
+                new_columns = []
+                for c in df.columns.tolist():
+                    new_columns.append(" ".join(c.split("\n")))
+                df.set_axis(new_columns, axis=1, inplace=True)
+
                 it_is_a = ''
                 all_metrics = list(df.columns.values)
+                print("line 94 all_metrics", all_metrics)
                 ########
                 financial_data_type_list = [ { "revenue": 1, "operating profit": 2, "gross profit": 1, "earnings per share": 2, "owners of the parent": 1, "cost of": 1,
                         "other income": 1, "controlling interest": 1, "net income": 1, "interest expense": 1, "per common share": 2, "per share": 1,
@@ -293,10 +299,18 @@ def create_graphs(filtered_data, selected_col, all_data, type_of_graph):
     if filtered_data is not None:
         dff = pd.DataFrame(all_data)
         dff = dff[dff.index.isin(filtered_data)].fillna(0)
-        dff.replace(r'\D+','', regex=True, inplace=True)
+        dff.replace(r'[^0-9.-]','', regex=True, inplace=True)
+        print("line 297:", dff.columns.tolist())
+        new_columns = []
+        for c in dff.columns.tolist():
+            new_columns.append(" ".join(c.split("\n")))
+        print("line 305 new columns:", new_columns)
+        dff.set_axis(new_columns, axis=1, inplace=True)
+        print("line 306:", dff.columns.tolist())
         dff = dff.astype(float)
         print("dff", dff)
 
+        print("line 307 selected col", selected_col[0])
         if selected_col[0] == dff.columns[0]:
             return no_update
         else:
@@ -490,7 +504,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
         current_liabilities = {}
         inventories = {}
         for h in list(df.columns.values)[1:]:
-            if 'current assets' == h.lower().strip() or 'total current assets' == h.lower().strip():
+            if 'current assets' in h.lower().strip() or 'total current assets' in h.lower().strip():
                 for i in range(len(df[h].tolist())): 
                     if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         current_assets[df[df.columns[0]][i]] = 0
@@ -540,25 +554,25 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
         print("CASH FLOW DF", df)
 
         for h in list(df.columns.values)[1:]:
-            if 'cash flow from operating activities' == h.lower().strip() or 'cash flow from operations' == h.lower().strip() or 'operating cash flow' == h.lower().strip():
+            if 'cash flow from operating activities' in h.lower().strip() or 'cash flow from operations' in h.lower().strip() or 'operating cash flow' in h.lower().strip() or 'cash flows from operating activities' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
                     if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         cash_flow_from_operations[df[df.columns[0]][i]] = 0
                     else:
                         cash_flow_from_operations[df[df.columns[0]][i]] = df[h].tolist()[i]
-            elif 'cash flow from investing activities' == h.lower().strip() or 'cash flow from investing' == h.lower().strip() or 'cash flow from investment' == h.lower().strip():
+            elif 'cash flow from investing activities' in h.lower().strip() or 'cash flow from investing' in h.lower().strip() or 'cash flow from investment' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
                     if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         cash_flow_from_investing[df[df.columns[0]][i]] = 0
                     else:
                         cash_flow_from_investing[df[df.columns[0]][i]] = df[h].tolist()[i]
-            elif 'cash flow from financing activities' == h.lower().strip() or 'cash flow from financing' == h.lower().strip():
+            elif 'cash flow from financing activities' in h.lower().strip() or 'cash flow from financing' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
                     if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         cash_flow_from_financing[df[df.columns[0]][i]] = 0
                     else:
                         cash_flow_from_financing[df[df.columns[0]][i]] = df[h].tolist()[i]
-            elif 'current liabilities' == h.lower().strip():
+            elif 'current liabilities' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
                     if df[h].tolist()[i] == "":
                         continue
@@ -566,7 +580,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                         current_liabilities[df[df.columns[0]][i]] = 0
                     else:
                         current_liabilities[df[df.columns[0]][i]] = df[h].tolist()[i]
-            elif 'total liabilities' == h.lower().strip():
+            elif 'total liabilities' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
                     if df[h].tolist()[i] == "":
                         continue 
@@ -674,7 +688,12 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
             color = "success"
             inverse = True
             if len(df.iloc[:, 0].tolist()) > 0 and i>0:
-                if str(list(key_metrics[metric_name].values())[i]) < str(list(key_metrics[metric_name].values())[i-1]):
+                if metric_name == "Gross Margin" or metric_name == "Operating Margin":
+                    if float(str(list(key_metrics[metric_name].values())[i])[:-1]) < float(str(list(key_metrics[metric_name].values())[i-1])[:-1]):
+                        color = "warning"
+                        inverse = False
+                
+                elif float(str(list(key_metrics[metric_name].values())[i])) < float(str(list(key_metrics[metric_name].values())[i-1])):
                     color = "warning"
                     inverse = False
 
@@ -844,7 +863,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                     color = "success"
                     inverse = True
                     if i>0:
-                        if str(list(key_metrics[metric_name].values())[i]) < str(list(key_metrics[metric_name].values())[i-1]):
+                        if float(str(list(key_metrics[metric_name].values())[i])) < float(str(list(key_metrics[metric_name].values())[i-1])):
                             color = "warning"
                             inverse = False
                     if float(list(key_metrics[metric_name].values())[i]) < float(threshold_df.iloc[0][metric_name]):
