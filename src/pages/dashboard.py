@@ -425,32 +425,32 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
         for h in list(df.columns.values)[1:]: # list of column names except first column
             if 'revenue' in h.lower().strip() or 'net sales' in h.lower().strip(): # if column is about revenue
                 for i in range(len(df[h].tolist())): # for each year store the value in a dictionary
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None: # convert 100% to 100 or 14,316 to 14316
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None: # convert 100% to 100 or 14,316 to 14316
                     # if math.isnan(float(df[h].tolist()[i])) or df[h].tolist()[i] is None:
                         revenue[df[df.columns[0]][i]] = 0
                     else:
                         revenue[df[df.columns[0]][i]] = df[h].tolist()[i]
             elif 'cost of goods sold' in h.lower().strip() or 'cost of revenue' in h.lower().strip() or 'cost of goods' in h.lower().strip() or 'cogs' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         cost_of_goods_sold[df[df.columns[0]][i]] = 0
                     else:
                         cost_of_goods_sold[df[df.columns[0]][i]] = df[h].tolist()[i]
             elif 'operating expenses' in h.lower().strip() or 'operating expense' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         operating_expenses[df[df.columns[0]][i]] = 0
                     else:
                         operating_expenses[df[df.columns[0]][i]] = df[h].tolist()[i]
             elif 'gross profit' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         gross_profit[df[df.columns[0]][i]] = 0
                     else:
                         gross_profit[df[df.columns[0]][i]] = df[h].tolist()[i]
             elif 'operating profit' in h.lower().strip() or 'operating income' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         operating_income[df[df.columns[0]][i]] = 0
                     else:
                         operating_income[df[df.columns[0]][i]] = df[h].tolist()[i]
@@ -460,19 +460,19 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
 
         for y in df.iloc[:, 0].tolist():
             if y in revenue and y in cost_of_goods_sold:
-                gross_profit[y] = float(re.sub("[^0-9.]", "", str(revenue[y]))) - float(re.sub("[^0-9.]", "", str(cost_of_goods_sold[y])))
+                gross_profit[y] = float(re.sub("[^0-9.-]", "", str(revenue[y]))) - float(re.sub("[^0-9.-]", "", str(cost_of_goods_sold[y])))
             if y in gross_profit and y in revenue:
                 if revenue[y] == 0:
                     gross_margin[y] = 0
                 else:
-                    gross_margin[y] = str(round(float(re.sub("[^0-9.]", "", str(gross_profit[y]))) / float(re.sub("[^0-9.]", "", str(revenue[y]))) * 100, 2)) + "%"
+                    gross_margin[y] = str(round(float(re.sub("[^0-9.-]", "", str(gross_profit[y]))) / float(re.sub("[^0-9.-]", "", str(revenue[y]))) * 100, 2)) + "%"
             if y in gross_profit and y in operating_expenses:
-                operating_income[y] = float(re.sub("[^0-9.]", "", str(gross_profit[y]))) - float(re.sub("[^0-9.]", "", str(operating_expenses[y])))
+                operating_income[y] = float(re.sub("[^0-9.-]", "", str(gross_profit[y]))) - float(re.sub("[^0-9.-]", "", str(operating_expenses[y])))
             if y in operating_income and y in revenue:
                 if revenue[y] == 0:
                     gross_margin[y] = 0
                 else:
-                    operating_margin[y] = str(round(float(re.sub("[^0-9.]", "", str(operating_income[y]))) / float(re.sub("[^0-9.]", "", str(revenue[y])))*100, 2)) + "%"
+                    operating_margin[y] = str(round(float(re.sub("[^0-9.-]", "", str(operating_income[y]))) / float(re.sub("[^0-9.-]", "", str(revenue[y])))*100, 2)) + "%"
 
         # key_metrics['Gross Profit'] = gross_profit
         key_metrics['Gross Margin'] = gross_margin
@@ -492,19 +492,19 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
         for h in list(df.columns.values)[1:]:
             if 'current assets' == h.lower().strip() or 'total current assets' == h.lower().strip():
                 for i in range(len(df[h].tolist())): 
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         current_assets[df[df.columns[0]][i]] = 0
                     else:
                         current_assets[df[df.columns[0]][i]] = df[h].tolist()[i]
             elif 'current liabilities' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         current_liabilities[df[df.columns[0]][i]] = 0
                     else:
                         current_liabilities[df[df.columns[0]][i]] = df[h].tolist()[i]
             elif 'inventories' in h.lower().strip():
                 for i in range(len(df[h].tolist())):
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         inventories[df[df.columns[0]][i]] = 0
                     else:
                         inventories[df[df.columns[0]][i]] = df[h].tolist()[i]
@@ -514,12 +514,12 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                 if current_liabilities[y] == 0:
                     current_ratio[y] = 0
                 else: 
-                    current_ratio[y] = round(float(re.sub("[^0-9.]", "", str(current_assets[y]))) / float(re.sub("[^0-9.]", "", str(current_liabilities[y]))), 2)
+                    current_ratio[y] = round(float(re.sub("[^0-9.-]", "", str(current_assets[y]))) / float(re.sub("[^0-9.-]", "", str(current_liabilities[y]))), 2)
             if y in current_assets and y in current_liabilities and y in inventories:
                 if current_liabilities[y] == 0:
                     quick_ratio[y] = 0
                 else:
-                    quick_ratio[y] = round((float(re.sub("[^0-9.]", "", str(current_assets[y]))) - float(re.sub("[^0-9.]", "", str(inventories[y])))) / float(re.sub("[^0-9.]", "", str(current_liabilities[y]))), 2)
+                    quick_ratio[y] = round((float(re.sub("[^0-9.-]", "", str(current_assets[y]))) - float(re.sub("[^0-9.-]", "", str(inventories[y])))) / float(re.sub("[^0-9.-]", "", str(current_liabilities[y]))), 2)
 
         key_metrics['Current Ratio'] = current_ratio
         key_metrics['Quick Ratio'] = quick_ratio
@@ -542,19 +542,19 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
         for h in list(df.columns.values)[1:]:
             if 'cash flow from operating activities' == h.lower().strip() or 'cash flow from operations' == h.lower().strip() or 'operating cash flow' == h.lower().strip():
                 for i in range(len(df[h].tolist())):
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         cash_flow_from_operations[df[df.columns[0]][i]] = 0
                     else:
                         cash_flow_from_operations[df[df.columns[0]][i]] = df[h].tolist()[i]
             elif 'cash flow from investing activities' == h.lower().strip() or 'cash flow from investing' == h.lower().strip() or 'cash flow from investment' == h.lower().strip():
                 for i in range(len(df[h].tolist())):
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         cash_flow_from_investing[df[df.columns[0]][i]] = 0
                     else:
                         cash_flow_from_investing[df[df.columns[0]][i]] = df[h].tolist()[i]
             elif 'cash flow from financing activities' == h.lower().strip() or 'cash flow from financing' == h.lower().strip():
                 for i in range(len(df[h].tolist())):
-                    if math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    if math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         cash_flow_from_financing[df[df.columns[0]][i]] = 0
                     else:
                         cash_flow_from_financing[df[df.columns[0]][i]] = df[h].tolist()[i]
@@ -562,7 +562,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                 for i in range(len(df[h].tolist())):
                     if df[h].tolist()[i] == "":
                         continue
-                    elif math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    elif math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         current_liabilities[df[df.columns[0]][i]] = 0
                     else:
                         current_liabilities[df[df.columns[0]][i]] = df[h].tolist()[i]
@@ -570,7 +570,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                 for i in range(len(df[h].tolist())):
                     if df[h].tolist()[i] == "":
                         continue 
-                    elif math.isnan(float(re.sub("[^0-9.]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
+                    elif math.isnan(float(re.sub("[^0-9.-]", "", str(df[h].tolist()[i])))) or df[h].tolist()[i] is None:
                         total_liabilities[df[df.columns[0]][i]] = 0
                     else:
                         total_liabilities[df[df.columns[0]][i]] = df[h].tolist()[i]
@@ -590,12 +590,12 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                 if total_liabilities[y] == 0:
                     cash_flow_coverage_ratio[y] = 0
                 else:
-                    cash_flow_coverage_ratio[y] = round(float(re.sub("[^0-9.]", "", str(cash_flow_from_operations[y]))) / float(re.sub("[^0-9.]", "", str(total_liabilities[y]))), 2)
+                    cash_flow_coverage_ratio[y] = round(float(re.sub("[^0-9.-]", "", str(cash_flow_from_operations[y]))) / float(re.sub("[^0-9.-]", "", str(total_liabilities[y]))), 2)
             if y in cash_flow_from_operations and y in current_liabilities:
                 if current_liabilities[y] == 0:
                     operating_cash_flow_ratio[y] = 0
                 else:
-                    operating_cash_flow_ratio[y] = round(float(re.sub("[^0-9.]", "", str(cash_flow_from_operations[y]))) / float(re.sub("[^0-9.]", "", str(current_liabilities[y]))), 2)
+                    operating_cash_flow_ratio[y] = round(float(re.sub("[^0-9.-]", "", str(cash_flow_from_operations[y]))) / float(re.sub("[^0-9.-]", "", str(current_liabilities[y]))), 2)
 
         key_metrics['Operating Cash Flow Ratio'] = operating_cash_flow_ratio
         key_metrics['Cash Flow Coverage Ratio'] = cash_flow_coverage_ratio
@@ -774,17 +774,17 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                             print(list(df.columns.values))
                             print(df.iloc[j])
                             if column_1 in list(df.columns.values):
-                                column_1_val = float(re.sub("[^0-9.]", "", str(df.iloc[j][column_1])))
+                                column_1_val = float(re.sub("[^0-9.-]", "", str(df.iloc[j][column_1])))
                             elif column_1 not in list(df.columns.values) and column_1 in key_metrics.keys():
                                 print("line 621 values", list(key_metrics[column_1].values()))
-                                column_1_val = float(re.sub("[^0-9.]", "", str(list(key_metrics[column_1].values())[j])))
+                                column_1_val = float(re.sub("[^0-9.-]", "", str(list(key_metrics[column_1].values())[j])))
                             else:
                                 add_calculations_warning_note = dbc.Alert("Check if Column name exists or is spelled correctly", color="warning", style={'display': 'inline-block'})
                                 break
                             if column_2 in list(df.columns.values):
-                                column_2_val = float(re.sub("[^0-9.]", "", str(df.iloc[j][column_2])))
+                                column_2_val = float(re.sub("[^0-9.-]", "", str(df.iloc[j][column_2])))
                             elif column_2 not in list(df.columns.values) and column_2 in key_metrics.keys():
-                                column_2_val = float(re.sub("[^0-9.]", "", str(list(key_metrics[column_2].values())[j])))
+                                column_2_val = float(re.sub("[^0-9.-]", "", str(list(key_metrics[column_2].values())[j])))
                             else:
                                 add_calculations_warning_note = dbc.Alert("Check if Column name exists or is spelled correctly", color="warning", style={'display': 'inline-block'})
                                 break
