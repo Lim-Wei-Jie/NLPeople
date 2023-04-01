@@ -664,7 +664,7 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
 
     # list of the ratios predefined by the app
     app_calculated_ratios = []
-    app_calculated_ratios.append(html.P("App calculated ratios for " + it_is_a + " are:"))
+    app_calculated_ratios.append(html.P("Here are some financial ratios generated for " + it_is_a + ":"))
     for ratio_name, metrics_needed in required_metrics_for_ratio.items():
         app_calculated_ratios.append(dbc.Badge([html.Span(str(ratio_name), id='tooltip-calc-ratio' + str(ratio_name) + str(all_data), style={"textDecoration": "underline", "cursor": "pointer"}),
                                         dbc.Tooltip("Metrics needed for calculation: " + ", ".join(metrics_needed), target="tooltip-calc-ratio" + str(ratio_name) + str(all_data))], color="white", text_color="dark", className="border me-1")
