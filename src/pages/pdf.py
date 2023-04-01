@@ -591,7 +591,8 @@ def update_line(all_rows_data, slctd_row_indices, active_cell):
                 #     metrics.append(dff[i][0])
                 # print("metrics: ", metrics)
                 # print("metrics[row] ", metrics[row])
-
+                print("new_df_check line 594: ", new_df)
+                new_df.replace(r'[^0-9.-]','', regex=True, inplace=True)
                 return [
                     dcc.Graph(id='graph',
                                 figure=px.line(
@@ -867,18 +868,18 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                                     card_colors["Operating Margin"] = {}
                                                                     if operating_margin < 20:
                                                                         card_colors["Operating Margin"][year] = "danger"
-                                                                    elif operating_margin > 20:
+                                                                    elif operating_margin >= 20:
                                                                         card_colors["Operating Margin"][year] = "success"
                                                                 else:
                                                                     if operating_margin < 20:
                                                                         card_colors["Operating Margin"][year] = "danger"
-                                                                    if operating_margin > 20:
+                                                                    if operating_margin >= 20:
                                                                         card_colors["Operating Margin"][year] = "success"
                                                                     #{'Operating Margin': {'2020': "Danger", '2021': "Danger"}, 'Gross Profit Margin': {'2020': "Success", '2021': "Success"}}
                                                                 
                                                                         for i in range(len(key_metrics["Operating Margin"])):
                                                                             if i != 0:
-                                                                                if card_colors["Operating Margin"][year] == "success":
+                                                                                if float(str(list(key_metrics["Operating Margin"].values())[i])[:-1]) >= 20:
                                                                                     if float(str(list(key_metrics["Operating Margin"].values())[i])[:-1]) < float(str(list(key_metrics["Operating Margin"].values())[i-1])[:-1]):
                                                                                         print("current operating margin: ", str(list(key_metrics["Operating Margin"].values())[i])[:-1])
                                                                                         print("before operating margin: ", str(list(key_metrics["Operating Margin"].values())[i-1])[:-1])
@@ -994,16 +995,17 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                             card_colors["Gross Margin"] = {}
                                                             if gross_profit_margin < 50:
                                                                 card_colors["Gross Margin"][year] = "danger"
-                                                            elif gross_profit_margin > 50:
+                                                            elif gross_profit_margin >= 50:
                                                                 card_colors["Gross Margin"][year] = "success"
                                                         if "Gross Margin" in card_colors:
                                                             if gross_profit_margin < 50:
                                                                 card_colors["Gross Margin"][year] = "danger"
-                                                            if gross_profit_margin > 50:
+                                                            if gross_profit_margin >= 50:
                                                                 card_colors["Gross Margin"][year] = "success" 
                                                                 for i in range(len(key_metrics["Gross Margin"])):
                                                                     if i != 0:
-                                                                        if card_colors["Gross Margin"][year] == "success":
+                                                                        #if card_colors["Gross Margin"][year] == "success":
+                                                                        if float(str(list(key_metrics["Gross Margin"].values())[i])[:-1]) >= 50:
                                                                             if float(str(list(key_metrics["Gross Margin"].values())[i])[:-1]) < float(str(list(key_metrics["Gross Margin"].values())[i-1])[:-1]):
                                                                                 print("current gross margin: ", str(list(key_metrics["Gross Margin"].values())[i])[:-1])
                                                                                 print("before gross margin: ", str(list(key_metrics["Gross Margin"].values())[i-1])[:-1])
@@ -1109,16 +1111,16 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                             card_colors["Current Ratio"] = {}
                                                             if current_ratio_margin < 1.5:
                                                                 card_colors["Current Ratio"][year] = "danger"
-                                                            elif current_ratio_margin > 1.5:
+                                                            elif current_ratio_margin >= 1.5:
                                                                 card_colors["Current Ratio"][year] = "success"
                                                         else:
                                                             if current_ratio_margin< 1.5:
                                                                 card_colors["Current Ratio"][year] = "danger"
-                                                            if current_ratio_margin > 1.5:
+                                                            if current_ratio_margin >= 1.5:
                                                                 card_colors["Current Ratio"][year] = "success"
                                                                 for i in range(len(key_metrics["Current Ratio"])):
                                                                     if i != 0:
-                                                                        if card_colors["Current Ratio"][year] == "success":
+                                                                        if float(str(list(key_metrics["Current Ratio"].values())[i])[:-1]) >= 1.5:
                                                                             if float(str(list(key_metrics["Current Ratio"].values())[i])[:-1]) < float(str(list(key_metrics["Current Ratio"].values())[i-1])[:-1]):
                                                                                 list_of_year_keys = list(key_metrics["Current Ratio"].keys()) # aka list of years from key_metrics
                                                                                 low_year = list_of_year_keys[i]
@@ -1221,16 +1223,16 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                                         card_colors["Quick Ratio"] = {}
                                                                         if quick_ratio_margin < 1:
                                                                             card_colors["Quick Ratio"][year] = "danger"
-                                                                        elif quick_ratio_margin > 1:
+                                                                        elif quick_ratio_margin >= 1:
                                                                             card_colors["Quick Ratio"][year] = "success"
                                                                     else:
                                                                         if quick_ratio_margin < 1:
                                                                             card_colors["Quick Ratio"][year] = "danger"
-                                                                        if quick_ratio_margin > 1:
+                                                                        if quick_ratio_margin >= 1:
                                                                             card_colors["Quick Ratio"][year] = "success"
                                                                             for i in range(len(key_metrics["Quick Ratio"])):
                                                                                 if i != 0:
-                                                                                    if card_colors["Quick Ratio"][year] == "success":
+                                                                                    if float(str(list(key_metrics["Quick Ratio"].values())[i])[:-1]) >= 1:
                                                                                         if float(str(list(key_metrics["Quick Ratio"].values())[i])[:-1]) < float(str(list(key_metrics["Quick Ratio"].values())[i-1])[:-1]):
                                                                                             list_of_year_keys = list(key_metrics["Quick Ratio"].keys()) # aka list of years from key_metrics
                                                                                             low_year = list_of_year_keys[i]
@@ -1331,16 +1333,16 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                             card_colors["Operating Cash Flow Ratio"] = {}
                                                             if operating_cash_flow_ratio < 1:
                                                                 card_colors["Operating Cash Flow Ratio"][year] = "danger"
-                                                            elif operating_cash_flow_ratio > 1:
+                                                            elif operating_cash_flow_ratio >= 1:
                                                                 card_colors["Operating Cash Flow Ratio"][year] = "success"
                                                         else:
                                                             if operating_cash_flow_ratio < 1:
                                                                 card_colors["Operating Cash Flow Ratio"][year] = "danger"
-                                                            if operating_cash_flow_ratio > 1:
+                                                            if operating_cash_flow_ratio >= 1:
                                                                 card_colors["Operating Cash Flow Ratio"][year] = "success" 
                                                                 for i in range(len(key_metrics["Operating Cash Flow Ratio"])):
                                                                     if i != 0:
-                                                                        if card_colors["Operating Cash Flow Ratio"][year] == "success":
+                                                                        if float(str(list(key_metrics["Operating Cash Flow Ratio"].values())[i])[:-1]) >= 1:
                                                                             if float(str(list(key_metrics["Operating Cash Flow Ratio"].values())[i])[:-1]) < float(str(list(key_metrics["Operating Cash Flow Ratio"].values())[i-1])[:-1]):
                                                                                 list_of_year_keys = list(key_metrics["Operating Cash Flow Ratio"].keys()) # aka list of years from key_metrics
                                                                                 low_year = list_of_year_keys[i]
@@ -1403,16 +1405,16 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                         card_colors["Cash Flow Coverage Ratio"] = {}
                                                         if cash_flow_coverage_ratio < 1:
                                                             card_colors["Cash Flow Coverage Ratio"][year] = "danger"
-                                                        elif cash_flow_coverage_ratio > 1:
+                                                        elif cash_flow_coverage_ratio >= 1:
                                                             card_colors["Cash Flow Coverage Ratio"][year] = "success"
                                                     else:
                                                         if cash_flow_coverage_ratio < 1:
                                                             card_colors["Cash Flow Coverage Ratio"][year] = "danger"
-                                                        if cash_flow_coverage_ratio > 1:
+                                                        if cash_flow_coverage_ratio >= 1:
                                                             card_colors["Cash Flow Coverage Ratio"][year] = "success"
                                                             for i in range(len(key_metrics["Cash Flow Coverage Ratio"])):
                                                                 if i != 0:
-                                                                    if card_colors["Cash Flow Coverage Ratio"][year] == "success":
+                                                                    if float(str(list(key_metrics["Cash Flow Coverage Ratio"].values())[i])[:-1]) >= 1:
                                                                         if float(str(list(key_metrics["Cash Flow Coverage Ratio"].values())[i])[:-1]) < float(str(list(key_metrics["Cash Flow Coverage Ratio"].values())[i-1])[:-1]):
                                                                             list_of_year_keys = list(key_metrics["Cash Flow Coverage Ratio"].keys()) # aka list of years from key_metrics
                                                                             low_year = list_of_year_keys[i]
