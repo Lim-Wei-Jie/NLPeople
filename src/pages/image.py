@@ -804,9 +804,9 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                             revenue_attained_op = list(table_data[revenue_row_op_position].values())[t]
                                             operating_expenses = list(table_data[operating_expenses_row_op_position].values())[t]
                                             if cost_of_goods_sold_op != None and revenue_attained_op != None and operating_expenses != None and cost_of_goods_sold_op != "" and  revenue_attained_op != "" and operating_expenses != "":
-                                                cost_of_goods_sold_op = re.sub('[^0-9.]', '', cost_of_goods_sold_op)
-                                                revenue_attained_op = re.sub('[^0-9.]', '', revenue_attained_op)
-                                                operating_expenses = re.sub('[^0-9.]', '', operating_expenses)
+                                                cost_of_goods_sold_op = re.sub('[^0-9.-]', '', cost_of_goods_sold_op)
+                                                revenue_attained_op = re.sub('[^0-9.-]', '', revenue_attained_op)
+                                                operating_expenses = re.sub('[^0-9.-]', '', operating_expenses)
                                                 numerator_metrics_list = []
                                                 numerator_metrics_list.append(list(table_data[cost_of_goods_sold_row_op_position].values())[0])
                                                 numerator_metrics_list.append(list(table_data[revenue_row_op_position].values())[0])
@@ -819,7 +819,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                             operating_profit = list(table_data[word_operating_profit_row_op_position].values())[t]
                                             print("sweaty monkey: ", operating_profit)
                                             if operating_profit != None and operating_profit != "":
-                                                operating_profit = re.sub('[^0-9.]', '', operating_profit)
+                                                operating_profit = re.sub('[^0-9.-]', '', operating_profit)
                                                 numerator_metrics_list = []
                                                 numerator_metrics_list.append(list(table_data[word_operating_profit_row_op_position].values())[0])
 
@@ -831,8 +831,8 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                             gross_profit_attained = list(table_data[gross_profit_position].values())[t]
                                             operating_expenses = list(table_data[operating_expenses_row_op_position].values())[t]
                                             if gross_profit_attained != None and operating_expenses != None and gross_profit_attained != "" and operating_expenses != "":
-                                                gross_profit_attained = re.sub('[^0-9.]', '', gross_profit_attained)
-                                                operating_expenses = re.sub('[^0-9.]', '', operating_expenses)
+                                                gross_profit_attained = re.sub('[^0-9.-]', '', gross_profit_attained)
+                                                operating_expenses = re.sub('[^0-9.-]', '', operating_expenses)
                                                 numerator_metrics_list = []
                                                 numerator_metrics_list.append(list(table_data[gross_profit_position].values())[0])
                                                 numerator_metrics_list.append(list(table_data[operating_expenses_row_op_position].values()[0]))
@@ -848,7 +848,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                         print("gafa firee")
                                                         operating_margin_denominator = list(table_data[k].values())[t]
                                                         if operating_margin_denominator != None and operating_margin_denominator != "":
-                                                            operating_margin_denominator = re.sub('[^0-9.]', '', operating_margin_denominator)
+                                                            operating_margin_denominator = re.sub('[^0-9.-]', '', operating_margin_denominator)
                                                             print("updated denominator", operating_margin_denominator)
 
                                                             denominator_metrics_list = []
@@ -875,13 +875,16 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                                     if operating_margin > 20:
                                                                         card_colors["Operating Margin"][year] = "success"
                                                                     #{'Operating Margin': {'2020': "Danger", '2021': "Danger"}, 'Gross Profit Margin': {'2020': "Success", '2021': "Success"}}
-                                                                    
-                                                                    for i in range(len(key_metrics["Operating Margin"])):
-                                                                        if i != 0:
-                                                                            if str(list(key_metrics["Operating Margin"].values())[i]) < str(list(key_metrics["Operating Margin"].values())[i-1]):
-                                                                                list_of_year_keys = list(key_metrics["Operating Margin"].keys()) # aka list of years from key_metrics
-                                                                                low_year = list_of_year_keys[i]
-                                                                                card_colors["Operating Margin"][low_year] = "warning"
+                                                                
+                                                                        for i in range(len(key_metrics["Operating Margin"])):
+                                                                            if i != 0:
+                                                                                if card_colors["Operating Margin"][year] == "success":
+                                                                                    if float(str(list(key_metrics["Operating Margin"].values())[i])[:-1]) < float(str(list(key_metrics["Operating Margin"].values())[i-1])[:-1]):
+                                                                                        print("current operating margin: ", str(list(key_metrics["Operating Margin"].values())[i])[:-1])
+                                                                                        print("before operating margin: ", str(list(key_metrics["Operating Margin"].values())[i-1])[:-1])
+                                                                                        list_of_year_keys = list(key_metrics["Operating Margin"].keys()) # aka list of years from key_metrics
+                                                                                        low_year = list_of_year_keys[i]
+                                                                                        card_colors["Operating Margin"][low_year] = "warning"
 
                                                                 if "Operating Margin" not in metrics_used:
                                                                     metrics_used["Operating Margin"] = {}
@@ -935,7 +938,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                 if gross_profit_position != "":
                                     gross_profit_attained = list(table_data[gross_profit_position].values())[t]
                                     if gross_profit_attained != None and gross_profit_attained != "":
-                                        gross_profit_attained = re.sub('[^0-9.]', '', gross_profit_attained)
+                                        gross_profit_attained = re.sub('[^0-9.-]', '', gross_profit_attained)
 
                                         numerator_metrics_list = []
                                         numerator_metrics_list.append(list(table_data[gross_profit_position].values())[0])
@@ -949,9 +952,9 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                     cost_of_goods_sold = list(table_data[cost_of_goods_sold_row_position].values())[t]
                                     revenue_attained = list(table_data[revenue_row_position].values())[t]
                                     if cost_of_goods_sold != None and revenue_attained != None:
-                                        cost_of_goods_sold = re.sub('[^0-9.]', '', cost_of_goods_sold)
+                                        cost_of_goods_sold = re.sub('[^0-9.-]', '', cost_of_goods_sold)
                                         print("cost_of_goods for operating_margin", cost_of_goods_sold)
-                                        revenue_attained = re.sub('[^0-9.]', '', revenue_attained)
+                                        revenue_attained = re.sub('[^0-9.-]', '', revenue_attained)
                                         print("revenue_attained for operating_margin", revenue_attained)
 
                                         if revenue_attained != "" and cost_of_goods_sold != "":
@@ -969,7 +972,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                             if word in table_data[k][value].lower().strip():
                                                 gross_profit_margin_denominator = list(table_data[k].values())[t]
                                                 if gross_profit_margin_denominator != None:
-                                                    gross_profit_margin_denominator = re.sub('[^0-9.]', '', gross_profit_margin_denominator)
+                                                    gross_profit_margin_denominator = re.sub('[^0-9.-]', '', gross_profit_margin_denominator)
                                                     print("updated denominator", gross_profit_margin_denominator)
 
                                                     if gross_profit_margin_denominator != "":
@@ -993,17 +996,20 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                                 card_colors["Gross Margin"][year] = "danger"
                                                             elif gross_profit_margin > 50:
                                                                 card_colors["Gross Margin"][year] = "success"
-                                                        else:
+                                                        if "Gross Margin" in card_colors:
                                                             if gross_profit_margin < 50:
                                                                 card_colors["Gross Margin"][year] = "danger"
                                                             if gross_profit_margin > 50:
                                                                 card_colors["Gross Margin"][year] = "success" 
-                                                            for i in range(len(key_metrics["Gross Margin"])):
-                                                                if i != 0:
-                                                                    if str(list(key_metrics["Gross Margin"].values())[i]) < str(list(key_metrics["Gross Margin"].values())[i-1]):
-                                                                        list_of_year_keys = list(key_metrics["Gross Margin"].keys()) # aka list of years from key_metrics
-                                                                        low_year = list_of_year_keys[i]
-                                                                        card_colors["Gross Margin"][low_year] = "warning"
+                                                                for i in range(len(key_metrics["Gross Margin"])):
+                                                                    if i != 0:
+                                                                        if card_colors["Gross Margin"][year] == "success":
+                                                                            if float(str(list(key_metrics["Gross Margin"].values())[i])[:-1]) < float(str(list(key_metrics["Gross Margin"].values())[i-1])[:-1]):
+                                                                                print("current gross margin: ", str(list(key_metrics["Gross Margin"].values())[i])[:-1])
+                                                                                print("before gross margin: ", str(list(key_metrics["Gross Margin"].values())[i-1])[:-1])
+                                                                                list_of_year_keys = list(key_metrics["Gross Margin"].keys()) # aka list of years from key_metrics
+                                                                                low_year = list_of_year_keys[i]
+                                                                                card_colors["Gross Margin"][low_year] = "warning"
 
                                                         if "Gross Margin" not in metrics_used:
                                                                 metrics_used["Gross Margin"] = {}
@@ -1016,10 +1022,9 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                             metrics_used["Gross Margin"][year].append(denominator_metrics_list)
 
                                                         
-
+            print("key_metrics for income statement: ", key_metrics)
             print("metrics_used: ", metrics_used)
         #metrics_used:  {'Operating Margin': {'2020': [['Operating profit'], ['IAS 1.82(a)\nRevenue']], '2021': [['Operating profit'], ['IAS 1.82(a)\nRevenue']], '2023': [[], ['IAS 1.82(a)\nRevenue']]}, 'Gross Margin': {'2023': [['IAS 1.82(b)\nFinance costs', 'IAS 1.82(a)\nRevenue'], ['IAS 1.82(a)\nRevenue']], '2022': [['IAS 1.82(b)\nFinance costs', 'IAS 1.82(a)\nRevenue'], ['IAS 1.82(a)\nRevenue']], '2021': [['IAS 1.82(b)\nFinance costs', 'IAS 1.82(a)\nRevenue'], ['IAS 1.82(a)\nRevenue']]}}
-
 
         
             print("card colors for income statement: " , card_colors)
@@ -1073,7 +1078,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
 
                                 assets_value = list(table_data[assets_row_position].values())[t]
                                 if assets_value != None and assets_value != "":
-                                    assets_value= re.sub('[^0-9.]', '', assets_value)
+                                    assets_value= re.sub('[^0-9.-]', '', assets_value)
                                     numerator_metrics_list = []
                                     numerator_metrics_list.append(list(table_data[assets_row_position].values())[0])
                                     current_ratio_numerator = round(float(assets_value),2)
@@ -1085,7 +1090,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                 if word in table_data[k][value].lower().strip():
                                                     current_ratio_denominator = list(table_data[k].values())[t]  
                                                     if current_ratio_denominator!= None and current_ratio_denominator != "":
-                                                        current_ratio_denominator = re.sub('[^0-9.]', '', current_ratio_denominator)
+                                                        current_ratio_denominator = re.sub('[^0-9.-]', '', current_ratio_denominator)
                                                         denominator_metrics_list = []
                                                         denominator_metrics_list.append(list(table_data[k].values())[0])
                                                     print("updated current ratio denominator", current_ratio_denominator)
@@ -1111,12 +1116,13 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                                 card_colors["Current Ratio"][year] = "danger"
                                                             if current_ratio_margin > 1.5:
                                                                 card_colors["Current Ratio"][year] = "success"
-                                                            for i in range(len(key_metrics["Current Ratio"])):
-                                                                if i != 0:
-                                                                    if str(list(key_metrics["Current Ratio"].values())[i]) < str(list(key_metrics["Current Ratio"].values())[i-1]):
-                                                                        list_of_year_keys = list(key_metrics["Current Ratio"].keys()) # aka list of years from key_metrics
-                                                                        low_year = list_of_year_keys[i]
-                                                                        card_colors["Current Ratio"][low_year] = "warning"
+                                                                for i in range(len(key_metrics["Current Ratio"])):
+                                                                    if i != 0:
+                                                                        if card_colors["Current Ratio"][year] == "success":
+                                                                            if float(str(list(key_metrics["Current Ratio"].values())[i])[:-1]) < float(str(list(key_metrics["Current Ratio"].values())[i-1])[:-1]):
+                                                                                list_of_year_keys = list(key_metrics["Current Ratio"].keys()) # aka list of years from key_metrics
+                                                                                low_year = list_of_year_keys[i]
+                                                                                card_colors["Current Ratio"][low_year] = "warning"
                                                         if "Current Ratio" not in metrics_used:
                                                             metrics_used["Current Ratio"] = {}
                                                             metrics_used["Current Ratio"][year] = []
@@ -1159,7 +1165,6 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                 current_liabilities_row_position = s
 
 
-
             for m in range(len(table_data)):
                 a_dict = table_data[m]
                 if current_assets_row_position != "" and inventory_row_position != "" and current_liabilities_row_position != "":
@@ -1175,8 +1180,8 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                     current_assets_value = list(table_data[current_assets_row_position].values())[t]
                                     inventory_value = list(table_data[inventory_row_position].values())[t]
                                     if current_assets_value != None and inventory_value != None:
-                                        current_assets_value = re.sub('[^0-9.]', '', current_assets_value)            
-                                        inventory_value = re.sub('[^0-9.]', '', inventory_value)
+                                        current_assets_value = re.sub('[^0-9.-]', '', current_assets_value)            
+                                        inventory_value = re.sub('[^0-9.-]', '', inventory_value)
                                 
                                         print("current_assets_value", current_assets_value)
                                         print("inventory_value", inventory_value)
@@ -1196,7 +1201,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                         if word in table_data[k][value].lower().strip():
                                                             quick_ratio_denominator = list(table_data[k].values())[t]
                                                             if quick_ratio_denominator != None:
-                                                                quick_ratio_denominator = re.sub('[^0-9.]', '', quick_ratio_denominator)
+                                                                quick_ratio_denominator = re.sub('[^0-9.-]', '', quick_ratio_denominator)
                                                                 if quick_ratio_denominator != "":
                                                                     denominator_metrics_list = []
                                                                     denominator_metrics_list.append(list(table_data[k].values())[0])
@@ -1223,12 +1228,13 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                                             card_colors["Quick Ratio"][year] = "danger"
                                                                         if quick_ratio_margin > 1:
                                                                             card_colors["Quick Ratio"][year] = "success"
-                                                                        for i in range(len(key_metrics["Quick Ratio"])):
-                                                                            if i != 0:
-                                                                                if str(list(key_metrics["Quick Ratio"].values())[i]) < str(list(key_metrics["Quick Ratio"].values())[i-1]):
-                                                                                    list_of_year_keys = list(key_metrics["Quick Ratio"].keys()) # aka list of years from key_metrics
-                                                                                    low_year = list_of_year_keys[i]
-                                                                                    card_colors["Quick Ratio"][low_year] = "warning"
+                                                                            for i in range(len(key_metrics["Quick Ratio"])):
+                                                                                if i != 0:
+                                                                                    if card_colors["Quick Ratio"][year] == "success":
+                                                                                        if float(str(list(key_metrics["Quick Ratio"].values())[i])[:-1]) < float(str(list(key_metrics["Quick Ratio"].values())[i-1])[:-1]):
+                                                                                            list_of_year_keys = list(key_metrics["Quick Ratio"].keys()) # aka list of years from key_metrics
+                                                                                            low_year = list_of_year_keys[i]
+                                                                                            card_colors["Quick Ratio"][low_year] = "warning"
                                                                     if "Quick Ratio" not in metrics_used:
                                                                         metrics_used["Quick Ratio"] = {}
                                                                         metrics_used["Quick Ratio"][year] = []
@@ -1276,7 +1282,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             for s in range(len(table_data)):
                 for t in range(1, len(table_data[0])):
                     if table_data[s]["0"] != None:
-                        for word_cost in ["cash flows from operating activities", "cash flows from operations", "operating cash flow"]:
+                        for word_cost in ["cash flow from operating activities", "cash flow from operations", "operating cash flow", "cash flows from operating activities", "cash flows from operations"]:
                             if word_cost in table_data[s]["0"].lower().strip():
                                 cash_flow_op_row_position = s
                         for word_opex in ["current liabilities"]:
@@ -1292,7 +1298,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                             year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
                             if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
                                 cash_flow_op = list(table_data[cash_flow_op_row_position].values())[t]
-                                cash_flow_op = re.sub('[^0-9.]', '', cash_flow_op)
+                                cash_flow_op = re.sub('[^0-9.-]', '', cash_flow_op)
                                 operating_cash_flow_numerator = cash_flow_op
 
                                 if operating_cash_flow_numerator != "":
@@ -1306,7 +1312,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                             for word in ["current liabilities"]:
                                                 if word in table_data[k][value].lower().strip():
                                                     operating_cash_flow_denominator = list(table_data[k].values())[t]
-                                                    operating_cash_flow_denominator = re.sub('[^0-9.]', '', operating_cash_flow_denominator)
+                                                    operating_cash_flow_denominator = re.sub('[^0-9.-]', '', operating_cash_flow_denominator)
                                                     print("updated operating_cash_flow_denominator", operating_cash_flow_denominator)
                                                     if operating_cash_flow_denominator != "":
                                                         denominator_metrics_list = []
@@ -1332,12 +1338,13 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                                 card_colors["Operating Cash Flow Ratio"][year] = "danger"
                                                             if operating_cash_flow_ratio > 1:
                                                                 card_colors["Operating Cash Flow Ratio"][year] = "success" 
-                                                            for i in range(len(key_metrics["Operating Cash Flow Ratio"])):
-                                                                if i != 0:
-                                                                    if str(list(key_metrics["Operating Cash Flow Ratio"].values())[i]) < str(list(key_metrics["Operating Cash Flow Ratio"].values())[i-1]):
-                                                                        list_of_year_keys = list(key_metrics["Operating Cash Flow Ratio"].keys()) # aka list of years from key_metrics
-                                                                        low_year = list_of_year_keys[i]
-                                                                        card_colors["Operating Cash Flow Ratio"][low_year] = "warning"
+                                                                for i in range(len(key_metrics["Operating Cash Flow Ratio"])):
+                                                                    if i != 0:
+                                                                        if card_colors["Operating Cash Flow Ratio"][year] == "success":
+                                                                            if float(str(list(key_metrics["Operating Cash Flow Ratio"].values())[i])[:-1]) < float(str(list(key_metrics["Operating Cash Flow Ratio"].values())[i-1])[:-1]):
+                                                                                list_of_year_keys = list(key_metrics["Operating Cash Flow Ratio"].keys()) # aka list of years from key_metrics
+                                                                                low_year = list_of_year_keys[i]
+                                                                                card_colors["Operating Cash Flow Ratio"][low_year] = "warning"
                                                         if "Operating Cash Flow Ratio" not in metrics_used:
                                                             metrics_used["Operating Cash Flow Ratio"] = {}
                                                             metrics_used["Operating Cash Flow Ratio"][year] = []
@@ -1358,14 +1365,14 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             cash_flow_coverage_ratio = "Value cannot be generated, please make further edits to extracted table."
             for m in range(len(table_data)):
                 a_dict = table_data[m]
-                for word in ["cash flow from operating activities", "cash flow from operations", "operating cash flow"]:
+                for word in ["cash flow from operating activities", "cash flow from operations", "operating cash flow", "cash flows from operating activities", "cash flows from operations"]:
                     if a_dict[value] != None:
                         if word in a_dict[value].lower().strip():
                             for t in range(1, len(table_data[0])): #table_data[0] is an obj that will always contain the years
                                 year = list(table_data[0].values())[t] # don't take table_data[0][0] coz that's the x-axis label --> remember t is index
                                 if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
                                     cash_flow_coverage_numerator = list(a_dict.values())[t]
-                                    cash_flow_coverage_numerator = re.sub('[^0-9.]', '', cash_flow_coverage_numerator)
+                                    cash_flow_coverage_numerator = re.sub('[^0-9.-]', '', cash_flow_coverage_numerator)
                                     if cash_flow_coverage_numerator != "":
                                         numerator_metrics_list = []
                                         numerator_metrics_list.append(list(table_data[m].values())[0])
@@ -1376,7 +1383,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                         if table_data[k][value] != None:
                                             if "total liabilities" in table_data[k][value].lower().strip():
                                                 cash_flow_coverage_denominator = list(table_data[k].values())[t]
-                                                cash_flow_coverage_denominator = re.sub('[^0-9.]', '', cash_flow_coverage_denominator)
+                                                cash_flow_coverage_denominator = re.sub('[^0-9.-]', '', cash_flow_coverage_denominator)
                                                 if cash_flow_coverage_denominator != "":
                                                     denominator_metrics_list = []
                                                     denominator_metrics_list.append(list(table_data[k].values())[0])
@@ -1403,12 +1410,13 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                                             card_colors["Cash Flow Coverage Ratio"][year] = "danger"
                                                         if cash_flow_coverage_ratio > 1:
                                                             card_colors["Cash Flow Coverage Ratio"][year] = "success"
-                                                        for i in range(len(key_metrics["Cash Flow Coverage Ratio"])):
-                                                            if i != 0:
-                                                                if str(list(key_metrics["Cash Flow Coverage Ratio"].values())[i]) < str(list(key_metrics["Cash Flow Coverage Ratio"].values())[i-1]):
-                                                                    list_of_year_keys = list(key_metrics["Cash Flow Coverage Ratio"].keys()) # aka list of years from key_metrics
-                                                                    low_year = list_of_year_keys[i]
-                                                                    card_colors["Cash Flow Coverage Ratio"][low_year] = "warning"
+                                                            for i in range(len(key_metrics["Cash Flow Coverage Ratio"])):
+                                                                if i != 0:
+                                                                    if card_colors["Cash Flow Coverage Ratio"][year] == "success":
+                                                                        if float(str(list(key_metrics["Cash Flow Coverage Ratio"].values())[i])[:-1]) < float(str(list(key_metrics["Cash Flow Coverage Ratio"].values())[i-1])[:-1]):
+                                                                            list_of_year_keys = list(key_metrics["Cash Flow Coverage Ratio"].keys()) # aka list of years from key_metrics
+                                                                            low_year = list_of_year_keys[i]
+                                                                            card_colors["Cash Flow Coverage Ratio"][low_year] = "warning"
                                                     if "Cash Flow Coverage Ratio" not in metrics_used:
                                                         metrics_used["Cash Flow Coverage Ratio"] = {}
                                                         metrics_used["Cash Flow Coverage Ratio"][year] = []
@@ -1423,16 +1431,6 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
 
 
             print("card colors for cash flow to net income: " , card_colors)
-
-            # for financial_ratio in key_metrics:
-            #     for year_key in key_metrics[financial_ratio]:
-            #         element = dbc.Card(
-            #                     dbc.CardBody([
-            #                         html.P(str(year_key) + " " + str(financial_ratio)),
-            #                         html.H4(str(key_metrics[financial_ratio][year_key]))
-            #                     ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True)
-            #         financial_ratio_cards.append(dbc.Col(element))
-            # return dbc.Container(dbc.Row(financial_ratio_cards))
         
             for financial_ratio in key_metrics:
                 for year_key in key_metrics[financial_ratio]:
