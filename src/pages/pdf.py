@@ -1178,7 +1178,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                             if list(a_dict.values())[t] != "" and list(a_dict.values())[t] != None:
                                 print("went into quick ratio checkpoint 2")
                                 
-                                if current_assets_row_position != "" and inventory_value != "":
+                                if current_assets_row_position != "" and inventory_row_position != "":
                                     current_assets_value = list(table_data[current_assets_row_position].values())[t]
                                     inventory_value = list(table_data[inventory_row_position].values())[t]
                                     if current_assets_value != None and inventory_value != None:
