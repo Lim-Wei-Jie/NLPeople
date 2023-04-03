@@ -354,17 +354,17 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
     text = []
     
     ####################
-    financial_data_type_list = [ { "revenue": 1, "operating profit": 2, "gross profit": 1, "earnings per share": 2, "owners of the parent": 1, "cost of": 1,
-            "other income": 1, "controlling interest": 1, "net income": 1, "interest expense": 1, "per common share": 2, "per share": 1,
-            "tax expense": 1, "sales": 1 }, # dictionary for words from income statements
+    financial_data_type_list = [ { "revenue": 1, "operating profit": 2, "operating income": 2,"gross profit": 1, "earnings per share": 2, "owners of the parent": 1, "cost of": 1,
+    "other income": 1, "controlling interest": 1, "net income": 1, "interest expense": 1, "per common share": 2, "per share": 1,
+    "tax expense": 1, "sales": 1 }, # dictionary for words from income statements
 
-        { "current assets": 2, "fixed assets": 2, "total assets": 2, "inventory": 1, "inventories": 1, "liabilities": 1, "current liabilities": 3,
-            "taxes payable": 1, "long-term debt": 3, "total current liabilities": 3, "equity": 1, "shareholders' equity": 2, "common shares": 2,
-            "common stock": 2 }, # dictionary for words from balance sheets
+    { "current assets": 2, "total current assets": 2, "fixed assets": 2, "total assets": 2, "inventory": 1, "inventories": 1, "liabilities": 1, "current liabilities": 3, "total liabilities": 3,
+    "taxes payable": 1, "long-term debt": 3, "total current liabilities": 3, "equity": 1, "shareholders' equity": 2, "common shares": 2,
+    "common stock": 2 }, # dictionary for words from balance sheets
         
-        { "cash flow from operating activities": 10, "cash flow from investing activities": 10, "cash flow from financing activities": 10,
-            "cash flows from operating activities": 15, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
-            "cash flow from": 10, "cash flows from": 10} ] # dictionary for words from cash flow statements
+    { "cash flow from operating activities": 10, "cash flow from investing activities": 10, "cash flow from financing activities": 10,
+    "cash flows from operating activities": 15, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
+    "cash flow from": 10, "cash flows from": 10, "cash and cash equivalents": 5, "operating activities": 5, "financing activities": 5, "investing activities": 5} ] # dictionary for words from cash flow statements
         
     income_total_weight = 0
     balance_total_weight = 0
@@ -787,22 +787,34 @@ def display_metrics(all_data, threshold_data, threshold_columns, user_add_ratios
                     if v != None and v.strip() != "":
                         column_1 = user_add_ratios_data[i]['Column 1']
                         column_2 = user_add_ratios_data[i]['Column 2']
+                        column_1_lower = user_add_ratios_data[i]['Column 1'].lower().strip()
+                        column_2_lower = user_add_ratios_data[i]['Column 2'].lower().strip()
                         print("line 616 key_metrics", key_metrics)
                         for j in range(len(df.iloc[:,0].tolist())): # for each year/quarter
                             print(column_1)
                             print(list(df.columns.values))
                             print(df.iloc[j])
-                            if column_1 in list(df.columns.values):
+                            df_columns_values_lower = [x.lower().strip() for x in list(df.columns.values)]
+                            print("line 798", df_columns_values_lower)
+                            if column_1_lower in df_columns_values_lower:
+                                idx = df_columns_values_lower.index(column_1_lower)
+                                column_1 = list(df.columns.values)[idx]
                                 column_1_val = float(re.sub("[^0-9.-]", "", str(df.iloc[j][column_1])))
-                            elif column_1 not in list(df.columns.values) and column_1 in key_metrics.keys():
+                            elif column_1_lower not in df_columns_values_lower and column_1 in key_metrics.keys():
                                 print("line 621 values", list(key_metrics[column_1].values()))
+                                idx = df_columns_values_lower.index(column_1_lower)
+                                column_1 = list(df.columns.values)[idx]
                                 column_1_val = float(re.sub("[^0-9.-]", "", str(list(key_metrics[column_1].values())[j])))
                             else:
                                 add_calculations_warning_note = dbc.Alert("Check if Column name exists or is spelled correctly", color="warning", style={'display': 'inline-block'})
                                 break
-                            if column_2 in list(df.columns.values):
+                            if column_2_lower in df_columns_values_lower:
+                                idx = df_columns_values_lower.index(column_2_lower)
+                                column_2 = list(df.columns.values)[idx]
                                 column_2_val = float(re.sub("[^0-9.-]", "", str(df.iloc[j][column_2])))
-                            elif column_2 not in list(df.columns.values) and column_2 in key_metrics.keys():
+                            elif column_2_lower not in df_columns_values_lower and column_2 in key_metrics.keys():
+                                idx = df_columns_values_lower.index(column_2_lower)
+                                column_2 = list(df.columns.values)[idx]
                                 column_2_val = float(re.sub("[^0-9.-]", "", str(list(key_metrics[column_2].values())[j])))
                             else:
                                 add_calculations_warning_note = dbc.Alert("Check if Column name exists or is spelled correctly", color="warning", style={'display': 'inline-block'})

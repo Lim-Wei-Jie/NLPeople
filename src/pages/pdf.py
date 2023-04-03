@@ -678,17 +678,14 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             #checks if table_data is from an income statement, balance sheet or cash-flow statement.
 
       
-        financial_data_type_list = [ { "revenue": 1, "operating profit": 2, "gross profit": 1, "earnings per share": 2, "owners of the parent": 1, "cost of": 1,
-            "other income": 1, "controlling interest": 1, "net income": 1, "interest expense": 1, "per common share": 2, "per share": 1,
-            "tax expense": 1, "sales": 1 }, # dictionary for words from income statements
+        financial_data_type_list = [ { "revenue": 1, "operating profit": 2, "operating income": 2,"gross profit": 1, "earnings per share": 2, "owners of the parent": 1, "cost of": 1, "other income": 1, "controlling interest": 1, "net income": 1, "interest expense": 1, "per common share": 2, "per share": 1,
+        "tax expense": 1, "sales": 1 }, # dictionary for words from income statements
 
-        { "current assets": 2, "fixed assets": 2, "total assets": 2, "inventory": 1, "inventories": 1, "liabilities": 1, "current liabilities": 3,
-            "taxes payable": 1, "long-term debt": 3, "total current liabilities": 3, "equity": 1, "shareholders' equity": 2, "common shares": 2,
-            "common stock": 2 }, # dictionary for words from balance sheets
+        { "current assets": 2, "total current assets": 2, "fixed assets": 2, "total assets": 2, "inventory": 1, "inventories": 1, "liabilities": 1, "current liabilities": 3, "total liabilities": 3, "taxes payable": 1, "long-term debt": 3, "total current liabilities": 3, "equity": 1, "shareholders' equity": 2, "common shares": 2, "common stock": 2 }, # dictionary for words from balance sheets
         
         { "cash flow from operating activities": 10, "cash flow from investing activities": 10, "cash flow from financing activities": 10,
-            "cash flows from operating activities": 15, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
-            "cash flow from": 10, "cash flows from": 10} ] # dictionary for words from cash flow statements
+        "cash flows from operating activities": 15, "cash flows from investing activities": 10, "cash flows from financing activities": 10, 
+        "cash flow from": 10, "cash flows from": 10, "cash and cash equivalents": 5, "operating activities": 5, "financing activities": 5, "investing activities": 5} ] # dictionary for words from cash flow statements
         
         income_total_weight = 0
         balance_total_weight = 0
@@ -1028,6 +1025,15 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
             print("metrics_used: ", metrics_used)
         #metrics_used:  {'Operating Margin': {'2020': [['Operating profit'], ['IAS 1.82(a)\nRevenue']], '2021': [['Operating profit'], ['IAS 1.82(a)\nRevenue']], '2023': [[], ['IAS 1.82(a)\nRevenue']]}, 'Gross Margin': {'2023': [['IAS 1.82(b)\nFinance costs', 'IAS 1.82(a)\nRevenue'], ['IAS 1.82(a)\nRevenue']], '2022': [['IAS 1.82(b)\nFinance costs', 'IAS 1.82(a)\nRevenue'], ['IAS 1.82(a)\nRevenue']], '2021': [['IAS 1.82(b)\nFinance costs', 'IAS 1.82(a)\nRevenue'], ['IAS 1.82(a)\nRevenue']]}}
 
+            metrics_needed_operating_margin = "NUMERATOR: (cost of goods AND revenue AND operating expense) OR (gross profit AND operating expense) OR operating profit/operating income; DENOMINATOR: revenue OR net sales"
+            metrics_needed_gross_margin = "NUMERATOR: (cost of goods/cost of revenue AND revenue) OR gross profit; DENOMINATOR: revenue OR net sales"
+
+
+            operating_margin_metric_display = dbc.Badge([html.Span(str("Operating Margin"), id='operating-margin-alert', style={"textDecoration": "underline", "cursor": "pointer"}),
+                                        dbc.Tooltip(metrics_needed_operating_margin, target="operating-margin-alert", placement="top")], color="white", text_color="dark", className="border me-1")
+            
+            gross_margin_metric_display = dbc.Badge([html.Span(str("Gross Margin"), id='gross-margin-alert', style={"textDecoration": "underline", "cursor": "pointer"}),
+                                        dbc.Tooltip(metrics_needed_gross_margin, target="gross-margin-alert", placement="top")], color="white", text_color="dark", className="border me-1")
         
             print("card colors for income statement: " , card_colors)
 
@@ -1041,7 +1047,8 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                 ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True, id=f"{no_spaces_financial_ratio}-{year_key}")
                     tooltip = dbc.Tooltip(f"NUMERATOR METRICS: {' AND '.join(str(x) for x in metrics_used[financial_ratio][year_key][0])} ; DENOMINATOR METRICS: {' AND '.join(str(x) for x in metrics_used[financial_ratio][year_key][1])}", target=f"{no_spaces_financial_ratio}-{year_key}", placement="top")
                     financial_ratio_cards.append(dbc.Col([element, tooltip]))
-            return dbc.Container(dbc.Row(financial_ratio_cards))
+            #return dbc.Container(dbc.Row(financial_ratio_cards))
+            return dbc.Container([dbc.Col(["Here are some financial ratios that the app calculates. Hover over to find out what the app identifies for the calculations of these metrics! This feature is especially useful if any of the following financial ratios is not displayed. ",operating_margin_metric_display, gross_margin_metric_display]),dbc.Row(financial_ratio_cards)])
 
                     
 
@@ -1253,6 +1260,15 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
 
             print("card colors for quick ratio: " , card_colors)
 
+            metrics_needed_current_ratio = "NUMERATOR: current assets; DENOMINATOR: current liabilities"
+            metrics_needed_quick_ratio = "NUMERATOR: current assets AND inventories; DENOMINATOR: current liabilities"
+
+
+            current_ratio_metric_display = dbc.Badge([html.Span(str("Current Ratio"), id='current-ratio-alert', style={"textDecoration": "underline", "cursor": "pointer"}),
+                                        dbc.Tooltip(metrics_needed_current_ratio, target="current-ratio-alert", placement="top")], color="white", text_color="dark", className="border me-1")
+            
+            quick_ratio_metric_display = dbc.Badge([html.Span(str("Quick Ratio"), id='quick-ratio-alert', style={"textDecoration": "underline", "cursor": "pointer"}),
+                                        dbc.Tooltip(metrics_needed_quick_ratio, target="quick-ratio-alert", placement="top")], color="white", text_color="dark", className="border me-1")
         
             for financial_ratio in key_metrics:
                 for year_key in key_metrics[financial_ratio]:
@@ -1264,7 +1280,7 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                 ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True, id=f"{no_spaces_financial_ratio}-{year_key}")
                     tooltip = dbc.Tooltip(f"NUMERATOR METRICS: {' AND '.join(str(x) for x in metrics_used[financial_ratio][year_key][0])} ; DENOMINATOR METRICS: {' AND '.join(str(x) for x in metrics_used[financial_ratio][year_key][1])}", target=f"{no_spaces_financial_ratio}-{year_key}", placement="top")
                     financial_ratio_cards.append(dbc.Col([element, tooltip]))
-            return dbc.Container(dbc.Row(financial_ratio_cards))
+            return dbc.Container([dbc.Col(["Here are some financial ratios that the app calculates. Hover over to find out what the app identifies for the calculations of these metrics! This feature is especially useful if any of the following financial ratios is not displayed. ",current_ratio_metric_display, quick_ratio_metric_display]), dbc.Row(financial_ratio_cards)])
 
 
         elif financial_data_type == "cash flow statement":
@@ -1433,6 +1449,18 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
 
 
             print("card colors for cash flow to net income: " , card_colors)
+
+
+            metrics_needed_operating_cash = "NUMERATOR: cash flow from operations OR cash flows from operations OR operating cash flow; DENOMINATOR: current liabilities"
+            metrics_needed_cash_flow_coverage = "NUMERATOR: cash flow from operations OR cash flows from operations OR operating cash flow; DENOMINATOR: total liabilities"
+
+
+            operating_cash_metric_display = dbc.Badge([html.Span(str("Operating Cash Flow Ratio"), id='operating-cash-alert', style={"textDecoration": "underline", "cursor": "pointer"}),
+                                        dbc.Tooltip(metrics_needed_operating_cash, target="operating-cash-alert", placement="top")], color="white", text_color="dark", className="border me-1")
+            
+            cash_flow_cov_metric_display = dbc.Badge([html.Span(str("Cash Flow Coverage Ratio"), id='cash-flow-alert', style={"textDecoration": "underline", "cursor": "pointer"}),
+                                        dbc.Tooltip(metrics_needed_cash_flow_coverage, target="cash-flow-alert", placement="top")], color="white", text_color="dark", className="border me-1")
+
         
             for financial_ratio in key_metrics:
                 for year_key in key_metrics[financial_ratio]:
@@ -1444,7 +1472,8 @@ def generate_financial_ratios(n_clicks_fin_ratio, n_clicks_fin_col, n_clicks_ext
                                 ]), className='text-center m-4', color=card_colors[financial_ratio][year_key], inverse=True, id=f"{no_spaces_financial_ratio}-{year_key}")
                     tooltip = dbc.Tooltip(f"NUMERATOR METRICS: {' AND '.join(str(x) for x in metrics_used[financial_ratio][year_key][0])} ; DENOMINATOR METRICS: {' AND '.join(str(x) for x in metrics_used[financial_ratio][year_key][1])}", target=f"{no_spaces_financial_ratio}-{year_key}", placement="top")
                     financial_ratio_cards.append(dbc.Col([element, tooltip]))
-            return dbc.Container(dbc.Row(financial_ratio_cards))
+            #return dbc.Container(dbc.Row(financial_ratio_cards))
+            return dbc.Container([dbc.Col(["Here are some financial ratios that the app calculates. Hover over to find out what the app identifies for the calculations of these metrics! This feature is especially useful if any of the following financial ratios is not displayed. ",operating_cash_metric_display, cash_flow_cov_metric_display]), dbc.Row(financial_ratio_cards)])
 
 
 #Upload component:
