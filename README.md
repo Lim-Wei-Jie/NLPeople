@@ -1,6 +1,6 @@
 # NLPeople
 
-For local use, follow the instructions below
+For local use, follow the instructions below.
 
 To create new env, run CMD as administrator and install virtualenv
 
@@ -39,7 +39,7 @@ open terminal, run
 python src/app.py
 ```
 
-Flaws of the app:
+Current limitations of the app:
 - cannot rearrange columns or rows
 - columns and rows can only be added to the ends of the table
 - for currency conversion, need to read the file for whether the values are in billions/millions
